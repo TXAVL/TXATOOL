@@ -495,7 +495,7 @@ namespace TXATOOL.Views
 
         private void BtnSupport_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://github.com/TXAVL") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://fb.com/vlog.txa.2311") { UseShellExecute = true });
         }
 
         private async void BtnRemoveWinHWID_Click(object sender, RoutedEventArgs e)

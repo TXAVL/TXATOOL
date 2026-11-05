@@ -322,7 +322,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- CARD 1: FACEBOOK -->
-                <Border Grid.Column="0" Visibility="Collapsed" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="FacebookCard_Click">
+                <Border Grid.Column="0" Grid.ColumnSpan="5" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="FacebookCard_Click">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -334,14 +334,14 @@
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock x:Name="lblFacebookTitle" Text="Facebook" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock x:Name="lblFacebookDesc" Text="Cộng đồng Zịt's Tech Lab" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                            <TextBlock x:Name="lblFacebookDesc" Text="TXA Vlog trên Facebook" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
                         </StackPanel>
                         <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
                     </Grid>
                 </Border>
 
                 <!-- CARD 2: GITHUB -->
-                <Border Grid.Column="0" Grid.ColumnSpan="5" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="GithubCard_Click">
+                <Border Grid.Column="2" Visibility="Collapsed" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="GithubCard_Click">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

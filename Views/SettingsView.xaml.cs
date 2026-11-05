@@ -83,17 +83,17 @@ namespace TXATOOL.Views
 
         private void Developer_Click(object sender, RoutedEventArgs e)
         {
-            OpenUrl("https://github.com/TXAVL");
+            OpenUrl("https://fb.com/vlog.txa.2311");
         }
 
         private void FacebookLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenUrl("https://github.com/TXAVL");
+            OpenUrl("https://fb.com/vlog.txa.2311");
         }
 
         private void GithubLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenUrl("https://github.com/TXAVL/TXATOOL");
+            OpenUrl("https://fb.com/vlog.txa.2311");
         }
 
         private void LoadCurrentVersion()

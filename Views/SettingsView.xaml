@@ -112,8 +112,7 @@
                 <TextBlock Text="Date: 22/11/2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,15"/>
 
                 <TextBlock x:Name="lblLinks" Text="Links:" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
-                <TextBlock Text="https://github.com/TXAVL" FontSize="14" Foreground="{DynamicResource AccentTextBrush}" Cursor="Hand" TextDecorations="Underline" Margin="0,0,0,5" MouseLeftButtonUp="FacebookLink_Click"/>
-                <TextBlock Text="https://github.com/TXAVL/TXATOOL" FontSize="14" Foreground="{DynamicResource AccentTextBrush}" Cursor="Hand" TextDecorations="Underline" Margin="0,0,0,15" MouseLeftButtonUp="GithubLink_Click"/>
+                <TextBlock Text="https://fb.com/vlog.txa.2311" FontSize="14" Foreground="{DynamicResource AccentTextBrush}" Cursor="Hand" TextDecorations="Underline" Margin="0,0,0,5" MouseLeftButtonUp="FacebookLink_Click"/>
 
                 <TextBlock x:Name="lblThirdPartyLibs" Text="Third-party Libraries:" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
                 <TextBlock Text="wpfui" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
@@ -122,14 +121,16 @@
             <!-- About Us -->
             <TextBlock x:Name="lblAboutUs" Text="About us" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,15"/>
             <StackPanel Margin="0,0,0,30">
-                <TextBlock x:Name="lblDeveloperInfo" Text="Developed by TXAVL." FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
+                <TextBlock x:Name="lblDeveloperInfo" Text="Developed by TXA." FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
                 <TextBlock x:Name="lblDeveloperDesc" Text="Born from our own struggles with laptop and PC performance, this tool was built to help others boost their PCs and enjoy smoother experiences." 
                            FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,15"/>
-                <TextBlock x:Name="lblBasedOn" Text="Developed by TXA." FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,15"/>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Click="Developer_Click" Style="{StaticResource ActionButtonStyle}" Width="180" Height="42" Margin="0" Padding="0" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource LineBrush}" VerticalAlignment="Center" AutomationProperties.Name="TXAVL on GitHub">
-                        <TextBlock Text="TXAVL" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                    <Button Click="Developer_Click" Style="{StaticResource ActionButtonStyle}" Width="180" Height="42" Margin="0" Padding="0" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource LineBrush}" VerticalAlignment="Center" AutomationProperties.Name="TXA on Facebook">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image Source="/Images/fb.png" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="TXA" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
                 </StackPanel>
             </StackPanel>
