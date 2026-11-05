@@ -1554,7 +1554,7 @@ namespace TXATOOL.Views
         {
             try
             {
-                Process.Start(new ProcessStartInfo("https://github.com/TXAVL") { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("https://fb.com/vlog.txa.2311") { UseShellExecute = true });
             }
             catch { }
         }
@@ -1801,7 +1801,7 @@ namespace TXATOOL.Views
                 var fbTitle = LocalizationService.Get("lblFacebookTitle");
                 if (lblFacebookTitle != null) lblFacebookTitle.Text = (!string.IsNullOrEmpty(fbTitle) && fbTitle != "lblFacebookTitle") ? fbTitle : "Facebook";
                 var fbDesc = LocalizationService.Get("lblFacebookDesc");
-                if (lblFacebookDesc != null) lblFacebookDesc.Text = (!string.IsNullOrEmpty(fbDesc) && fbDesc != "lblFacebookDesc") ? fbDesc : "Zịt's Tech Lab Community";
+                if (lblFacebookDesc != null) lblFacebookDesc.Text = (!string.IsNullOrEmpty(fbDesc) && fbDesc != "lblFacebookDesc") ? fbDesc : "TXA Vlog on Facebook";
 
                 var ghTitle = LocalizationService.Get("lblGithubTitle");
                 if (lblGithubTitle != null) lblGithubTitle.Text = (!string.IsNullOrEmpty(ghTitle) && ghTitle != "lblGithubTitle") ? ghTitle : "GitHub Repository";

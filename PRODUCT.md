@@ -14,7 +14,7 @@ Primary: IT technicians and PC repair staff who set up, optimize and clean machi
 
 ## Product Purpose
 
-TXATOOL - WIN ("A Software for IT Support", by TXAVL; based on HyperLis by Zit's Tech Lab) is an all-in-one Windows toolkit. It covers Windows tweaks and optimization, system cleanup, hardware and Windows info, curated downloads (apps, Windows ISOs, Office, WinPE, resources), license backup, and network tools. Success means a technician finishes a machine setup or tune-up in one tool instead of many.
+TXATOOL - WIN ("A Software for IT Support", by TXA) is an all-in-one Windows toolkit. It covers Windows tweaks and optimization, system cleanup, hardware and Windows info, curated downloads (apps, Windows ISOs, Office, WinPE, resources), license backup, and network tools. Success means a technician finishes a machine setup or tune-up in one tool instead of many.
 
 ## Positioning
 
@@ -35,7 +35,7 @@ Runs locally on Windows 10/11, installed via Inno Setup (with and without bundle
 
 ## Brand Commitments
 
-Name: TXATOOL - WIN (renamed from HyperLis; namespace, assembly, config folder and files now use TXATOOL). Publisher: TXAVL (github.com/TXAVL/TXATOOL). Based on HyperLis by Zit's Tech Lab (no license file found, attribution kept in Settings). Existing assets in `Images/` (logo, icon).
+Name: TXATOOL - WIN (renamed from HyperLis; namespace, assembly, config folder and files now use TXATOOL). Publisher: TXA (fb.com/vlog.txa.2311); repo github.com/TXAVL/TXATOOL. Original-author permission confirmed by the owner. Existing assets in `Images/` (logo, icon).
 
 ## Evidence on Hand
 

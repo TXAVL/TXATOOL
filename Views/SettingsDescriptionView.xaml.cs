@@ -27,6 +27,7 @@ namespace TXATOOL.Views
         {
             if (lblDonationTitle != null) lblDonationTitle.Text = LocalizationService.Get("lblDonationTitle");
             if (lblDonationDesc != null) lblDonationDesc.Text = LocalizationService.Get("lblDonationDesc");
+            if (lblDonationNote != null) lblDonationNote.Text = LocalizationService.Get("lblDonationNote") ?? "Transfer note: DONATE UNG HO TXA";
             if (lblDonationThanks != null) lblDonationThanks.Text = LocalizationService.Get("lblDonationThanks");
         }
     }
