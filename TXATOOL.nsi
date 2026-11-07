@@ -74,11 +74,19 @@ Function .onInit
     ReadRegStr $PREV_UNINSTALL HKCU "${UNINST_KEY}" "UninstallString"
   ${EndIf}
 
+  ; Bỏ qua thông báo xác nhận nếu đang chạy ở chế độ im lặng (/S từ Auto-Update)
+  IfSilent init_done
+
   ${If} $PREV_VERSION != ""
-    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Phát hiện ${APP_NAME} (phiên bản $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi cài đặt phiên bản mới để tránh xung đột.$\n$\nBạn có muốn tiếp tục cài đặt không?" IDYES init_continue
-    Abort
-  init_continue:
+    ${If} $PREV_VERSION == "${APP_VERSION}"
+      MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Phiên bản ${APP_VERSION} hiện đã được cài đặt trên máy của bạn.$\n$\nBạn có muốn cài đè (ghi đè toàn bộ file) phiên bản này không?" IDYES init_done
+      Abort
+    ${Else}
+      MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Phát hiện ${APP_NAME} (phiên bản cũ $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi nâng cấp lên phiên bản mới ${APP_VERSION}.$\n$\nBạn có muốn tiếp tục cài đặt không?" IDYES init_done
+      Abort
+    ${EndIf}
   ${EndIf}
+init_done:
 FunctionEnd
 
 Section "Install"
@@ -91,24 +99,32 @@ Section "Install"
   Pop $0
   Sleep 500
 
-  ; If previous version of TXATOOL exists, run its uninstaller silently
-  ${If} $PREV_DIR != ""
-  ${AndIf} ${FileExists} "$PREV_DIR\Uninstall.exe"
-    DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $PREV_DIR..."
-    ExecWait '"$PREV_DIR\Uninstall.exe" /S _?=$PREV_DIR' $0
-    Sleep 1000
-    Delete "$PREV_DIR\Uninstall.exe"
-    RMDir "$PREV_DIR"
-  ${ElseIf} ${FileExists} "$INSTDIR\Uninstall.exe"
-    DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $INSTDIR..."
-    ExecWait '"$INSTDIR\Uninstall.exe" /S _?=$INSTDIR' $0
-    Sleep 1000
-    Delete "$INSTDIR\Uninstall.exe"
-    RMDir "$INSTDIR"
-  ${ElseIf} $PREV_UNINSTALL != ""
-    DetailPrint "Đang chạy trình gỡ cài đặt của phiên bản cũ..."
-    ExecWait '$PREV_UNINSTALL /S _?=$INSTDIR' $0
-    Sleep 1000
+  SetOverwrite on
+
+  ; Nếu phát hiện phiên bản KHÁC/CŨ HƠN thì mới chạy gỡ cài đặt bản cũ trước
+  ; Nếu là CÙNG PHIÊN BẢN (cài đè) thì ghi đè trực tiếp mà không cần chạy uninstaller
+  ${If} $PREV_VERSION != ""
+  ${AndIf} $PREV_VERSION != "${APP_VERSION}"
+    ${If} $PREV_DIR != ""
+    ${AndIf} ${FileExists} "$PREV_DIR\Uninstall.exe"
+      DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $PREV_DIR..."
+      ExecWait '"$PREV_DIR\Uninstall.exe" /S _?=$PREV_DIR' $0
+      Sleep 1000
+      Delete "$PREV_DIR\Uninstall.exe"
+      RMDir "$PREV_DIR"
+    ${ElseIf} ${FileExists} "$INSTDIR\Uninstall.exe"
+      DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $INSTDIR..."
+      ExecWait '"$INSTDIR\Uninstall.exe" /S _?=$INSTDIR' $0
+      Sleep 1000
+      Delete "$INSTDIR\Uninstall.exe"
+      RMDir "$INSTDIR"
+    ${ElseIf} $PREV_UNINSTALL != ""
+      DetailPrint "Đang chạy trình gỡ cài đặt của phiên bản cũ..."
+      ExecWait '$PREV_UNINSTALL /S _?=$INSTDIR' $0
+      Sleep 1000
+    ${EndIf}
+  ${ElseIf} $PREV_VERSION == "${APP_VERSION}"
+    DetailPrint "Cùng phiên bản ${APP_VERSION} - Đang tiến hành cài đè các tệp tin..."
   ${EndIf}
 
   SetOutPath "$INSTDIR"
