@@ -10,7 +10,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <ApplicationIcon>Images\icon.ico</ApplicationIcon>
     <AssemblyName>TXATOOL</AssemblyName>
-    <Description>TXATOOL - WIN</Description>
+    <Description>TXATOOL - WIN: Phần mềm tối ưu hóa &amp; cứu hộ Windows - Phát triển bởi TXA</Description>
     <Copyright>Copyright © 2026 TXAVL</Copyright>
     <AssemblyTitle>TXATOOL - WIN</AssemblyTitle>
     <Company>TXAVL</Company>

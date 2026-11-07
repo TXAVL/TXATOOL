@@ -103,6 +103,8 @@ LangString FINISH_TITLE ${LANG_VIETNAMESE} "Hoàn tất Cài đặt ${APP_NAME}"
 LangString FINISH_TEXT ${LANG_VIETNAMESE} "${APP_NAME} ${APP_VERSION} đã được cài đặt thành công trên máy tính của bạn.$\n$\nNhấn 'Hoàn tất' để đóng trình hướng dẫn cài đặt."
 LangString FINISH_RUN_TEXT ${LANG_VIETNAMESE} "Khởi chạy ${APP_NAME} ngay"
 LangString FINISH_LINK_TEXT ${LANG_VIETNAMESE} "Truy cập Tài liệu hướng dẫn sử dụng TXA (Docs)"
+LangString SHORTCUT_DESC ${LANG_VIETNAMESE} "TXATOOL - WIN: Phần mềm tối ưu hóa & cứu hộ Windows - Phát triển bởi TXA"
+LangString SHORTCUT_UNINST_DESC ${LANG_VIETNAMESE} "Gỡ cài đặt ${APP_NAME}"
 
 LangString UNINST_CLOSING ${LANG_VIETNAMESE} "Đang đóng ứng dụng nếu đang chạy trước khi gỡ bỏ..."
 
@@ -125,6 +127,8 @@ LangString FINISH_TITLE ${LANG_ENGLISH} "Completing ${APP_NAME} Setup"
 LangString FINISH_TEXT ${LANG_ENGLISH} "${APP_NAME} ${APP_VERSION} has been successfully installed on your computer.$\n$\nClick 'Finish' to exit this wizard."
 LangString FINISH_RUN_TEXT ${LANG_ENGLISH} "Launch ${APP_NAME} now"
 LangString FINISH_LINK_TEXT ${LANG_ENGLISH} "Visit TXA Documentation (Docs)"
+LangString SHORTCUT_DESC ${LANG_ENGLISH} "TXATOOL - WIN: Windows Optimization & Rescue Toolkit - Developed by TXA"
+LangString SHORTCUT_UNINST_DESC ${LANG_ENGLISH} "Uninstall ${APP_NAME}"
 
 LangString UNINST_CLOSING ${LANG_ENGLISH} "Terminating running instances before uninstalling..."
 
@@ -220,9 +224,9 @@ Section "Install"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   CreateDirectory "$SMPROGRAMS\${APP_NAME}"
-  CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
-  CreateShortcut "$SMPROGRAMS\${APP_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+  CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
+  CreateShortcut "$SMPROGRAMS\${APP_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0 "" "" "$(SHORTCUT_UNINST_DESC)"
+  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
 
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME}"
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayVersion" "${APP_VERSION}"
