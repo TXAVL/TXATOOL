@@ -438,6 +438,8 @@
     "btnUninstallTxaRepo": "Gỡ cài đặt TXA Repo",
     "btnTxaRepoDoctor": "Kiểm tra hệ thống",
     "btnOpenTxaTerminal": "Mở TXA Terminal",
+    "btnViewTxaRepoWeb": "Kho phần mềm (Web)",
+    "btnViewTxaRepoDocs": "Tài liệu hướng dẫn (Docs)",
     "lblExtendInsertKey": "Nhập key thủ công",
     "msgExtendPasteKey": "Dán key kích hoạt vào đây",
     "btnExtendActivateWin": "Kích hoạt Windows",

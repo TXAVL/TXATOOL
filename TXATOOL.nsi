@@ -71,7 +71,7 @@ VIAddVersionKey "LegalCopyright" "Copyright (c) 2026 ${APP_PUBLISHER}"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
 !define MUI_FINISHPAGE_RUN_TEXT $(FINISH_RUN_TEXT)
 !define MUI_FINISHPAGE_LINK $(FINISH_LINK_TEXT)
-!define MUI_FINISHPAGE_LINK_LOCATION "https://txavl.github.io/txa-repo"
+!define MUI_FINISHPAGE_LINK_LOCATION "https://txavl.github.io/txa-repo/docs/"
 !insertmacro MUI_PAGE_FINISH
 
 ; --- Uninstaller Pages ---
@@ -102,7 +102,7 @@ LangString DETAIL_OVERWRITE ${LANG_VIETNAMESE} "Cùng phiên bản ${APP_VERSION
 LangString FINISH_TITLE ${LANG_VIETNAMESE} "Hoàn tất Cài đặt ${APP_NAME}"
 LangString FINISH_TEXT ${LANG_VIETNAMESE} "${APP_NAME} ${APP_VERSION} đã được cài đặt thành công trên máy tính của bạn.$\n$\nNhấn 'Hoàn tất' để đóng trình hướng dẫn cài đặt."
 LangString FINISH_RUN_TEXT ${LANG_VIETNAMESE} "Khởi chạy ${APP_NAME} ngay"
-LangString FINISH_LINK_TEXT ${LANG_VIETNAMESE} "Truy cập Kho phần mềm & Tài liệu TXA (Website)"
+LangString FINISH_LINK_TEXT ${LANG_VIETNAMESE} "Truy cập Tài liệu hướng dẫn sử dụng TXA (Docs)"
 
 LangString UNINST_CLOSING ${LANG_VIETNAMESE} "Đang đóng ứng dụng nếu đang chạy trước khi gỡ bỏ..."
 
@@ -124,7 +124,7 @@ LangString DETAIL_OVERWRITE ${LANG_ENGLISH} "Same version ${APP_VERSION} detecte
 LangString FINISH_TITLE ${LANG_ENGLISH} "Completing ${APP_NAME} Setup"
 LangString FINISH_TEXT ${LANG_ENGLISH} "${APP_NAME} ${APP_VERSION} has been successfully installed on your computer.$\n$\nClick 'Finish' to exit this wizard."
 LangString FINISH_RUN_TEXT ${LANG_ENGLISH} "Launch ${APP_NAME} now"
-LangString FINISH_LINK_TEXT ${LANG_ENGLISH} "Visit TXA Software Store & Documentation (Website)"
+LangString FINISH_LINK_TEXT ${LANG_ENGLISH} "Visit TXA Documentation (Docs)"
 
 LangString UNINST_CLOSING ${LANG_ENGLISH} "Terminating running instances before uninstalling..."
 

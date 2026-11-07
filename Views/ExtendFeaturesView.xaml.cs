@@ -175,6 +175,8 @@ namespace TXATOOL.Views
             btnUninstallTxaRepo.Content = Helpers.LocalizationService.Get("btnUninstallTxaRepo");
             btnTxaRepoDoctor.Content = Helpers.LocalizationService.Get("btnTxaRepoDoctor");
             btnOpenTxaTerminal.Content = Helpers.LocalizationService.Get("btnOpenTxaTerminal");
+            btnViewTxaRepoWeb.Content = Helpers.LocalizationService.Get("btnViewTxaRepoWeb");
+            btnViewTxaRepoDocs.Content = Helpers.LocalizationService.Get("btnViewTxaRepoDocs");
 
             lblExtendOptiTools.Text = Helpers.LocalizationService.Get("lblExtendOptiTools");
             btnExtendMsiUtil.Content = Helpers.LocalizationService.Get("btnExtendMsiUtil");
@@ -1611,6 +1613,11 @@ namespace TXATOOL.Views
         }
 
         private void ViewTxaRepoWeb_Click(object sender, RoutedEventArgs e)
+        {
+            Services.TxaRepoService.OpenStore();
+        }
+
+        private void ViewTxaRepoDocs_Click(object sender, RoutedEventArgs e)
         {
             Services.TxaRepoService.OpenDocs();
         }

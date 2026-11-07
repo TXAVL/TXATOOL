@@ -9,7 +9,8 @@ namespace TXATOOL.Services
     public static class TxaRepoService
     {
         public const string REPO_URL = "https://github.com/TXAVL/txa-repo";
-        public const string DOCS_URL = "https://txavl.github.io/txa-repo";
+        public const string STORE_URL = "https://txavl.github.io/txa-repo";
+        public const string DOCS_URL = "https://txavl.github.io/txa-repo/docs/";
         public const string INSTALL_SCRIPT_URL = "https://raw.githubusercontent.com/TXAVL/txa-repo/main/install.ps1";
 
         public static string GetInstalledPath()
@@ -68,14 +69,14 @@ namespace TXATOOL.Services
             try
             {
                 string openWebCmd = openDocsOnSuccess 
-                    ? $"if ($?) {{ Write-Host 'Cai dat hoan tat! Dang mo trang chu TXA Repo: {DOCS_URL}' -ForegroundColor Green; Start-Process '{DOCS_URL}' }}" 
+                    ? $"if ($?) {{ Write-Host 'Cai dat hoan tat! Dang mo kho phan mem TXA: {STORE_URL}' -ForegroundColor Green; Start-Process '{STORE_URL}' }}" 
                     : "";
 
                 string script = $"& ([scriptblock]::Create((irm {INSTALL_SCRIPT_URL}))) -Lang {lang}; {openWebCmd}";
                 var psi = new ProcessStartInfo
                 {
                     FileName = "powershell.exe",
-                    Arguments = $"-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '==================================================' -ForegroundColor Cyan; Write-Host '   DANG CAI DAT KHO PHAN MEM TXA (txapm)...' -ForegroundColor Green; Write-Host '   Nguon: {REPO_URL}' -ForegroundColor DarkGray; Write-Host '   Trang chu: {DOCS_URL}' -ForegroundColor DarkGray; Write-Host '==================================================' -ForegroundColor Cyan; {script}\"",
+                    Arguments = $"-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '==================================================' -ForegroundColor Cyan; Write-Host '   DANG CAI DAT KHO PHAN MEM TXA (txapm)...' -ForegroundColor Green; Write-Host '   Nguon: {REPO_URL}' -ForegroundColor DarkGray; Write-Host '   Kho phan mem: {STORE_URL}' -ForegroundColor DarkGray; Write-Host '   Tai lieu: {DOCS_URL}' -ForegroundColor DarkGray; Write-Host '==================================================' -ForegroundColor Cyan; {script}\"",
                     UseShellExecute = true,
                     Verb = "runas"
                 };
@@ -142,6 +143,18 @@ namespace TXATOOL.Services
             catch (Exception ex)
             {
                 Logger.LogCrash(ex, "TxaRepoService.OpenTerminal");
+            }
+        }
+
+        public static void OpenStore()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(STORE_URL) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogCrash(ex, "TxaRepoService.OpenStore");
             }
         }
 

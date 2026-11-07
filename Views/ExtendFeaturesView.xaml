@@ -101,7 +101,8 @@
                             <Button x:Name="btnUninstallTxaRepo" Content="Gỡ cài đặt TXA Repo" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="170" Click="UninstallTxaRepo_Click"/>
                             <Button x:Name="btnTxaRepoDoctor" Content="Kiểm tra hệ thống" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="160" Click="TxaRepoDoctor_Click"/>
                             <Button x:Name="btnOpenTxaTerminal" Content="Mở TXA Terminal" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="160" Click="OpenTxaTerminal_Click"/>
-                            <Button x:Name="btnViewTxaRepoWeb" Content="Mở txavl.github.io/txa-repo" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="220" Click="ViewTxaRepoWeb_Click"/>
+                            <Button x:Name="btnViewTxaRepoWeb" Content="Kho phần mềm (Web)" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="180" Click="ViewTxaRepoWeb_Click"/>
+                            <Button x:Name="btnViewTxaRepoDocs" Content="Tài liệu hướng dẫn (Docs)" Style="{StaticResource ActionButtonStyle}" Margin="0,0,15,10" Width="190" Click="ViewTxaRepoDocs_Click"/>
                         </WrapPanel>
                     </StackPanel>
                 </Border>

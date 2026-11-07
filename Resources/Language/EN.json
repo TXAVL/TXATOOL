@@ -439,6 +439,8 @@
     "btnUninstallTxaRepo": "Uninstall TXA Repo",
     "btnTxaRepoDoctor": "Doctor / Health Check",
     "btnOpenTxaTerminal": "Open TXA Terminal",
+    "btnViewTxaRepoWeb": "Software Store (Web)",
+    "btnViewTxaRepoDocs": "Documentation (Docs)",
     "lblExtendInsertKey": "Insert product key manually",
     "msgExtendPasteKey": "Paste your Activation Key here",
     "btnExtendActivateWin": "Activate Windows",
