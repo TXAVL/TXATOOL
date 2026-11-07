@@ -10,7 +10,7 @@ Unicode true
 
 !define APP_NAME      "TXATOOL - WIN"
 !define APP_EXE       "TXATOOL.exe"
-!define APP_VERSION   "1.0.0"
+!define APP_VERSION   "1.1.0"
 !define APP_PUBLISHER "TXA"
 !define APP_URL       "https://fb.com/vlog.txa.2311"
 !define UNINST_KEY    "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL-WIN"

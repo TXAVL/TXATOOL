@@ -2,7 +2,7 @@
 
 An all-in-one Windows toolkit for IT support: system tweaks and optimization, cleanup, hardware info, downloads (apps, ISOs, Office, WinPE), license backup and network tools. Light and dark themes (follows Windows), Vietnamese and English.
 
-* **Version:** 1.0.0
+* **Version:** 1.1.0
 * **Author:** [TXA](https://fb.com/vlog.txa.2311)
 
 ## Build

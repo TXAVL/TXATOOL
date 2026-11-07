@@ -46,6 +46,6 @@ if %errorlevel% neq 0 (
 
 echo.
 echo ==========================================
-echo    SUCCESS: Output\TXATOOL_Setup_v1.0.0.exe
+echo    SUCCESS: Output\TXATOOL_Setup_v1.1.0.exe
 echo ==========================================
 popd

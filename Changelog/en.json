@@ -1,20 +1,35 @@
 {
+    "v1.1.0": {
+        "title": "TXATOOL - WIN - Changelog v1.1.0",
+        "summary_title": "OFFICIAL UPDATE v1.1.0 SUMMARY",
+        "content": [
+            "Integrated official command-line TXA Package Manager (txapm): install, uninstall, health check doctor, and dedicated terminal.",
+            "Added advanced system tuning & optimization suite: NTLite (auto-download & run), RAMMap64 (clear RAM), NVIDIA Profile Inspector, Chris Titus WinUtil, MSI Util v3, Timer Resolution.",
+            "Brand new NSIS installer: Multilingual (Vietnamese & English), Fluent Dark Blue styling with glowing tech banners.",
+            "Smart upgrade & overwrite mechanism: Automatic conflict handling and safe in-place overwrite mode.",
+            "Integrated auto-update ecosystem powered by txa.yml format.",
+            "Dedicated VietQR donation card & popup supporting TXA.",
+            "Distinct routing for Software Store (txavl.github.io/txa-repo) and Documentation (txavl.github.io/txa-repo/docs/)."
+        ],
+        "version_label": "LATEST RELEASE",
+        "version_value": "v1.1.0"
+    },
     "v1.0.0": {
         "title": "TXATOOL - WIN - Changelog v1.0.0",
         "summary_title": "OFFICIAL RELEASE v1.0.0 SUMMARY",
         "content": [
-            "Official launch of TXATOOL - WIN: The all-in-one toolkit designed for IT technicians and power users.",
-            "Integrated WSAP: Automated Windows installation directly from ISO onto target drive without requiring a USB boot drive.",
-            "Advanced network printer troubleshooting (fixes stubborn errors 0x0000011b, 0x00000709, 0x0000007c, RPC, and firewall issues).",
-            "Windows Edition Converter (Convert SKUs): Seamless switching between Home, Pro, Enterprise, and IoT Enterprise LTSC.",
-            "Smart License Manager: Check activation status, backup and restore digital licenses, and remove unwanted activation traces.",
-            "Deep system optimization: Disable telemetry, reduce latency, tune services, and comprehensive disk & cache cleaning.",
-            "UWP Debloat & Startup Apps Manager: Safely remove Windows bloatware and speed up system startup time.",
-            "Curated Software Store with hundreds of essential, verified applications ready for instant download.",
-            "Custom Microsoft Office Deployment tool for tailored installation of required Office apps and versions.",
-            "Modern Fluent Glass UI with full Light/Dark Theme auto-switching and bilingual support (Vietnamese & English)."
+            "Initial official release of TXATOOL - WIN toolkit for IT technicians and power users.",
+            "Integrated WSAP: Automated Windows installation directly from ISO image into HDD partition without USB Boot.",
+            "Comprehensive Network LAN printer repair suite (fixing 0x0000011b, 0x00000709, 0x0000007c, RPC, and Firewall issues).",
+            "Windows Edition Switcher (Convert SKUs) between Home, Pro, Enterprise, IoT Enterprise LTSC.",
+            "Smart licensing manager: activation check, digital license backup and restore.",
+            "Deep OS performance optimization: disabling telemetry, reducing latency, RAM optimization, and disk cleanup.",
+            "UWP bloatware remover and Windows startup manager.",
+            "Curated app store with essential tools updated regularly.",
+            "Customizable Microsoft Office deployment tool.",
+            "Modern Fluent Glass UI with automatic Light/Dark system theme matching and full Vietnamese / English localization."
         ],
-        "version_label": "RELEASE VERSION",
+        "version_label": "INITIAL RELEASE",
         "version_value": "v1.0.0"
     }
 }

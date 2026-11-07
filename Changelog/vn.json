@@ -1,4 +1,19 @@
 {
+    "v1.1.0": {
+        "title": "TXATOOL - WIN - Nhật ký thay đổi v1.1.0",
+        "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.1.0",
+        "content": [
+            "Tích hợp kho phần mềm dòng lệnh TXA Package Manager (txapm): Hỗ trợ cài đặt, gỡ bỏ, kiểm tra hệ thống và mở terminal chuyên dụng.",
+            "Tích hợp bộ công cụ tinh chỉnh & tối ưu nâng cao: NTLite (tải & chạy tự động), RAMMap64 (giải phóng RAM), NVIDIA Profile Inspector, Chris Titus WinUtil, MSI Util v3, Timer Resolution.",
+            "Bộ cài đặt NSIS hoàn toàn mới: Hỗ trợ đa ngôn ngữ (Tiếng Việt & English), đồ họa Fluent phát sáng hiện đại.",
+            "Cơ chế nâng cấp & cài đè thông minh: Nhận diện xung đột phiên bản, tự động đóng app và ghi đè mượt mà không lỗi.",
+            "Tích hợp hệ sinh thái cập nhật tự động qua file cấu hình txa.yml.",
+            "Card & Popup ủng hộ VietQR dành riêng cho tác giả TXA.",
+            "Phân tách rõ liên kết Kho phần mềm (txavl.github.io/txa-repo) và Tài liệu hướng dẫn (txavl.github.io/txa-repo/docs/)."
+        ],
+        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_value": "v1.1.0"
+    },
     "v1.0.0": {
         "title": "TXATOOL - WIN - Nhật ký thay đổi v1.0.0",
         "summary_title": "TỔNG QUAN PHIÊN BẢN CHÍNH THỨC v1.0.0",

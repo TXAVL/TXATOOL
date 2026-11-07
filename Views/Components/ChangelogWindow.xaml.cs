@@ -91,6 +91,7 @@ namespace TXATOOL.Views.Components
 
                 var dateMap = new Dictionary<string, string>
                 {
+                    { "v1.1.0", "2026-11-07" },
                     { "v1.0.0", "2026-11-05" }
                 };
 
