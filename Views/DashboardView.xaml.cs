@@ -36,10 +36,12 @@ namespace TXATOOL.Views
         private class GpuInfo { public string Name { get; set; } = ""; public int Index { get; set; } public ulong DedicatedRam { get; set; } public ulong SharedRam { get; set; } public ulong AdapterRam => IsIntegrated ? SharedRam : DedicatedRam; public string Luid { get; set; } = ""; public bool IsIntegrated { get; set; } }
         private System.Collections.Generic.List<GpuInfo> _detectedGpus = new System.Collections.Generic.List<GpuInfo>();
         private int _selectedGpuIndex = 0;
+#pragma warning disable CS0067, CS0414
         private string _currentChangelogVersion = "";
 
         // Events for navigation
         public event EventHandler<string>? NavigateRequested;
+#pragma warning restore CS0067, CS0414
 
 #pragma warning disable CS0169, CS0649
         // Backing stubs for removed UI elements to preserve code-behind compatibility
