@@ -163,6 +163,8 @@ namespace TXATOOL.Views.Components
 
                 ChangelogPanel.Children.Add(border);
             }
+
+            Dispatcher.InvokeAsync(() => ChangelogScrollViewer?.ScrollToTop(), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

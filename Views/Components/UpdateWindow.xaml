@@ -1,7 +1,7 @@
 <Window x:Class="TXATOOL.Views.Components.UpdateWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Update Available" Height="600" Width="800"
+        Title="Update Available" Height="680" Width="840"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -159,7 +159,7 @@
                         <Separator Grid.Row="0" VerticalAlignment="Bottom" Margin="-20,0,-20,0" Background="{DynamicResource SurfaceSunkenBrush}" Height="1" />
 
                         <!-- Changelog List -->
-                        <ScrollViewer Grid.Row="1" Margin="0,15,0,0" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer x:Name="ChangelogScrollViewer" Grid.Row="1" Margin="0,15,0,0" VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="ChangelogPanel">
                                 <!-- Items will be added dynamically via code-behind -->
                             </StackPanel>
