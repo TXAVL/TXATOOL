@@ -253,12 +253,10 @@ namespace TXATOOL.Services
                     }
                 }
 
-                // Run NSIS installer silently or semi-silently
-                // For NSIS, /S performs a silent install. If omitted, user sees the standard setup UI.
+                // Run NSIS installer with interactive wizard (not silent) so user can proceed manually
                 var psi = new ProcessStartInfo
                 {
                     FileName = tempPath,
-                    Arguments = "/S", // NSIS silent flag
                     UseShellExecute = true,
                     Verb = "runas"
                 };

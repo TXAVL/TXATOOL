@@ -87,7 +87,7 @@ VIAddVersionKey "LegalCopyright" "Copyright (c) 2026 ${APP_PUBLISHER}"
 ; ------------------- TIẾNG VIỆT -------------------
 LangString MSG_REQ_64BIT ${LANG_VIETNAMESE} "${APP_NAME} yêu cầu hệ điều hành Windows 10 hoặc Windows 11 (64-bit)."
 LangString MSG_SAME_VER ${LANG_VIETNAMESE} "Phiên bản ${APP_VERSION} hiện đã được cài đặt trên máy tính của bạn.$\n$\nBạn có muốn cài đè (ghi đè toàn bộ tệp tin) phiên bản này không?"
-LangString MSG_PREV_VER ${LANG_VIETNAMESE} "Phát hiện ${APP_NAME} (phiên bản cũ $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi nâng cấp lên phiên bản mới ${APP_VERSION}.$\n$\nBạn có muốn tiếp tục cài đặt không?"
+LangString MSG_PREV_VER ${LANG_VIETNAMESE} "Phát hiện ${APP_NAME} (phiên bản $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tiến hành nâng cấp lên phiên bản mới ${APP_VERSION}.$\n$\nBạn có muốn tiếp tục nâng cấp không?"
 
 LangString WELCOME_TITLE ${LANG_VIETNAMESE} "Chào mừng bạn đến với Bộ cài đặt ${APP_NAME}"
 LangString WELCOME_TEXT ${LANG_VIETNAMESE} "Trình hướng dẫn này sẽ hỗ trợ bạn cài đặt ${APP_NAME} ${APP_VERSION} vào máy tính.$\n$\n${APP_NAME} là giải pháp all-in-one chuyên nghiệp dành cho kỹ thuật viên IT:$\n• Cài Windows trực tiếp từ ISO (WSAP - Không cần USB Boot)$\n• Bộ công cụ xử lý lỗi chia sẻ máy in mạng LAN chuyên sâu$\n• Chuyển đổi ấn bản Windows (Convert SKU) & Kích hoạt bản quyền số$\n• Tinh chỉnh tối ưu hóa hiệu năng, dọn rác & gỡ Bloatware UWP$\n• Kho phần mềm tuyển chọn & Cài đặt Microsoft Office tùy biến$\n$\nNhấn 'Tiếp tục' để bắt đầu thiết lập."
@@ -96,7 +96,7 @@ LangString DIR_TEXT_TOP ${LANG_VIETNAMESE} "Thiết lập sẽ cài đặt ${APP
 LangString DIR_TEXT_DEST ${LANG_VIETNAMESE} "Thư mục cài đặt đích"
 
 LangString DETAIL_KILL_APP ${LANG_VIETNAMESE} "Đang kiểm tra và đóng ứng dụng nếu đang chạy..."
-LangString DETAIL_REMOVE_OLD ${LANG_VIETNAMESE} "Đang tự động gỡ bỏ phiên bản cũ..."
+LangString DETAIL_UPGRADE ${LANG_VIETNAMESE} "Đang nâng cấp các tệp tin lên phiên bản mới ${APP_VERSION}..."
 LangString DETAIL_OVERWRITE ${LANG_VIETNAMESE} "Cùng phiên bản ${APP_VERSION} - Đang tiến hành cài đè các tệp tin..."
 
 LangString FINISH_TITLE ${LANG_VIETNAMESE} "Hoàn tất Cài đặt ${APP_NAME}"
@@ -111,7 +111,7 @@ LangString UNINST_CLOSING ${LANG_VIETNAMESE} "Đang đóng ứng dụng nếu đ
 ; ------------------- ENGLISH -------------------
 LangString MSG_REQ_64BIT ${LANG_ENGLISH} "${APP_NAME} requires 64-bit Windows 10 or Windows 11."
 LangString MSG_SAME_VER ${LANG_ENGLISH} "Version ${APP_VERSION} is already installed on your computer.$\n$\nDo you want to reinstall and overwrite all existing files?"
-LangString MSG_PREV_VER ${LANG_ENGLISH} "A previous version ($PREV_VERSION) of ${APP_NAME} was detected on this computer.$\n$\nThe installer will automatically remove the previous version before upgrading to ${APP_VERSION}.$\n$\nDo you want to continue?"
+LangString MSG_PREV_VER ${LANG_ENGLISH} "A previous version ($PREV_VERSION) of ${APP_NAME} was detected on this computer.$\n$\nThe setup will upgrade to the new version ${APP_VERSION}.$\n$\nDo you want to continue?"
 
 LangString WELCOME_TITLE ${LANG_ENGLISH} "Welcome to the ${APP_NAME} Setup Wizard"
 LangString WELCOME_TEXT ${LANG_ENGLISH} "This wizard will guide you through the installation of ${APP_NAME} ${APP_VERSION}.$\n$\n${APP_NAME} is an all-in-one suite designed for IT technicians and power users:$\n• Direct Windows ISO Deployment (WSAP - No USB Boot needed)$\n• In-depth Network LAN Printer Repair Toolkit$\n• Windows SKU Conversion & Digital Licensing Manager$\n• Deep OS Performance Optimization & UWP Bloatware Cleaner$\n• Curated App Store & Customizable Microsoft Office Deployment$\n$\nClick 'Next' to continue."
@@ -120,7 +120,7 @@ LangString DIR_TEXT_TOP ${LANG_ENGLISH} "Setup will install ${APP_NAME} in the f
 LangString DIR_TEXT_DEST ${LANG_ENGLISH} "Destination Folder"
 
 LangString DETAIL_KILL_APP ${LANG_ENGLISH} "Checking and terminating running instances of ${APP_NAME}..."
-LangString DETAIL_REMOVE_OLD ${LANG_ENGLISH} "Automatically removing previous version..."
+LangString DETAIL_UPGRADE ${LANG_ENGLISH} "Upgrading application files to version ${APP_VERSION}..."
 LangString DETAIL_OVERWRITE ${LANG_ENGLISH} "Same version ${APP_VERSION} detected - Overwriting application files..."
 
 LangString FINISH_TITLE ${LANG_ENGLISH} "Completing ${APP_NAME} Setup"
@@ -163,7 +163,11 @@ Function .onInit
     ReadRegStr $PREV_UNINSTALL HKCU "${UNINST_KEY}" "UninstallString"
   ${EndIf}
 
-  ; Bỏ qua thông báo xác nhận nếu đang chạy ở chế độ im lặng (/S từ Auto-Update)
+  ${If} $PREV_DIR != ""
+    StrCpy $INSTDIR $PREV_DIR
+  ${EndIf}
+
+  ; Bỏ qua thông báo xác nhận nếu đang chạy ở chế độ im lặng
   IfSilent init_done
 
   ${If} $PREV_VERSION != ""
@@ -194,26 +198,10 @@ Section "Install"
 
   SetOverwrite on
 
-  ; Nếu phát hiện phiên bản KHÁC/CŨ HƠN thì mới chạy gỡ cài đặt bản cũ trước
-  ; Nếu là CÙNG PHIÊN BẢN (cài đè) thì ghi đè trực tiếp mà không cần chạy uninstaller
+  ; Nâng cấp trực tiếp tệp tin mới (In-place Upgrade), không chạy gỡ cài đặt làm mất dữ liệu
   ${If} $PREV_VERSION != ""
   ${AndIf} $PREV_VERSION != "${APP_VERSION}"
-    DetailPrint "$(DETAIL_REMOVE_OLD)"
-    ${If} $PREV_DIR != ""
-    ${AndIf} ${FileExists} "$PREV_DIR\Uninstall.exe"
-      ExecWait '"$PREV_DIR\Uninstall.exe" /S _?=$PREV_DIR' $0
-      Sleep 1000
-      Delete "$PREV_DIR\Uninstall.exe"
-      RMDir "$PREV_DIR"
-    ${ElseIf} ${FileExists} "$INSTDIR\Uninstall.exe"
-      ExecWait '"$INSTDIR\Uninstall.exe" /S _?=$INSTDIR' $0
-      Sleep 1000
-      Delete "$INSTDIR\Uninstall.exe"
-      RMDir "$INSTDIR"
-    ${ElseIf} $PREV_UNINSTALL != ""
-      ExecWait '$PREV_UNINSTALL /S _?=$INSTDIR' $0
-      Sleep 1000
-    ${EndIf}
+    DetailPrint "$(DETAIL_UPGRADE)"
   ${ElseIf} $PREV_VERSION == "${APP_VERSION}"
     DetailPrint "$(DETAIL_OVERWRITE)"
   ${EndIf}
@@ -227,6 +215,11 @@ Section "Install"
   CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
   CreateShortcut "$SMPROGRAMS\${APP_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0 "" "" "$(SHORTCUT_UNINST_DESC)"
   CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
+
+  ; Đảm bảo Desktop của người dùng hiện tại luôn có shortcut
+  SetShellVarContext current
+  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
+  SetShellVarContext all
 
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME}"
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayVersion" "${APP_VERSION}"
@@ -244,12 +237,17 @@ SectionEnd
 
 Section "Uninstall"
   SetRegView 64
-  SetShellVarContext all
   DetailPrint "$(UNINST_CLOSING)"
   nsExec::Exec 'taskkill /F /T /IM ${APP_EXE}'
   Pop $0
   Sleep 500
 
+  SetShellVarContext current
+  Delete "$DESKTOP\${APP_NAME}.lnk"
+  Delete "$DESKTOP\TXATOOL.lnk"
+  RMDir /r "$SMPROGRAMS\${APP_NAME}"
+
+  SetShellVarContext all
   Delete "$DESKTOP\${APP_NAME}.lnk"
   Delete "$DESKTOP\TXATOOL.lnk"
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
