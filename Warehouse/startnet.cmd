@@ -20,19 +20,11 @@ If exist "X:\%FindFile%" (
     Set "FilePath=X:\%FindFile%"
     Goto :ConfigFound
 )
-If exist "X:\TXATOOLWindowsConfig.txt" (
-    Set "FilePath=X:\TXATOOLWindowsConfig.txt"
-    Goto :ConfigFound
-)
 
 :: 2. Quick search in root of all drives
 For %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     if exist "%%D:\!FindFile!" (
         Set "FilePath=%%D:\!FindFile!"
-        goto :ConfigFound
-    )
-    if exist "%%D:\TXATOOLWindowsConfig.txt" (
-        Set "FilePath=%%D:\TXATOOLWindowsConfig.txt"
         goto :ConfigFound
     )
 )
@@ -41,10 +33,6 @@ For %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 For %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     if exist "%%D:\" (
         For /f "delims=" %%a in ('dir /s /b "%%D:\!FindFile!" 2^>nul') do (
-            Set "FilePath=%%a"
-            goto :ConfigFound
-        )
-        For /f "delims=" %%a in ('dir /s /b "%%D:\TXATOOLWindowsConfig.txt" 2^>nul') do (
             Set "FilePath=%%a"
             goto :ConfigFound
         )
