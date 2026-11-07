@@ -1,5 +1,7 @@
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Media;
+using System.Diagnostics;
 using Microsoft.Win32;
 using TXATOOL.Helpers;
 
@@ -19,6 +21,7 @@ namespace TXATOOL.Views
         {
              ApplyTranslations();
              Helpers.LocalizationService.LanguageChanged += ApplyTranslations;
+             _ = UpdateTxaRepoStatusAsync();
 
              await LoadIrstData();
 
@@ -166,9 +169,20 @@ namespace TXATOOL.Views
             btnExtendRemove.Content = Helpers.LocalizationService.Get("btnExtendRemove");
             btnExtendListPrograms.Content = Helpers.LocalizationService.Get("btnExtendListPrograms");
 
-            lblExtendReduceLatency.Text = Helpers.LocalizationService.Get("lblExtendReduceLatency");
+            lblExtendTxaRepo.Text = Helpers.LocalizationService.Get("lblExtendTxaRepo");
+            descExtendTxaRepo.Text = Helpers.LocalizationService.Get("descExtendTxaRepo");
+            btnInstallTxaRepo.Content = Helpers.LocalizationService.Get("btnInstallTxaRepo");
+            btnUninstallTxaRepo.Content = Helpers.LocalizationService.Get("btnUninstallTxaRepo");
+            btnTxaRepoDoctor.Content = Helpers.LocalizationService.Get("btnTxaRepoDoctor");
+            btnOpenTxaTerminal.Content = Helpers.LocalizationService.Get("btnOpenTxaTerminal");
+
+            lblExtendOptiTools.Text = Helpers.LocalizationService.Get("lblExtendOptiTools");
             btnExtendMsiUtil.Content = Helpers.LocalizationService.Get("btnExtendMsiUtil");
             btnExtendTimerRes.Content = Helpers.LocalizationService.Get("btnExtendTimerRes");
+            btnExtendRamMap.Content = Helpers.LocalizationService.Get("btnExtendRamMap");
+            btnExtendNvidiaInspector.Content = Helpers.LocalizationService.Get("btnExtendNvidiaInspector");
+            btnExtendNtlite.Content = Helpers.LocalizationService.Get("btnExtendNtlite");
+            btnExtendWinUtil.Content = Helpers.LocalizationService.Get("btnExtendWinUtil");
 
 
             lblExtendExportDriver.Text = Helpers.LocalizationService.Get("lblExtendExportDriver");
@@ -1477,6 +1491,220 @@ namespace TXATOOL.Views
             {
                 Components.CustomMessageBoxWindow.Show(string.Format(Helpers.LocalizationService.Get("msgExtendToolLaunchFailed"), "Timer Resolution", ex.Message), Helpers.LocalizationService.Get("msgError"));
             }
+        }
+
+        private async Task UpdateTxaRepoStatusAsync()
+        {
+            try
+            {
+                bool isInstalled = Services.TxaRepoService.IsInstalled();
+                if (isInstalled)
+                {
+                    string ver = await Services.TxaRepoService.GetInstalledVersionAsync();
+                    string statusText = string.IsNullOrWhiteSpace(ver) ? "Đã cài đặt" : $"Đã cài ({ver})";
+                    txtTxaRepoStatus.Text = statusText;
+                    borderTxaRepoBadge.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981")); // Green
+                    btnUninstallTxaRepo.IsEnabled = true;
+                    btnTxaRepoDoctor.IsEnabled = true;
+                    btnOpenTxaTerminal.IsEnabled = true;
+                }
+                else
+                {
+                    txtTxaRepoStatus.Text = "Chưa cài đặt";
+                    borderTxaRepoBadge.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7280")); // Gray
+                    btnUninstallTxaRepo.IsEnabled = false;
+                    btnTxaRepoDoctor.IsEnabled = false;
+                    btnOpenTxaTerminal.IsEnabled = false;
+                }
+            }
+            catch { }
+        }
+
+        private async void InstallTxaRepo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string lang = Helpers.LocalizationService.CurrentLanguage?.ToLower().Contains("en") == true ? "en" : "vi";
+                Services.TxaRepoService.Install(lang);
+                Components.CustomMessageBoxWindow.Show(
+                    "Đang mở cửa sổ PowerShell để cài đặt TXA Package Manager (txapm).\nVui lòng theo dõi tiến trình trên màn hình console.", 
+                    "TXA Repo Installer");
+                await Task.Delay(3000);
+                await UpdateTxaRepoStatusAsync();
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi cài đặt TXA Repo: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private async void UninstallTxaRepo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var confirm = MessageBox.Show(
+                    "Bạn có chắc chắn muốn gỡ bỏ hoàn toàn TXA Package Manager (txapm) khỏi máy?", 
+                    "Xác nhận gỡ bỏ", 
+                    MessageBoxButton.YesNo, 
+                    MessageBoxImage.Question);
+
+                if (confirm == MessageBoxResult.Yes)
+                {
+                    Services.TxaRepoService.Uninstall();
+                    await Task.Delay(3000);
+                    await UpdateTxaRepoStatusAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi gỡ cài đặt TXA Repo: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private void TxaRepoDoctor_Click(object sender, RoutedEventArgs e)
+        {
+            Services.TxaRepoService.RunDoctor();
+        }
+
+        private void OpenTxaTerminal_Click(object sender, RoutedEventArgs e)
+        {
+            Services.TxaRepoService.OpenTerminal();
+        }
+
+        private void ViewTxaRepoWeb_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://github.com/TXAVL/txa-repo") { UseShellExecute = true });
+            }
+            catch { }
+        }
+
+        private void OpenRAMMap_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string tool = ResolveToolPath(System.IO.Path.Combine("Tools", "RAMMap64.exe"), System.IO.Path.Combine("Warehouse", "RAMMap", "RAMMap64.exe"));
+                if (!System.IO.File.Exists(tool))
+                {
+                    Components.CustomMessageBoxWindow.Show($"Không tìm thấy file: {tool}", "Lỗi");
+                    return;
+                }
+                Process.Start(new ProcessStartInfo(tool) { UseShellExecute = true, Verb = "runas" });
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi mở RAMMap: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private void OpenNvidiaInspector_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string tool = ResolveToolPath(System.IO.Path.Combine("Tools", "Inspector.exe"), System.IO.Path.Combine("Warehouse", "Optimize game", "Optimize game", "Inspector.exe"));
+                if (!System.IO.File.Exists(tool))
+                {
+                    Components.CustomMessageBoxWindow.Show($"Không tìm thấy NVIDIA Inspector tại: {tool}", "Lỗi");
+                    return;
+                }
+                Process.Start(new ProcessStartInfo(tool) { UseShellExecute = true, Verb = "runas" });
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi mở NVIDIA Profile Inspector: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private void OpenNTLite_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pf = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                string pfx86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                string path1 = System.IO.Path.Combine(pf, "NTLite", "NTLite.exe");
+                string path2 = System.IO.Path.Combine(pfx86, "NTLite", "NTLite.exe");
+
+                if (System.IO.File.Exists(path1))
+                {
+                    Process.Start(new ProcessStartInfo(path1) { UseShellExecute = true, Verb = "runas" });
+                    return;
+                }
+                if (System.IO.File.Exists(path2))
+                {
+                    Process.Start(new ProcessStartInfo(path2) { UseShellExecute = true, Verb = "runas" });
+                    return;
+                }
+
+                // If not installed, ask user to install via winget or open download page
+                var result = MessageBox.Show(
+                    "NTLite chưa được cài đặt trên máy của bạn.\n\nBạn có muốn tự động cài đặt NTLite qua Windows Package Manager (winget) ngay bây giờ không?", 
+                    "NTLite - Bộ công cụ tùy biến ISO Windows", 
+                    MessageBoxButton.YesNoCancel, 
+                    MessageBoxImage.Information);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "powershell.exe",
+                        Arguments = "-NoExit -ExecutionPolicy Bypass -Command \"Write-Host 'Dang cai dat NTLite qua winget...' -ForegroundColor Cyan; winget install Nlitesoft.NTLite --accept-package-agreements --accept-source-agreements; Write-Host 'Hoan tat!' -ForegroundColor Green\"",
+                        UseShellExecute = true,
+                        Verb = "runas"
+                    });
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    Process.Start(new ProcessStartInfo("https://www.ntlite.com/download/") { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi mở/cài đặt NTLite: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private void OpenWinUtil_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string script = ResolveToolPath(System.IO.Path.Combine("Warehouse", "winutil-main", "scripts", "main.ps1"), System.IO.Path.Combine("Warehouse", "winutil-main", "scripts", "main.ps1"));
+                string cmd;
+                if (System.IO.File.Exists(script))
+                {
+                    cmd = $"-NoExit -ExecutionPolicy Bypass -File \"{script}\"";
+                }
+                else
+                {
+                    cmd = "-NoExit -ExecutionPolicy Bypass -Command \"irm https://christitus.com/win | iex\"";
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = cmd,
+                    UseShellExecute = true,
+                    Verb = "runas"
+                });
+            }
+            catch (Exception ex)
+            {
+                Components.CustomMessageBoxWindow.Show($"Lỗi mở Chris Titus WinUtil: {ex.Message}", "Lỗi");
+            }
+        }
+
+        private string ResolveToolPath(string relativeSubpath, string warehouseFallback)
+        {
+            string path1 = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeSubpath));
+            if (System.IO.File.Exists(path1)) return path1;
+
+            string path2 = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, warehouseFallback));
+            if (System.IO.File.Exists(path2)) return path2;
+
+            string path3 = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\", warehouseFallback));
+            if (System.IO.File.Exists(path3)) return path3;
+
+            return path1;
         }
 
 

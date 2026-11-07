@@ -1,4 +1,4 @@
-﻿; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
+; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
 ; Build: compile_setup.bat  (publishes win-x64 self-contained, then runs makensis)
 
 Unicode true
@@ -84,9 +84,7 @@ Function .onInit
   ${EndIf}
 
   ${If} $PREV_VERSION != ""
-    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 \
-      "Phát hiện ${APP_NAME} (phiên bản $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi cài đặt phiên bản mới để tránh xung đột.$\n$\nBạn có muốn tiếp tục cài đặt không?" \
-      IDYES init_continue
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Phát hiện ${APP_NAME} (phiên bản $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi cài đặt phiên bản mới để tránh xung đột.$\n$\nBạn có muốn tiếp tục cài đặt không?" IDYES init_continue
     Abort
   init_continue:
   ${EndIf}

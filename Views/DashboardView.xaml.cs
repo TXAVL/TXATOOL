@@ -1582,6 +1582,35 @@ namespace TXATOOL.Views
             catch { }
         }
 
+        private void TxaRepoCard_Click(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (Services.TxaRepoService.IsInstalled())
+                {
+                    Services.TxaRepoService.OpenTerminal();
+                }
+                else
+                {
+                    var result = MessageBox.Show(
+                        "Kho phần mềm TXA (txapm) chưa được cài đặt trên máy của bạn.\n\nBạn có muốn tự động cài đặt kho TXA qua PowerShell ngay bây giờ không?", 
+                        "TXA Package Manager (txapm)", 
+                        MessageBoxButton.YesNo, 
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        string lang = Helpers.LocalizationService.CurrentLanguage?.ToLower().Contains("en") == true ? "en" : "vi";
+                        Services.TxaRepoService.Install(lang);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi");
+            }
+        }
+
         private void WebsiteCard_Click(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1821,6 +1850,11 @@ namespace TXATOOL.Views
                 if (lblGithubTitle != null) lblGithubTitle.Text = (!string.IsNullOrEmpty(ghTitle) && ghTitle != "lblGithubTitle") ? ghTitle : "GitHub Repository";
                 var ghDesc = LocalizationService.Get("lblGithubDesc");
                 if (lblGithubDesc != null) lblGithubDesc.Text = (!string.IsNullOrEmpty(ghDesc) && ghDesc != "lblGithubDesc") ? ghDesc : "Open source & contribute";
+
+                var txaTitle = LocalizationService.Get("lblTxaRepoTitle");
+                if (lblTxaRepoTitle != null) lblTxaRepoTitle.Text = (!string.IsNullOrEmpty(txaTitle) && txaTitle != "lblTxaRepoTitle") ? txaTitle : "Kho TXA (txapm)";
+                var txaDesc = LocalizationService.Get("lblTxaRepoDesc");
+                if (lblTxaRepoDesc != null) lblTxaRepoDesc.Text = (!string.IsNullOrEmpty(txaDesc) && txaDesc != "lblTxaRepoDesc") ? txaDesc : "Cài đặt gói lệnh TXA";
 
                 var perfTracker = LocalizationService.Get("lblSystemPerformance");
                 if (lblPerfTracker != null) lblPerfTracker.Text = (!string.IsNullOrEmpty(perfTracker) && perfTracker != "lblSystemPerformance") ? perfTracker : "System Performance";

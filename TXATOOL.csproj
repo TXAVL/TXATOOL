@@ -82,6 +82,10 @@
       <Link>Tools\RAMMap64.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Warehouse\Optimize game\Optimize game\Inspector.exe">
+      <Link>Tools\Inspector.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Language\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
