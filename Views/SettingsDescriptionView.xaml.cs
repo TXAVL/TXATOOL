@@ -27,8 +27,34 @@ namespace TXATOOL.Views
         {
             if (lblDonationTitle != null) lblDonationTitle.Text = LocalizationService.Get("lblDonationTitle");
             if (lblDonationDesc != null) lblDonationDesc.Text = LocalizationService.Get("lblDonationDesc");
-            if (lblDonationNote != null) lblDonationNote.Text = LocalizationService.Get("lblDonationNote") ?? "Transfer note: DONATE UNG HO TXA";
+            if (lblDonationNote != null) lblDonationNote.Text = LocalizationService.Get("lblDonationNote") ?? "Nội dung chuyển khoản: DONATE UNG HO TXA";
             if (lblDonationThanks != null) lblDonationThanks.Text = LocalizationService.Get("lblDonationThanks");
+            if (btnOpenDonateModal != null)
+            {
+                bool isVn = LocalizationService.CurrentLanguage?.ToLower().Contains("en") != true;
+                btnOpenDonateModal.Content = isVn ? "Phóng to mã QR" : "Enlarge QR Code";
+            }
+        }
+
+        private void QrImage_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OpenDonateModal();
+        }
+
+        private void OpenDonateModal_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenDonateModal();
+        }
+
+        private void OpenDonateModal()
+        {
+            try
+            {
+                var win = new TXATOOL.Views.Components.DonateWindow();
+                win.Owner = System.Windows.Application.Current.MainWindow;
+                win.ShowDialog();
+            }
+            catch { }
         }
     }
 }

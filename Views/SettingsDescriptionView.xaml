@@ -4,24 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
-    <StackPanel>
-        <TextBlock x:Name="lblDonationTitle" Text="Donation" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        
-        <TextBlock x:Name="lblDonationDesc" Text="Development and maintenance of TXATOOL - WIN takes a lot of time. If you like using this tool you can support its future by donating an amount of your choice." 
-                   FontSize="17" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,15"/>
-                   
-        <TextBlock x:Name="lblDonationThanks" Text="Thanks in advance!" FontSize="17" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,20"/>
-        
-        <Border CornerRadius="12" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="16,14" Margin="0,0,0,0">
-            <StackPanel>
-                <TextBlock x:Name="lblDonationBank" Text="Techcombank" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
-                <TextBlock x:Name="lblDonationHolder" Text="TANG XUAN ANH" FontSize="15" Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0"/>
-                <TextBlock x:Name="lblDonationNumber" Text="2923252311" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" Margin="0,6,0,0" IsHitTestVisible="True" Cursor="IBeam"/>
-                <TextBlock x:Name="lblDonationNote" Text="Transfer note: DONATE UNG HO TXA" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,8,0,0" TextWrapping="Wrap"/>
-            </StackPanel>
-        </Border>
+             d:DesignHeight="850" d:DesignWidth="300"
+             Foreground="{DynamicResource TextBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="0,0,10,20">
+            <TextBlock x:Name="lblDonationTitle" Text="Ủng hộ (Donate)" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,12" Foreground="{DynamicResource TextBrush}"/>
+            
+            <TextBlock x:Name="lblDonationDesc" Text="Việc phát triển và duy trì TXATOOL - WIN tốn rất nhiều thời gian và công sức. Nếu bạn thích công cụ này, bạn có thể ủng hộ với số tiền tùy ý." 
+                       FontSize="13.5" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,10"/>
+                       
+            <TextBlock x:Name="lblDonationThanks" Text="Cảm ơn bạn rất nhiều!" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,16"/>
+            
+            <Border CornerRadius="12" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="16" Margin="0,0,0,0">
+                <StackPanel HorizontalAlignment="Center">
+                    <!-- VietQR Official Header Badge -->
+                    <Border Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="6" Padding="10,4" HorizontalAlignment="Center" Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Viet" FontSize="15" FontWeight="Black" Foreground="#0054A6" FontFamily="Segoe UI"/>
+                            <TextBlock Text="QR" FontSize="15" FontWeight="Black" Foreground="#ED1C24" FontFamily="Segoe UI"/>
+                            <Border Width="1.5" Height="14" Background="#CBD5E1" Margin="8,0"/>
+                            <TextBlock Text="napas247" FontSize="11.5" FontWeight="Bold" Foreground="#0054A6" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-    </StackPanel>
+                    <!-- QR Code Image -->
+                    <Border Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="8" HorizontalAlignment="Center" Margin="0,0,0,14" Cursor="Hand" MouseLeftButtonUp="QrImage_Click" ToolTip="Nhấn để phóng to ảnh QR">
+                        <Image Source="pack://application:,,,/Images/qr_donate.png" 
+                               Width="200" Height="200" 
+                               Stretch="Uniform" 
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Border>
+
+                    <!-- Bank Details -->
+                    <TextBlock x:Name="lblDonationBank" Text="Techcombank" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="lblDonationHolder" Text="TANG XUAN ANH" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="lblDonationNumber" Text="2923252311" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" Margin="0,4,0,0" IsHitTestVisible="True" Cursor="IBeam" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="lblDonationNote" Text="Nội dung chuyển khoản: DONATE UNG HO TXA" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,6,0,0" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center"/>
+
+                    <!-- Action Button -->
+                    <Button x:Name="btnOpenDonateModal" Content="Phóng to mã QR" Height="36" Margin="0,14,0,0" Padding="16,0" Style="{StaticResource ActionButtonStyle}" Click="OpenDonateModal_Click"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

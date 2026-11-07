@@ -189,7 +189,8 @@ namespace TXATOOL.Views.Components
 
         private void LaterButton_Click(object sender, RoutedEventArgs e)
         {
-            AppConfigManager.Config.RemindDate = DateTime.Now.AddDays(3);
+            // "Nhắc tôi sau": Đóng thông báo trong phiên này và sẽ tự động nhắc lại ở lần khởi chạy tiếp theo
+            AppConfigManager.Config.RemindDate = null;
             AppConfigManager.SaveConfig();
             this.Close();
         }
