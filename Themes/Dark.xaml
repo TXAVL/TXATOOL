@@ -3,30 +3,54 @@
     <!-- DARK THEME: warm stone-black ground, raised stone surfaces, same orange accent family. -->
 
     <LinearGradientBrush x:Key="BgWindowBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#171412" Offset="0"/>
-        <GradientStop Color="#0F0D0C" Offset="1"/>
+        <GradientStop Color="#181513" Offset="0"/>
+        <GradientStop Color="#100E0D" Offset="1"/>
     </LinearGradientBrush>
 
-    <SolidColorBrush x:Key="PanelBrush" Color="#B31F1B19"/>
-    <SolidColorBrush x:Key="PanelHoverBrush" Color="#CC2A2522"/>
-    <SolidColorBrush x:Key="PanelSelectedBrush" Color="#E6332D29"/>
+    <!-- Translucent Panels with better opacity to prevent blurry/washed out contrast -->
+    <SolidColorBrush x:Key="PanelBrush" Color="#D9221D1A"/>
+    <SolidColorBrush x:Key="PanelHoverBrush" Color="#E62C2623"/>
+    <SolidColorBrush x:Key="PanelSelectedBrush" Color="#F2352E2A"/>
 
-    <SolidColorBrush x:Key="SurfaceBrush" Color="#292422"/>
-    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#221E1C"/>
-    <SolidColorBrush x:Key="SurfaceSunkenBrush" Color="#1A1716"/>
-    <SolidColorBrush x:Key="LineBrush" Color="#3F3935"/>
-    <SolidColorBrush x:Key="LineStrongBrush" Color="#5A524C"/>
+    <!-- High-definition surfaces and borders -->
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#2A2522"/>
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#211D1A"/>
+    <SolidColorBrush x:Key="SurfaceSunkenBrush" Color="#181513"/>
+    <SolidColorBrush x:Key="LineBrush" Color="#4A423D"/>
+    <SolidColorBrush x:Key="LineStrongBrush" Color="#665D56"/>
 
-    <SolidColorBrush x:Key="TextBrush" Color="#F5F2EE"/>
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6D0C9"/>
-    <SolidColorBrush x:Key="TextMutedBrush" Color="#A59D95"/>
+    <!-- Crisp WCAG text contrast -->
+    <SolidColorBrush x:Key="TextBrush" Color="#FAF7F5"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#E0D9D2"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="#B3ABA2"/>
     <SolidColorBrush x:Key="OnAccentBrush" Color="#FFFFFF"/>
 
     <Color x:Key="ActionColor">#D9480F</Color>
     <SolidColorBrush x:Key="ActionBrush" Color="#D9480F"/>
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#F0601F"/>
     <SolidColorBrush x:Key="AccentTextBrush" Color="#FB923C"/>
-    <SolidColorBrush x:Key="AccentSoftBrush" Color="#3A2418"/>
-    <SolidColorBrush x:Key="AccentSoftHoverBrush" Color="#4A2D1D"/>
-    <SolidColorBrush x:Key="AccentSoftPressedBrush" Color="#5C3823"/>
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#3E261B"/>
+    <SolidColorBrush x:Key="AccentSoftHoverBrush" Color="#4E3022"/>
+    <SolidColorBrush x:Key="AccentSoftPressedBrush" Color="#603A29"/>
+
+    <!-- Semantic Feedback & Status Brushes (High Contrast for Dark Background) -->
+    <SolidColorBrush x:Key="WarningBgBrush" Color="#2A1F0D"/>
+    <SolidColorBrush x:Key="WarningBorderBrush" Color="#854D0E"/>
+    <SolidColorBrush x:Key="WarningTextBrush" Color="#FDE68A"/>
+    <SolidColorBrush x:Key="WarningIconBrush" Color="#FBBF24"/>
+
+    <SolidColorBrush x:Key="SuccessBgBrush" Color="#0D281A"/>
+    <SolidColorBrush x:Key="SuccessBorderBrush" Color="#047857"/>
+    <SolidColorBrush x:Key="SuccessTextBrush" Color="#A7F3D0"/>
+    <SolidColorBrush x:Key="SuccessIconBrush" Color="#34D399"/>
+
+    <SolidColorBrush x:Key="DangerBgBrush" Color="#2D1111"/>
+    <SolidColorBrush x:Key="DangerBorderBrush" Color="#991B1B"/>
+    <SolidColorBrush x:Key="DangerTextBrush" Color="#FECACA"/>
+    <SolidColorBrush x:Key="DangerIconBrush" Color="#F87171"/>
+
+    <SolidColorBrush x:Key="InfoBgBrush" Color="#0E233F"/>
+    <SolidColorBrush x:Key="InfoBorderBrush" Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="InfoTextBrush" Color="#BFDBFE"/>
+    <SolidColorBrush x:Key="InfoIconBrush" Color="#60A5FA"/>
 </ResourceDictionary>

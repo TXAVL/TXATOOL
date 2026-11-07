@@ -105,6 +105,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        InitNavGroups();
         this.Loaded += MainWindow_Loaded;
 
         // Initialize localization: load saved language preference
@@ -160,6 +161,53 @@ public partial class MainWindow : Window
         Dispatcher.Invoke(() => ApplyMainWindowTranslations());
     }
 
+    // Sidebar categories (accordion): header button Tag = panel name
+    private static readonly (string Panel, string Chevron)[] NavGroups =
+    {
+        ("GroupDeploy", "ChvDeploy"),
+        ("GroupOptimize", "ChvOptimize"),
+        ("GroupSoftware", "ChvSoftware"),
+        ("GroupDiagnostics", "ChvDiagnostics")
+    };
+
+    private void SetNavGroup(string panelName, bool expanded)
+    {
+        if (FindName(panelName) is not StackPanel panel) return;
+        panel.Visibility = expanded ? Visibility.Visible : Visibility.Collapsed;
+        foreach (var g in NavGroups)
+        {
+            if (g.Panel == panelName && FindName(g.Chevron) is TextBlock chev)
+                chev.Text = expanded ? "\uE70D" : "\uE76C";
+        }
+    }
+
+    private void ExpandOnly(string panelName)
+    {
+        foreach (var g in NavGroups) SetNavGroup(g.Panel, g.Panel == panelName);
+    }
+
+    private void NavGroup_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button b || b.Tag is not string panelName) return;
+        bool open = FindName(panelName) is StackPanel p && p.Visibility == Visibility.Visible;
+        if (open) SetNavGroup(panelName, false); else ExpandOnly(panelName);
+    }
+
+    private void NavItem_Checked(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.Parent is StackPanel sp && sp.Name.StartsWith("Group"))
+            ExpandOnly(sp.Name);
+    }
+
+    private void InitNavGroups()
+    {
+        foreach (var rb in new[] { NavGeneral, NavWindows, NavStartup, NavUWPApps, NavCleaning, NavHardware, NavNetwork, NavUSBBoot,
+                                   NavDownload, NavOffice, NavExtendFeatures, NavWSAP, NavConvertSKU, NavLicense,
+                                   NavWindowsErrors, NavPrinterErrors, NavFixGame, NavGameConfigs })
+            rb.Checked += NavItem_Checked;
+        ExpandOnly("GroupOptimize");
+    }
+
     private string _searchPlaceholder = "Type here to search...";
 
     private void ApplyMainWindowTranslations()
@@ -177,11 +225,10 @@ public partial class MainWindow : Window
         RestartButton.Content = LocalizationService.Get("btnRestartToApply") ?? "Restart to apply changes";
 
         // Direct assignments — safer than visual tree traversal for custom templates
-        NavGroupOptimize.Text = LocalizationService.Get("NavGroupOptimize") ?? "Optimize";
-        NavGroupSoftware.Text = LocalizationService.Get("NavGroupSoftware") ?? "Software";
-        NavGroupLicense.Text = LocalizationService.Get("NavGroupLicense") ?? "License";
-        NavGroupDevice.Text = LocalizationService.Get("NavGroupDevice") ?? "Devices";
-        NavGroupFix.Text = LocalizationService.Get("NavGroupFix") ?? "Fix errors";
+        if (NavGroupDeploy != null) NavGroupDeploy.Text = LocalizationService.Get("NavGroupDeploy") ?? "OS Deployment";
+        if (NavGroupOptimize != null) NavGroupOptimize.Text = LocalizationService.Get("NavGroupOptimize") ?? "Optimization";
+        if (NavGroupSoftware != null) NavGroupSoftware.Text = LocalizationService.Get("NavGroupSoftware") ?? "Software & Tools";
+        if (NavGroupDiagnostics != null) NavGroupDiagnostics.Text = LocalizationService.Get("NavGroupDiagnostics") ?? "Diagnostics & Repair";
 
         NavDashboard.Content = LocalizationService.Get("NavDashboard");
         NavGeneral.Content = LocalizationService.Get("NavGeneral");

@@ -22,6 +22,7 @@
 
         <!-- CLOSE BUTTON STYLE -->
         <Style x:Key="WindowCloseBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -44,11 +45,12 @@
 
         <!-- OUTLINE BUTTON STYLE (VIEW ALL STYLE) -->
         <Style x:Key="ModalOutlineBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="32"/>
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="22,0"/>
             <Setter Property="Template">
@@ -59,7 +61,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
                                 <Setter TargetName="bdr" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
@@ -77,9 +79,9 @@
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Height" Value="34"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -125,7 +127,7 @@
         </Border>
 
         <!-- Main Window Surface -->
-        <Border CornerRadius="16" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" ClipToBounds="True">
+        <Border CornerRadius="16" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/> <!-- Header -->
@@ -150,7 +152,7 @@
 
                         <!-- Title and Subtitle -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="TxtWindowTitle" Text="TXATOOL - WIN - Changelog" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="TxtWindowTitle" Text="TXATOOL - WIN - Changelog" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock x:Name="TxtWindowSubtitle" Text="Lịch sử phát triển và toàn bộ các bản cập nhật phiên bản" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
 
@@ -173,7 +175,7 @@
                         <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource SearchTextBoxStyle}" TextChanged="SearchBox_TextChanged" Margin="0,0,16,0"/>
 
                         <!-- Total Versions Badge -->
-                        <Border Grid.Column="1" Background="{DynamicResource AccentSoftBrush}" CornerRadius="8" Padding="12,0" Height="34">
+                        <Border Grid.Column="1" Background="{DynamicResource SurfaceSunkenBrush}" CornerRadius="8" Padding="12,0" Height="34">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE81C;" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
                                 <TextBlock x:Name="TxtTotalReleases" Text="10 phiên bản" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
@@ -182,14 +184,14 @@
                     </Grid>
                 </Border>
 
-                <Separator Grid.Row="1" VerticalAlignment="Bottom" Background="{DynamicResource AccentSoftBrush}" Height="1" Margin="0"/>
+                <Separator Grid.Row="1" VerticalAlignment="Bottom" Background="{DynamicResource SurfaceSunkenBrush}" Height="1" Margin="0"/>
 
                 <!-- 3. CHANGELOG TIMELINE LIST -->
                 <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="24,16,24,16">
                     <ItemsControl x:Name="ChangelogItemsList">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="12" Padding="18,16" Margin="0,0,0,16">
+                                <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="12" Padding="18,16" Margin="0,0,0,16">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/> <!-- Version header -->
@@ -207,7 +209,7 @@
                                             <!-- Version name & indicator dot -->
                                             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <Ellipse Width="9" Height="9" Fill="{Binding DotBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding VersionName}" FontSize="15.5" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding VersionName}" FontSize="15.5" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
 
                                                 <!-- Latest Badge (Visible only on newest release) -->
                                                 <Border Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center"
@@ -224,7 +226,7 @@
                                         </Grid>
 
                                         <!-- Divider line -->
-                                        <Border Grid.Row="1" Height="1" Background="{DynamicResource AccentSoftHoverBrush}" Margin="0,10,0,10"/>
+                                        <Border Grid.Row="1" Height="1" Background="{DynamicResource SurfaceSunkenBrush}" Margin="0,10,0,10"/>
 
                                         <!-- Bullet Points List -->
                                         <ItemsControl Grid.Row="2" ItemsSource="{Binding Content}">
@@ -249,7 +251,7 @@
                 </ScrollViewer>
 
                 <!-- 4. FOOTER -->
-                <Border Grid.Row="3" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="0,1,0,0" Padding="24,14">
+                <Border Grid.Row="3" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0" Padding="24,14">
                     <Grid>
                         <!-- GitHub Releases External Link -->
                         <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="GitHubReleases_Click">

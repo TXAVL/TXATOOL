@@ -53,6 +53,7 @@
 
         <!-- TOGGLE SWITCH STYLE -->
         <Style x:Key="ToggleSwitchStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -111,17 +112,18 @@
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FontSize" Value="17"/>
             <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="13,3"/>
-            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="13,2"/>
+            <Setter Property="Margin" Value="0,1"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="FocusBorder" BorderThickness="2" BorderBrush="Transparent" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" Margin="10,0">
-                            <Grid Height="36" SnapsToDevicePixels="True" UseLayoutRounding="True" RenderOptions.BitmapScalingMode="HighQuality">
+                            <Grid Height="34" SnapsToDevicePixels="True" UseLayoutRounding="True" RenderOptions.BitmapScalingMode="HighQuality">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+                                <Border x:Name="SelBar" Width="3" Height="18" CornerRadius="2" Background="{DynamicResource ActionBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-9,0,0,0" Visibility="Collapsed"/>
                                 <TextBlock x:Name="IconText" Grid.Column="0" Text="{TemplateBinding Tag}" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True"/>
                                 <ContentPresenter Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                             </Grid>
@@ -138,6 +140,7 @@
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                 <Setter TargetName="IconText" Property="FontWeight" Value="Medium"/>
                                 <Setter TargetName="IconText" Property="Foreground" Value="{DynamicResource ActionBrush}"/>
+                                <Setter TargetName="SelBar" Property="Visibility" Value="Visible"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -200,6 +203,7 @@
 
         <!-- WINUI COMBOBOX ITEM STYLE -->
         <Style x:Key="WinUIComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="Margin" Value="4,1"/>
@@ -400,6 +404,7 @@
         </Style>
 
         <Style x:Key="ModernRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -433,6 +438,7 @@
         </Style>
 
         <Style x:Key="RoundedCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="Transparent"/>

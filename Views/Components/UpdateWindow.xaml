@@ -12,6 +12,7 @@
     <Window.Resources>
         <!-- Style for Bottom Buttons -->
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -117,7 +118,7 @@
                 </Grid>
 
                 <!-- Changelog Box -->
-                <Border Grid.Row="1" Background="{DynamicResource AccentSoftBrush}" CornerRadius="12" Margin="30,0,30,20" Padding="20">
+                <Border Grid.Row="1" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="12" Margin="30,0,30,20" Padding="20">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -135,7 +136,7 @@
                                 </Border>
                             </StackPanel>
                             
-                            <Button x:Name="ViewChangelogLink" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Cursor="Hand" HorizontalAlignment="Right" Click="ViewChangelogLink_Click">
+                            <Button x:Name="ViewChangelogLink" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Cursor="Hand" HorizontalAlignment="Right" Click="ViewChangelogLink_Click">
                                 <StackPanel Orientation="Horizontal" Margin="12,6">
                                     <TextBlock x:Name="ViewChangelogText" Text="View full changelog" FontSize="13" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,5,0" />
                                     <TextBlock Text="&#xE72A;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" />
@@ -155,7 +156,7 @@
                             </Button>
                         </Grid>
 
-                        <Separator Grid.Row="0" VerticalAlignment="Bottom" Margin="-20,0,-20,0" Background="{DynamicResource AccentSoftHoverBrush}" Height="1" />
+                        <Separator Grid.Row="0" VerticalAlignment="Bottom" Margin="-20,0,-20,0" Background="{DynamicResource SurfaceSunkenBrush}" Height="1" />
 
                         <!-- Changelog List -->
                         <ScrollViewer Grid.Row="1" Margin="0,15,0,0" VerticalScrollBarVisibility="Auto">
@@ -207,7 +208,7 @@
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" x:Name="ButtonPanel">
                         <!-- Skip Button -->
-                        <Button Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" 
+                        <Button Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" 
                                 Padding="15,8" Margin="0,0,10,0" Click="SkipButton_Click">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE711;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
@@ -238,7 +239,7 @@
                     <StackPanel x:Name="ProgressPanel" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center" Width="280">
                         <TextBlock x:Name="ProgressText" Text="Downloading update... 0%" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,0,0,5" HorizontalAlignment="Right"/>
                         <ProgressBar x:Name="DownloadProgress" Height="8" Minimum="0" Maximum="100" Value="0" 
-                                     Foreground="{DynamicResource ActionBrush}" Background="{DynamicResource AccentSoftHoverBrush}" BorderThickness="0">
+                                     Foreground="{DynamicResource ActionBrush}" Background="{DynamicResource SurfaceSunkenBrush}" BorderThickness="0">
                             <ProgressBar.Template>
                                 <ControlTemplate TargetType="ProgressBar">
                                     <Grid>

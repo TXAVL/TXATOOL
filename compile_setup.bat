@@ -2,59 +2,50 @@
 setlocal
 
 echo ==========================================
-echo        Building TXATOOL Project
+echo        Building TXATOOL - WIN
 echo ==========================================
 
-REM Always run from the script directory to avoid MSB1003
 pushd "%~dp0"
 set "PROJECT_FILE=%~dp0TXATOOL.csproj"
+set "MAKENSIS=C:\Program Files (x86)\NSIS\makensis.exe"
+if not exist "%MAKENSIS%" set "MAKENSIS=C:\Program Files\NSIS\makensis.exe"
 
 if not exist "%PROJECT_FILE%" (
     echo [ERROR] Project file not found: "%PROJECT_FILE%"
-    pause
+    popd
+    exit /b 1
+)
+if not exist "%MAKENSIS%" (
+    echo [ERROR] NSIS compiler ^(makensis.exe^) not found. Install NSIS 3.
+    popd
     exit /b 1
 )
 
 echo [1/3] Cleaning old build files...
-dotnet restore "%PROJECT_FILE%"
 dotnet clean "%PROJECT_FILE%" -c Release
-if %errorlevel% neq 0 (
-    echo [ERROR] Dotnet clean failed!
-    popd
-    pause
-    exit /b %errorlevel%
-)
 if exist "bin\Release" rmdir /s /q "bin\Release"
 
 echo.
-echo [2/3] Publishing application for win-x64...
-dotnet publish "%PROJECT_FILE%" -c Release -r win-x64
+echo [2/3] Publishing win-x64 (self-contained, .NET included)...
+dotnet publish "%PROJECT_FILE%" -c Release -r win-x64 --self-contained true
 if %errorlevel% neq 0 (
     echo [ERROR] Dotnet publish failed!
     popd
-    pause
     exit /b %errorlevel%
 )
 
 echo.
-echo [3/3] Compiling Inno Setup script...
-if not exist "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" (
-    echo [ERROR] Inno Setup compiler ^(ISCC.exe^) not found! Please check the installation path.
-    popd
-    pause
-    exit /b 1
-)
-"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%~dp0TXATOOL.iss"
+echo [3/3] Compiling NSIS installer...
+if not exist Output mkdir Output
+"%MAKENSIS%" "%~dp0TXATOOL.nsi"
 if %errorlevel% neq 0 (
-    echo [ERROR] Inno Setup compilation failed!
+    echo [ERROR] NSIS compilation failed!
     popd
-    pause
     exit /b %errorlevel%
 )
 
 echo.
 echo ==========================================
-echo    SUCCESS: Setup file generated in Output\
+echo    SUCCESS: Output\TXATOOL_Setup_v1.0.0.exe
 echo ==========================================
 popd
-pause

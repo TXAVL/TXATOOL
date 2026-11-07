@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TXATOOL.Views.SettingsView"
+<UserControl x:Class="TXATOOL.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -126,10 +126,17 @@
                            FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,15"/>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Click="Developer_Click" Style="{StaticResource ActionButtonStyle}" Width="180" Height="42" Margin="0" Padding="0" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource LineBrush}" VerticalAlignment="Center" AutomationProperties.Name="TXA on Facebook">
+                    <Button Click="Developer_Click" Style="{StaticResource ActionButtonStyle}" Width="160" Height="42" Margin="0,0,12,0" Padding="0" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource LineBrush}" VerticalAlignment="Center" AutomationProperties.Name="TXA on Facebook">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Image Source="/Images/fb.png" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="TXA" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                            <TextBlock Text="TXA Facebook" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="DonateQr_Click" Style="{StaticResource ActionButtonStyle}" Width="210" Height="42" Margin="0" Padding="0" Background="{DynamicResource ActionBrush}" VerticalAlignment="Center" AutomationProperties.Name="Donate VietQR">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE8D7;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="lblBtnDonateVietQR" Text="Ủng hộ tác giả (VietQR)" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

@@ -4,20 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
-             
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="Description:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-            <TextBlock Text="In this section, you can choose the most suitable DNS server for your PC to ensure the best connection. We also provide multiple options to help you achieve lower ping and a smoother gaming experience." 
-                       TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
-            
-            <Separator Background="{DynamicResource PanelSelectedBrush}" Margin="0,0,0,20"/>
-            
-            <TextBlock Text="Mô tả:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-            <TextBlock Text="Trong phần này, bạn có thể chọn máy chủ DNS phù hợp nhất cho PC của mình để đảm bảo kết nối tốt nhất. Chúng tôi cũng cung cấp nhiều tùy chọn để giúp bạn đạt được ping thấp hơn và trải nghiệm chơi game mượt mà hơn." 
-                       TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+             d:DesignHeight="600" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
+    <StackPanel>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Quick network diagnostics and configuration: switch to fast public DNS servers (Google, Cloudflare, Quad9), flush DNS cache, reset Winsock/IP stack, and test latency." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
         </StackPanel>
-    </ScrollViewer>
+
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Công cụ chẩn đoán và cấu hình mạng nhanh chóng: đổi nhanh DNS (Google DNS, Cloudflare, Quad9), xóa bộ nhớ cache DNS, reset Winsock và cấu hình IP khi mạng bị lỗi." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

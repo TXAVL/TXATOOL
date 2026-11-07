@@ -1550,6 +1550,20 @@ namespace TXATOOL.Views
             }
         }
 
+        private void DonateCard_Click(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var win = new TXATOOL.Views.Components.DonateWindow();
+                win.Owner = Application.Current.MainWindow;
+                win.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error opening DonateWindow: {ex.Message}");
+            }
+        }
+
         private void FacebookCard_Click(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1654,7 +1668,7 @@ namespace TXATOOL.Views
                             { "v1.0.3", "2026-07-15" },
                             { "v1.0.2", "2026-06-20" },
                             { "v1.0.1", "2026-05-10" },
-                            { "v1.0.0", "2026-04-01" }
+                            { "v1.0.0", "2026-11-05" }
                         };
 
                         var brushMap = new SolidColorBrush[]
@@ -1808,11 +1822,6 @@ namespace TXATOOL.Views
                 var ghDesc = LocalizationService.Get("lblGithubDesc");
                 if (lblGithubDesc != null) lblGithubDesc.Text = (!string.IsNullOrEmpty(ghDesc) && ghDesc != "lblGithubDesc") ? ghDesc : "Open source & contribute";
 
-                var wsTitle = LocalizationService.Get("lblWebsiteTitle");
-                if (lblWebsiteTitle != null) lblWebsiteTitle.Text = (!string.IsNullOrEmpty(wsTitle) && wsTitle != "lblWebsiteTitle") ? wsTitle : "Website";
-                var wsDesc = LocalizationService.Get("lblWebsiteDesc");
-                if (lblWebsiteDesc != null) lblWebsiteDesc.Text = (!string.IsNullOrEmpty(wsDesc) && wsDesc != "lblWebsiteDesc") ? wsDesc : "Official TXATOOL - WIN homepage";
-
                 var perfTracker = LocalizationService.Get("lblSystemPerformance");
                 if (lblPerfTracker != null) lblPerfTracker.Text = (!string.IsNullOrEmpty(perfTracker) && perfTracker != "lblSystemPerformance") ? perfTracker : "System Performance";
 
@@ -1859,6 +1868,12 @@ namespace TXATOOL.Views
 
                 var changelogTitle = LocalizationService.Get("lblChangelog");
                 if (ChangelogHeaderTitle != null) ChangelogHeaderTitle.Text = (!string.IsNullOrEmpty(changelogTitle) && changelogTitle != "lblChangelog") ? changelogTitle : "Changelog";
+
+                var donateTitle = LocalizationService.Get("lblDonateCardTitle");
+                if (lblDonateCardTitle != null) lblDonateCardTitle.Text = (!string.IsNullOrEmpty(donateTitle) && donateTitle != "lblDonateCardTitle") ? donateTitle : "Ủng hộ tác giả TXA";
+
+                var donateDesc = LocalizationService.Get("lblDonateCardDesc");
+                if (lblDonateCardDesc != null) lblDonateCardDesc.Text = (!string.IsNullOrEmpty(donateDesc) && donateDesc != "lblDonateCardDesc") ? donateDesc : "Quét mã VietQR ủng hộ dự án";
 
                 if (chkOptimizePerf != null && chkOptimizePerf.Content != null) chkOptimizePerf.Content = LocalizationService.Get("chkOptimizePerf");
                 if (chkOptimizeNetwork != null && chkOptimizeNetwork.Content != null) chkOptimizeNetwork.Content = LocalizationService.Get("chkNetThrottling");

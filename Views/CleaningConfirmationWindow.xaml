@@ -36,6 +36,7 @@
                 <Button x:Name="BtnConfirm" Content="Confirm Clean" Click="Confirm_Click" Width="200" Height="40" Margin="0,0,20,0">
                     <Button.Style>
                         <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
@@ -58,6 +59,7 @@
                 <Button x:Name="BtnCancel" Content="Wait a minute" Click="Cancel_Click" Width="200" Height="40">
                     <Button.Style>
                         <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">

@@ -41,6 +41,7 @@
                     <ListView x:Name="lvBackups" Background="Transparent" BorderThickness="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                 <Setter Property="Padding" Value="10,8"/>
                                 <Setter Property="Margin" Value="0,2"/>
                                 <Setter Property="Background" Value="Transparent"/>

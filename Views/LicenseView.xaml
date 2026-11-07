@@ -66,7 +66,7 @@
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftHoverBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
                                 <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -80,7 +80,7 @@
         <!-- SECONDARY FROSTED BUTTON -->
         <Style x:Key="SecondaryActionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="14,6"/>
@@ -95,7 +95,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
                                 <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
                             </Trigger>
@@ -103,8 +103,8 @@
                                 <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
                                 <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -116,7 +116,7 @@
         <!-- MAS CLEANUP ACTION CHIP BUTTON -->
         <Style x:Key="CleanupChipButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource LineStrongBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,6"/>
@@ -132,12 +132,12 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
                                 <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -188,7 +188,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -239,7 +239,7 @@
 
                 <!-- Title & Subtitle -->
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock x:Name="lblLicMainTitle" Text="Manage License" FontSize="23" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,2"/>
+                    <TextBlock x:Name="lblLicMainTitle" Text="Manage License" FontSize="23" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,2"/>
                     <TextBlock x:Name="lblLicSubTitle" Text="Backup/Restore/Remove Windows licenses on this device" FontSize="13" Foreground="{DynamicResource TextMutedBrush}"/>
                 </StackPanel>
 
@@ -284,7 +284,7 @@
                         <!-- Title, License Badge & Description -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,2">
-                                <TextBlock x:Name="txtStatusTitle" Text="Windows is activated" FontSize="17" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock x:Name="txtStatusTitle" Text="Windows is activated" FontSize="17" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <Border x:Name="brdLicenseTypeTag" Background="#ECFDF5" BorderBrush="#A7F3D0" BorderThickness="1" CornerRadius="6" Padding="10,2" VerticalAlignment="Center">
                                     <TextBlock x:Name="txtLicenseTypeTag" Text="OEM License (Factory Original)" FontSize="12" FontWeight="SemiBold" Foreground="#059669"/>
                                 </Border>
@@ -325,7 +325,7 @@
                             <!-- Metric 2: Method -->
                             <StackPanel Grid.Column="2">
                                 <TextBlock x:Name="lblLicMethod" Text="Method" FontSize="11.5" FontWeight="Medium" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,1"/>
-                                <TextBlock x:Name="txtDetailMethod" Text="OEM" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
+                                <TextBlock x:Name="txtDetailMethod" Text="OEM" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
                             </StackPanel>
 
                             <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="12,0" Background="{DynamicResource AccentSoftHoverBrush}"/>
@@ -333,7 +333,7 @@
                             <!-- Metric 3: Activation Date -->
                             <StackPanel Grid.Column="4">
                                 <TextBlock x:Name="lblLicActivationDate" Text="Activation Date" FontSize="11.5" FontWeight="Medium" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,1"/>
-                                <TextBlock x:Name="txtDetailDate" Text="13/03/2026" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
+                                <TextBlock x:Name="txtDetailDate" Text="13/03/2026" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
                             </StackPanel>
 
                             <Separator Grid.Column="5" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="12,0" Background="{DynamicResource AccentSoftHoverBrush}"/>
@@ -370,7 +370,7 @@
                             <Grid Margin="0,0,0,12">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="&#xE24B;" FontFamily="pack://application:,,,/Resources/Fonts/#Fluent System Icons, pack://application:,,,/Resources/Fonts/#FluentSystemIcons-Regular" FontSize="17" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="lblLicInfoTitle" Text="License Information" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblLicInfoTitle" Text="License Information" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <Button Style="{StaticResource SecondaryActionButtonStyle}" HorizontalAlignment="Right" Padding="12,5" Height="30" FontSize="12" Click="BtnCopyAll_Click">
                                     <StackPanel Orientation="Horizontal">
@@ -407,11 +407,11 @@
 
                                 <!-- Channel -->
                                 <TextBlock Grid.Row="0" Grid.Column="0" x:Name="lblLicChannel" Text="Channel" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtChannel" Text="OEM" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtChannel" Text="OEM" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
 
                                 <!-- CID -->
                                 <TextBlock Grid.Row="2" Grid.Column="0" x:Name="lblLicCID" Text="CID" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="txtCID" Text="00356-24621-51116-AAOEM" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="txtCID" Text="00356-24621-51116-AAOEM" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                 <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource IconButton}" Click="BtnCopyCID_Click" VerticalAlignment="Center" ToolTip="Copy CID">
                                     <Image Source="/Images/License/copy.png" Width="14" Height="14" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
@@ -425,37 +425,37 @@
 
                                 <!-- OEM Key -->
                                 <TextBlock Grid.Row="6" Grid.Column="0" x:Name="lblLicOemKey" Text="OEM Key" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Row="6" Grid.Column="1" x:Name="txtOemKey" Text="KNQ32-29MV8-DGGKP-47JG6-8TY6Q" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Grid.Row="6" Grid.Column="1" x:Name="txtOemKey" Text="KNQ32-29MV8-DGGKP-47JG6-8TY6Q" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                 <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource IconButton}" Click="BtnCopyOemKey_Click" VerticalAlignment="Center" ToolTip="Copy OEM Key">
                                     <Image Source="/Images/License/copy.png" Width="14" Height="14" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
 
                                 <!-- OEM Edition -->
                                 <TextBlock Grid.Row="8" Grid.Column="0" x:Name="lblLicOemEdition" Text="OEM Edition" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtOemEdition" Text="Home Single Language" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtOemEdition" Text="Home Single Language" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
 
                                 <!-- OS Name -->
                                 <TextBlock Grid.Row="10" Grid.Column="0" x:Name="lblLicOsName" Text="OS Edition" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtOsName" Text="Windows 10 Home Single Language" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtOsName" Text="Windows 10 Home Single Language" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
 
                                 <!-- Version & Build (Unified Font & Dynamic Localization) -->
                                 <TextBlock Grid.Row="12" Grid.Column="0" x:Name="lblLicVersion" Text="Version" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                 <StackPanel Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock x:Name="txtVersion" Text="22H2" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="txtVersion" Text="22H2" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
                                     <TextBlock Text="  •  " Foreground="{DynamicResource TextMutedBrush}" FontSize="12" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="lblLicOsBuild" Text="OS Build" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                     <TextBlock Text=": " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="txtBuild" Text="19045.6466" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="txtBuild" Text="19045.6466" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <!-- Architecture & Installed Date (Unified Font & Dynamic Localization) -->
                                 <TextBlock Grid.Row="14" Grid.Column="0" x:Name="lblLicArch" Text="Architecture" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                 <StackPanel Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock x:Name="txtArchitecture" Text="64-bit" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="txtArchitecture" Text="64-bit" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
                                     <TextBlock Text="  •  " Foreground="{DynamicResource TextMutedBrush}" FontSize="12" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="lblLicInstallDate" Text="Installed Date" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                     <TextBlock Text=": " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="txtInstallDate" Text="13/03/2026" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="txtInstallDate" Text="13/03/2026" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" FontSize="14" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
@@ -476,7 +476,7 @@
                             <StackPanel Grid.Row="0">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                     <TextBlock Text="&#xE740;" FontFamily="pack://application:,,,/Resources/Fonts/#Fluent System Icons, pack://application:,,,/Resources/Fonts/#FluentSystemIcons-Regular" FontSize="17" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,7,0" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="lblLicActivateTitle" Text="Activate Windows" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblLicActivateTitle" Text="Activate Windows" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <TextBlock x:Name="lblLicActivateDesc" Text="Enter a product key to activate Windows." FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12" TextWrapping="Wrap"/>
                             </StackPanel>
@@ -493,7 +493,7 @@
 
                                 <Border Grid.Column="0" BorderBrush="{DynamicResource LineStrongBrush}" BorderThickness="1" CornerRadius="7" Background="{DynamicResource SurfaceBrush}" Height="42">
                                     <Grid>
-                                        <TextBox x:Name="tbInputKey" BorderThickness="0" Background="Transparent" Padding="12,9,32,9" FontSize="13.5" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="tbInputKey" BorderThickness="0" Background="Transparent" Padding="12,9,32,9" FontSize="13.5" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                         <TextBlock x:Name="tbInputKeyPlaceholder" Text="Enter product key..." Foreground="{DynamicResource TextMutedBrush}" Padding="12,9" FontSize="13" IsHitTestVisible="False" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -533,7 +533,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock x:Name="lblLicChangeTypeTitle" Text="You want to change the license type?" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource AccentTextBrush}"/>
+                                        <TextBlock x:Name="lblLicChangeTypeTitle" Text="You want to change the license type?" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource TextBrush}"/>
                                         <TextBlock x:Name="lblLicChangeTypeDesc" Text="You can convert Windows Edition to use your own license." FontSize="12" Foreground="{DynamicResource TextMutedBrush}"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" x:Name="btnLicChangeType" Content="Click here >" Style="{StaticResource HyperlinkButtonStyle}" FontWeight="Bold" Click="BtnChangeKey_Click" VerticalAlignment="Center" Margin="8,0,0,0"/>
@@ -572,7 +572,7 @@
                             <!-- Header -->
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                 <Image Source="/Images/License/layers.png" Width="16" Height="16" Margin="0,0,7,0" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="lblLicBackupTitle" Text="Backup &amp; Restore Activation" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="lblLicBackupTitle" Text="Backup &amp; Restore Activation" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <!-- 2 Generous Boxes Side by Side -->
@@ -591,7 +591,7 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" x:Name="lblLicBackupSubTitle" Text="Backup License" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,2"/>
+                                        <TextBlock Grid.Row="0" x:Name="lblLicBackupSubTitle" Text="Backup License" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,2"/>
                                         <TextBlock Grid.Row="1" x:Name="lblLicBackupDesc" Text="Save current license information to a file for future use." FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,0,0,8" Height="32"/>
                                         <Button Grid.Row="2" Style="{StaticResource SecondaryActionButtonStyle}" Padding="12,5" Height="32" HorizontalAlignment="Left" Click="BtnBackup_Click">
                                             <StackPanel Orientation="Horizontal">
@@ -610,7 +610,7 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" x:Name="lblLicRestoreSubTitle" Text="Restore License" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,2"/>
+                                        <TextBlock Grid.Row="0" x:Name="lblLicRestoreSubTitle" Text="Restore License" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,2"/>
                                         <TextBlock Grid.Row="1" x:Name="lblLicRestoreDesc" Text="Restore license from a previously backed up file." FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,0,0,8" Height="32"/>
                                         <Button Grid.Row="2" Style="{StaticResource SecondaryActionButtonStyle}" Padding="12,5" Height="32" HorizontalAlignment="Left" Click="BtnRestore_Click">
                                             <StackPanel Orientation="Horizontal">
@@ -647,7 +647,7 @@
                             <StackPanel Grid.Row="0" Margin="0,0,0,10">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,2">
                                     <Image Source="/Images/License/remove.png" Width="16" Height="16" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="lblLicRemoveMAS" Text="Remove MAS" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblLicRemoveMAS" Text="Remove MAS" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <TextBlock x:Name="lblLicRemoveMASDesc" Text="Uninstall MAS activation scripts from the system." FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
@@ -655,7 +655,7 @@
                             <!-- Windows MAS Cleanup Section (Comfortable 40px Action Chips) -->
                             <Border Grid.Row="1" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <TextBlock x:Name="lblWinRemoveTitle" Text="Windows" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,7"/>
+                                    <TextBlock x:Name="lblWinRemoveTitle" Text="Windows" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,7"/>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -681,7 +681,7 @@
                             <!-- Office MAS Cleanup Section (Comfortable 40px Action Chips) -->
                             <Border Grid.Row="2" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <TextBlock x:Name="lblOffRemoveTitle" Text="Office" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,7"/>
+                                    <TextBlock x:Name="lblOffRemoveTitle" Text="Office" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,7"/>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>

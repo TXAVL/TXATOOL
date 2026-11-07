@@ -19,6 +19,7 @@
 
     <Window.Resources>
         <Style x:Key="WindowControlButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -62,11 +63,30 @@
             </Setter>
         </Style>
         
-        <Style x:Key="NavGroupHeaderStyle" TargetType="TextBlock">
+        <Style x:Key="NavGroupHeaderButtonStyle" TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
-            <Setter Property="Margin" Value="30,14,0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Hdr" Background="Transparent" CornerRadius="8" BorderThickness="2" BorderBrush="Transparent" Margin="10,10,10,0" Padding="20,5,12,5">
+                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Hdr" Property="Background" Value="{DynamicResource PanelHoverBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Hdr" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
 
@@ -86,7 +106,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="280"/> <!-- Sidebar -->
                         <ColumnDefinition Width="*"/>   <!-- Main Content -->
-                        <ColumnDefinition Width="320"/> <!-- Description Panel -->
+                        <ColumnDefinition Width="240"/> <!-- Description Panel -->
                     </Grid.ColumnDefinitions>
 
                     <!-- HEADER -->
@@ -143,6 +163,7 @@
                             </Button.Template>
                              <Button.Style>
                                 <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                     <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
                                 </Style>
                             </Button.Style>
@@ -156,30 +177,65 @@
                     <Border Grid.Row="1" Grid.Column="0" Background="{DynamicResource PanelBrush}" CornerRadius="15" Margin="15,20,5,20" Padding="0,10">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,0">
                             <StackPanel>
-                                <RadioButton x:Name="NavDashboard" IsChecked="True" Content="Dashboard" Tag="&#xE80F;" Style="{StaticResource MenuButtonStyle}" Checked="Dashboard_Checked"/>
-                                <TextBlock x:Name="NavGroupOptimize" Style="{StaticResource NavGroupHeaderStyle}"/>
-                                <RadioButton x:Name="NavGeneral" Content="General" Tag="&#xF8B0;" Style="{StaticResource MenuButtonStyle}" Checked="General_Checked"/>
-                                <RadioButton x:Name="NavWindows" Content="Windows" Tag="&#xE7F4;" Style="{StaticResource MenuButtonStyle}" Checked="Windows_Checked"/>
-                                <RadioButton x:Name="NavUWPApps" Content="UWP Apps" Tag="&#xE71D;" Style="{StaticResource MenuButtonStyle}" Checked="UWPApps_Checked"/>
-                                <RadioButton x:Name="NavStartup" Content="Startup Apps" Tag="&#xEC4A;" Style="{StaticResource MenuButtonStyle}" Checked="Startup_Checked"/>
-                                <RadioButton x:Name="NavCleaning" Content="Cleaning" Tag="&#xE74D;" Style="{StaticResource MenuButtonStyle}" Checked="Cleaning_Checked"/>
-                                <TextBlock x:Name="NavGroupSoftware" Style="{StaticResource NavGroupHeaderStyle}"/>
-                                <RadioButton x:Name="NavDownload" Content="Download" Tag="&#xE896;" Style="{StaticResource MenuButtonStyle}" Checked="Download_Checked"/>
-                                <RadioButton x:Name="NavOffice" Content="Office" Tag="&#xE9F9;" Style="{StaticResource MenuButtonStyle}" Checked="Office_Checked"/>
-                                <RadioButton x:Name="NavExtendFeatures" Content="Extend Features" Tag="&#xE700;" Style="{StaticResource MenuButtonStyle}" Checked="ExtendFeatures_Checked"/>
-                                <RadioButton x:Name="NavWSAP" Content="WSAP" Tag="&#xE74C;" Style="{StaticResource MenuButtonStyle}" Checked="WSAP_Checked"/>
-                                <TextBlock x:Name="NavGroupLicense" Style="{StaticResource NavGroupHeaderStyle}"/>
-                                <RadioButton x:Name="NavLicense" Content="License" Tag="&#xE8D7;" Style="{StaticResource MenuButtonStyle}" Checked="License_Checked"/>
-                                <RadioButton x:Name="NavConvertSKU" Content="Convert SKUs" Tag="&#xE8B1;" Style="{StaticResource MenuButtonStyle}" Checked="ConvertSKU_Checked"/>
-                                <TextBlock x:Name="NavGroupDevice" Style="{StaticResource NavGroupHeaderStyle}"/>
-                                <RadioButton x:Name="NavHardware" Content="Hardware Info" Tag="&#xE946;" Style="{StaticResource MenuButtonStyle}" Checked="HardwareInfo_Checked"/>
-                                <RadioButton x:Name="NavNetwork" Content="Network" Tag="&#xE909;" Style="{StaticResource MenuButtonStyle}" Checked="Network_Checked"/>
-                                <RadioButton x:Name="NavUSBBoot" Content="USB Boot" Tag="&#xE88E;" Style="{StaticResource MenuButtonStyle}" Checked="USBBoot_Checked"/>
-                                <TextBlock x:Name="NavGroupFix" Style="{StaticResource NavGroupHeaderStyle}"/>
-                                <RadioButton x:Name="NavPrinterErrors" Content="Printer Errors" Tag="&#xF56D;" Style="{StaticResource MenuButtonStyle}" Checked="PrinterErrors_Checked"/>
-                                <RadioButton x:Name="NavWindowsErrors" Content="Windows Errors" Tag="&#xED15;" Style="{StaticResource MenuButtonStyle}" Checked="WindowsErrors_Checked"/>
-                                <RadioButton x:Name="NavFixGame" Content="Fix game errors" Tag="&#xE90F;" Style="{StaticResource MenuButtonStyle}" Checked="FixGameErrors_Checked" Visibility="Collapsed"/>
-                                <RadioButton x:Name="NavGameConfigs" Content="Game Configs" Tag="&#xE7FC;" Style="{StaticResource MenuButtonStyle}" Checked="GameConfigs_Checked" Visibility="Collapsed"/>
+                                <RadioButton GroupName="MainNav" x:Name="NavDashboard" IsChecked="True" Content="Dashboard" Tag="&#xE80F;" Style="{StaticResource MenuButtonStyle}" Checked="Dashboard_Checked"/>
+                                
+                                <!-- GROUP 1: OS DEPLOYMENT & SETUP -->
+                                <Button Style="{StaticResource NavGroupHeaderButtonStyle}" Click="NavGroup_Click" Tag="GroupDeploy" AutomationProperties.Name="NavGroupDeploy">
+                                    <Grid>
+                                        <TextBlock x:Name="NavGroupDeploy" Text="OS Deployment" HorizontalAlignment="Left"/>
+                                        <TextBlock x:Name="ChvDeploy" Text="&#xE70D;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <StackPanel x:Name="GroupDeploy">
+                                    <RadioButton GroupName="MainNav" x:Name="NavWSAP" Content="WSAP" Tag="&#xE74C;" Style="{StaticResource MenuButtonStyle}" Checked="WSAP_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavUSBBoot" Content="USB Boot" Tag="&#xE88E;" Style="{StaticResource MenuButtonStyle}" Checked="USBBoot_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavConvertSKU" Content="Convert SKUs" Tag="&#xE8B1;" Style="{StaticResource MenuButtonStyle}" Checked="ConvertSKU_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavLicense" Content="License" Tag="&#xE8D7;" Style="{StaticResource MenuButtonStyle}" Checked="License_Checked"/>
+                                </StackPanel>
+
+                                <!-- GROUP 2: SYSTEM OPTIMIZATION -->
+                                <Button Style="{StaticResource NavGroupHeaderButtonStyle}" Click="NavGroup_Click" Tag="GroupOptimize" AutomationProperties.Name="NavGroupOptimize">
+                                    <Grid>
+                                        <TextBlock x:Name="NavGroupOptimize" Text="System Optimization" HorizontalAlignment="Left"/>
+                                        <TextBlock x:Name="ChvOptimize" Text="&#xE70D;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <StackPanel x:Name="GroupOptimize">
+                                    <RadioButton GroupName="MainNav" x:Name="NavGeneral" Content="General" Tag="&#xF8B0;" Style="{StaticResource MenuButtonStyle}" Checked="General_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavWindows" Content="Windows" Tag="&#xE7F4;" Style="{StaticResource MenuButtonStyle}" Checked="Windows_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavStartup" Content="Startup Apps" Tag="&#xEC4A;" Style="{StaticResource MenuButtonStyle}" Checked="Startup_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavUWPApps" Content="UWP Apps" Tag="&#xE71D;" Style="{StaticResource MenuButtonStyle}" Checked="UWPApps_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavCleaning" Content="Cleaning" Tag="&#xE74D;" Style="{StaticResource MenuButtonStyle}" Checked="Cleaning_Checked"/>
+                                </StackPanel>
+
+                                <!-- GROUP 3: SOFTWARE & TOOLS -->
+                                <Button Style="{StaticResource NavGroupHeaderButtonStyle}" Click="NavGroup_Click" Tag="GroupSoftware" AutomationProperties.Name="NavGroupSoftware">
+                                    <Grid>
+                                        <TextBlock x:Name="NavGroupSoftware" Text="Software &amp; Tools" HorizontalAlignment="Left"/>
+                                        <TextBlock x:Name="ChvSoftware" Text="&#xE70D;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <StackPanel x:Name="GroupSoftware">
+                                    <RadioButton GroupName="MainNav" x:Name="NavDownload" Content="Download" Tag="&#xE896;" Style="{StaticResource MenuButtonStyle}" Checked="Download_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavOffice" Content="Office" Tag="&#xE9F9;" Style="{StaticResource MenuButtonStyle}" Checked="Office_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavExtendFeatures" Content="Extend Features" Tag="&#xE700;" Style="{StaticResource MenuButtonStyle}" Checked="ExtendFeatures_Checked"/>
+                                </StackPanel>
+
+                                <!-- GROUP 4: DIAGNOSTICS & REPAIR -->
+                                <Button Style="{StaticResource NavGroupHeaderButtonStyle}" Click="NavGroup_Click" Tag="GroupDiagnostics" AutomationProperties.Name="NavGroupDiagnostics">
+                                    <Grid>
+                                        <TextBlock x:Name="NavGroupDiagnostics" Text="Diagnostics &amp; Repair" HorizontalAlignment="Left"/>
+                                        <TextBlock x:Name="ChvDiagnostics" Text="&#xE70D;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <StackPanel x:Name="GroupDiagnostics">
+                                    <RadioButton GroupName="MainNav" x:Name="NavHardware" Content="Hardware Info" Tag="&#xE946;" Style="{StaticResource MenuButtonStyle}" Checked="HardwareInfo_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavNetwork" Content="Network" Tag="&#xE909;" Style="{StaticResource MenuButtonStyle}" Checked="Network_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavPrinterErrors" Content="Printer Errors" Tag="&#xF56D;" Style="{StaticResource MenuButtonStyle}" Checked="PrinterErrors_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavWindowsErrors" Content="Windows Errors" Tag="&#xED15;" Style="{StaticResource MenuButtonStyle}" Checked="WindowsErrors_Checked"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavFixGame" Content="Fix game errors" Tag="&#xE90F;" Style="{StaticResource MenuButtonStyle}" Checked="FixGameErrors_Checked" Visibility="Collapsed"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavGameConfigs" Content="Game Configs" Tag="&#xE7FC;" Style="{StaticResource MenuButtonStyle}" Checked="GameConfigs_Checked" Visibility="Collapsed"/>
+                                </StackPanel>
                             </StackPanel>
                         </ScrollViewer>
                     </Border>

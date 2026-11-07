@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="600" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
     <StackPanel>
-        <TextBlock Text="Description:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-        <TextBlock Text="A comprehensive collection of 12 powerful tools to fix common Windows errors including System Files, SMB Access, Update issues, and Cache corruption. All fixes are applied safely with live progress logging." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Diagnose and repair common Windows OS errors: run system file checks (SFC/DISM), rebuild user profiles, fix SMB network share issues, icon cache, and Windows Update." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
 
-        <Separator Background="{DynamicResource PanelSelectedBrush}" Margin="0,0,0,20"/>
-
-        <TextBlock Text="Mô tả:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-        <TextBlock Text="Bộ sưu tập 12 công cụ mạnh mẽ chuyên trị các lỗi Windows phổ biến như lỗi File hệ thống, truy cập SMB, lỗi Update và hỏng bộ nhớ đệm. Mọi tác vụ được thực hiện an toàn kèm nhật ký tiến trình trực tiếp." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Chẩn đoán và tự động sửa các lỗi Windows phổ biến: quét và phục hồi file hệ thống (SFC), sửa lỗi User Profile, chia sẻ thư mục SMB, lỗi icon cache và lỗi Windows Update." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

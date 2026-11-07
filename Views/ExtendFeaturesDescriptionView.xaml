@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="600" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
     <StackPanel>
-        <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="19" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="This section provides extended features. Further details will be added in future updates." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
-        
-        <!-- <Separator Background="#A0A0A0" Margin="0,0,0,20"/> -->
-        <Separator Background="{DynamicResource SurfaceBrush}" Opacity="0.5" Margin="0,10"/>
-        <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="19" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="Phần này cung cấp các tính năng mở rộng. Thông tin chi tiết sẽ được bổ sung trong các bản cập nhật tiếp theo." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Expand your Windows toolkit with powerful extra utilities: add Take Ownership or God Mode to right-click menu, export/import drivers, download Intel IRST drivers, and backup Wi-Fi passwords." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
+
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Mở rộng bộ công cụ Windows với các tiện ích thiết thực: thêm menu chuột phải Take Ownership, God Mode, End Task; sao lưu &amp; phục hồi Driver; tải driver Intel IRST nhận diện ổ cứng; xuất mật khẩu Wi-Fi." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

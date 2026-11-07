@@ -1,8 +1,16 @@
 {
   "version": "1.0.0",
-  "release_date": "05-11-2026",
+  "release_date": "07-11-2026",
   "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.0.0/TXATOOL_Setup_v1.0.0.exe",
-  "content": [],
-  "size": "",
+  "content": [
+    "Official launch of TXATOOL - WIN: The all-in-one IT support toolkit.",
+    "Integrated WSAP: Automated Windows installation without USB boot drive.",
+    "Specialized LAN printer troubleshooter (0x11b, 0x709, RPC, SMB fixes).",
+    "Windows Edition Converter (Convert SKUs) and digital license manager.",
+    "Deep system optimizer, disk cleaning, UWP debloater and startup manager.",
+    "Curated software catalog and Microsoft Office deployment wizard.",
+    "Modern Fluent Glass UI with native Light/Dark theme and VN/EN localization."
+  ],
+  "size": "137 MB",
   "is_critical": false
 }

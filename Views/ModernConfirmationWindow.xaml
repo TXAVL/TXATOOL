@@ -64,6 +64,7 @@
                     <Button x:Name="BtnConfirm" Content="Yes" Click="Confirm_Click" MinWidth="130" Height="42" Padding="15,0">
                         <Button.Style>
                             <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
@@ -86,6 +87,7 @@
                     <Button x:Name="BtnCancel" Content="No" Click="Cancel_Click" MinWidth="130" Height="42" Margin="20,0,0,0" Padding="15,0">
                         <Button.Style>
                             <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">

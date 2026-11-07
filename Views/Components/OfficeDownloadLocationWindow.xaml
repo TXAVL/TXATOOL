@@ -14,13 +14,13 @@
         Foreground="{DynamicResource TextBrush}">
     <Viewbox Stretch="Fill">
     <Grid Width="410" Height="260">
-        <Border Margin="8" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="6" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1">
+        <Border Margin="8" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="6" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="3" Opacity="0.20" Color="#111827"/>
             </Border.Effect>
         </Border>
 
-        <Border Margin="8" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="6" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Padding="14,10,14,16">
+        <Border Margin="8" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="6" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="14,10,14,16">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

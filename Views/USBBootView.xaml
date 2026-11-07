@@ -75,7 +75,7 @@
                 <Border Background="{DynamicResource PanelBrush}" CornerRadius="12" Padding="25" Margin="0,0,0,25">
                     <StackPanel>
                         <!-- 1. Select USB -->
-                        <TextBlock x:Name="lblUsbSelectDrive" Text="1. Chọn USB/Drive" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource AccentTextBrush}"/>
+                        <TextBlock x:Name="lblUsbSelectDrive" Text="1. Chọn USB/Drive" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
@@ -99,7 +99,7 @@
                         </Grid>
 
                         <!-- 2. Select ISO -->
-                        <TextBlock x:Name="lblUsbSelectWinVer" Text="2. Chọn File ISO (Mới)" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource AccentTextBrush}"/>
+                        <TextBlock x:Name="lblUsbSelectWinVer" Text="2. Chọn File ISO (Mới)" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
                         
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
@@ -118,7 +118,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Margin="0,0,10,0">
+                            <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Margin="0,0,10,0">
                                 <TextBox x:Name="SelectISOTextBox" Text="Select directory to your iso" Background="Transparent" Padding="12" BorderThickness="0" VerticalContentAlignment="Center" FontSize="14" Foreground="{DynamicResource TextMutedBrush}"/>
                             </Border>
                             <Button x:Name="SelectISOBrowseBtn" Grid.Column="1" Content="Browse" VerticalAlignment="Stretch" Margin="0" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}" Padding="25,0" BorderThickness="0" Click="SelectISOBrowseBtn_Click">
@@ -168,7 +168,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0" Source="pack://application:,,,/Images/windows.png" Width="32" Height="32" VerticalAlignment="Top" Margin="0,0,15,0"/>
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock x:Name="lblUsbChooseResource" Text="Choose a Resource" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource AccentTextBrush}"/>
+                                    <TextBlock x:Name="lblUsbChooseResource" Text="Choose a Resource" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource TextBrush}"/>
                                     <TextBlock x:Name="lblUsbSelectSource" Text="Select another source to download the Windows ISO." FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,2,0,0"/>
                                 </StackPanel>
                             </Grid>

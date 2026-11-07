@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="600" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
     <StackPanel>
-        <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="19" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="Unlock more ways to supercharge your PC! With this option, you can boost system speed, protect your privacy, and get the best out of your graphics card. Try the Advanced Tweaks and enjoy smoother performance, higher FPS, and a faster, more responsive computer experience." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Unlock more ways to supercharge your PC! Boost system speed, enhance privacy, and optimize graphics for gaming and productivity. Enjoy smoother performance and lower latency." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
         
-        <Separator Background="{DynamicResource SurfaceBrush}" Opacity="0.5" Margin="0,10"/>
-        
-        <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="19" Margin="0,15,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="Mở khóa thêm nhiều cách để tăng tốc PC của bạn! Với tùy chọn này, bạn có thể tăng tốc hệ thống, bảo vệ quyền riêng tư và tận dụng tối đa card đồ họa. Hãy thử Advanced Tweaks và tận hưởng hiệu suất mượt mà hơn, FPS cao hơn và trải nghiệm máy tính nhanh hơn, phản hồi tốt hơn." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Mở khóa thêm các tùy chọn tăng tốc hệ điều hành Windows! Tăng tốc độ máy tính, bảo vệ quyền riêng tư và tối ưu hóa card đồ họa để có trải nghiệm phản hồi mượt mà, FPS cao hơn." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

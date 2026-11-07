@@ -99,7 +99,7 @@
                                 </DockPanel>
 
                                 <!-- Single Smooth Bar (Overall) -->
-                                <ProgressBar x:Name="SingleProgressBar" Value="0" Maximum="100" Height="6" Background="{DynamicResource AccentSoftHoverBrush}" Foreground="{DynamicResource AccentTextBrush}">
+                                <ProgressBar x:Name="SingleProgressBar" Value="0" Maximum="100" Height="6" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="{DynamicResource AccentTextBrush}">
                                     <ProgressBar.Template>
                                         <ControlTemplate TargetType="ProgressBar">
                                             <Grid>
@@ -117,7 +117,7 @@
                                         <DockPanel Margin="0,0,0,4">
                                             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                                                 <TextBlock Text="📄 " FontSize="12" VerticalAlignment="Center"/>
-                                                <TextBlock x:Name="CurrentFileNameText" Text="Preparing..." FontSize="12" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" MaxWidth="380" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="CurrentFileNameText" Text="Preparing..." FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" MaxWidth="380" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
                                             </StackPanel>
                                             <TextBlock x:Name="FilePercentText" Text="0%" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Center"/>
                                         </DockPanel>

@@ -185,6 +185,7 @@
 
         <!-- Style dÃ nh cho Action Button -->
         <Style x:Key="RoundedActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="5,0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -436,8 +437,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="lblOfficeSection9" Grid.Column="0" Text="9. Xem trÆ°á»›c cáº¥u hÃ¬nh (configuration.xml)" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0"/>
-                            <Button x:Name="btnCopyXml" Grid.Column="1" Padding="8,6" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Foreground="{DynamicResource TextBrush}" Cursor="Hand" Click="btnCopyXml_Click">
+                            <TextBlock x:Name="lblOfficeSection9" Grid.Column="0" Text="9. Xem trÆ°á»›c cáº¥u hÃ¬nh (configuration.xml)" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0"/>
+                            <Button x:Name="btnCopyXml" Grid.Column="1" Padding="8,6" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Foreground="{DynamicResource TextBrush}" Cursor="Hand" Click="btnCopyXml_Click">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" Padding="{TemplateBinding Padding}">
@@ -445,10 +446,10 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
                                             </Trigger>
                                             <Trigger Property="IsPressed" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftHoverBrush}"/>
+                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -460,7 +461,7 @@
                             </Button>
                         </Grid>
                         
-                        <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="6" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Padding="15">
+                        <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="6" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="15">
                             <TextBlock x:Name="txtXmlPreview" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}"/>
                         </Border>
                     </StackPanel>
@@ -469,7 +470,7 @@
                 <!-- 10. Tá»•ng quan cáº¥u hÃ¬nh -->
                 <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Padding="15" Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock x:Name="lblOfficeSection10" Text="10. Tá»•ng quan cáº¥u hÃ¬nh" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,15"/>
+                        <TextBlock x:Name="lblOfficeSection10" Text="10. Tá»•ng quan cáº¥u hÃ¬nh" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,15"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
@@ -484,22 +485,22 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             
-                            <TextBlock x:Name="lblOverviewTitleVersion" Grid.Row="0" Grid.Column="0" Text="PhiÃªn báº£n:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleVersion" Grid.Row="0" Grid.Column="0" Text="PhiÃªn báº£n:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" x:Name="lblOverviewVersion" Text="Microsoft 365 Enterprise" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             
-                            <TextBlock x:Name="lblOverviewTitleArch" Grid.Row="1" Grid.Column="0" Text="Kiáº¿n trÃºc:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleArch" Grid.Row="1" Grid.Column="0" Text="Kiáº¿n trÃºc:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="lblOverviewArch" Text="x64 (64-bit)" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             
-                            <TextBlock x:Name="lblOverviewTitleChannel" Grid.Row="2" Grid.Column="0" Text="Channel:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleChannel" Grid.Row="2" Grid.Column="0" Text="Channel:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="2" Grid.Column="1" x:Name="lblOverviewChannel" Text="Current Channel" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             
-                            <TextBlock x:Name="lblOverviewTitleLang" Grid.Row="3" Grid.Column="0" Text="NgÃ´n ngá»¯:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleLang" Grid.Row="3" Grid.Column="0" Text="NgÃ´n ngá»¯:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="3" Grid.Column="1" x:Name="lblOverviewLang" Text="Vietnamese (vi-vn)" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             
-                            <TextBlock x:Name="lblOverviewTitleApps" Grid.Row="4" Grid.Column="0" Text="á»¨ng dá»¥ng:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleApps" Grid.Row="4" Grid.Column="0" Text="á»¨ng dá»¥ng:" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="4" Grid.Column="1" x:Name="lblOverviewApps" Text="Word, Excel, PowerPoint, Outlook, Teams, OneDrive" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             
-                            <TextBlock x:Name="lblOverviewTitleOpts" Grid.Row="5" Grid.Column="0" Text="TÃ¹y chá»n:" FontWeight="SemiBold" Margin="0,0,0,0" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblOverviewTitleOpts" Grid.Row="5" Grid.Column="0" Text="TÃ¹y chá»n:" FontWeight="SemiBold" Margin="0,0,0,0" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Grid.Row="5" Grid.Column="1" x:Name="lblOverviewOpts" Text="Remove existing Office, Activate, Shortcuts, Include Updates" TextWrapping="Wrap" Margin="0,0,0,0" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         </Grid>
                     </StackPanel>
@@ -508,7 +509,7 @@
                 <!-- 11. HÃ nh Ä‘á»™ng -->
                 <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Padding="15" Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock x:Name="lblOfficeSection11" Text="11. HÃ nh Ä‘á»™ng" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,15"/>
+                        <TextBlock x:Name="lblOfficeSection11" Text="11. HÃ nh Ä‘á»™ng" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,15"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -535,7 +536,7 @@
                             </Button>
                             
                             <!-- Export XML Button -->
-                            <Button x:Name="btnExportXml" Grid.Column="4" Height="40" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource AccentTextBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" Style="{StaticResource RoundedActionButtonStyle}" Click="btnExportXml_Click">
+                            <Button x:Name="btnExportXml" Grid.Column="4" Height="40" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Style="{StaticResource RoundedActionButtonStyle}" Click="btnExportXml_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="&#xE943;" FontFamily="Segoe MDL2 Assets" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="txtExportXml" Text="Export XML" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -547,34 +548,34 @@
                     </StackPanel>
                 </Border>
                 <!-- 12. Uninstall Office -->
-                <Border Background="#FFF7F7" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+                <Border Background="{DynamicResource DangerBgBrush}" BorderBrush="{DynamicResource DangerBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock x:Name="lblOfficeSection12" Text="12. Uninstall Office" FontWeight="SemiBold" FontSize="16" Foreground="#B91C1C" Margin="0,0,0,10"/>
+                        <TextBlock x:Name="lblOfficeSection12" Text="12. Uninstall Office" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource DangerTextBrush}" Margin="0,0,0,10"/>
 
                         <Grid Margin="0,0,0,6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="&#xE814;" FontFamily="Segoe MDL2 Assets" Foreground="#DC2626" Margin="0,0,6,0" VerticalAlignment="Top"/>
+                            <TextBlock Grid.Column="0" Text="&#xE814;" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource DangerIconBrush}" Margin="0,0,6,0" VerticalAlignment="Top"/>
                             <TextBlock Grid.Column="1"
                                        x:Name="txtUninstallWarning"
                                        Text="Remove Microsoft Office, Visio, and Project currently installed on this machine."
-                                       Foreground="#7F1D1D"
+                                       Foreground="{DynamicResource DangerTextBrush}"
                                        FontSize="13"
                                        TextWrapping="Wrap"/>
                         </Grid>
 
                         <CheckBox x:Name="chkConfirmUninstall"
                                   Style="{StaticResource BlueConfirmCheckBoxStyle}"
-                                  Foreground="#7F1D1D"
+                                  Foreground="{DynamicResource DangerTextBrush}"
                                   Margin="0,0,0,12"
                                   Checked="chkConfirmUninstall_CheckedChanged"
                                   Unchecked="chkConfirmUninstall_CheckedChanged">
                             <TextBlock Text="I understand this action will uninstall all Office products"
                                        TextWrapping="Wrap"
                                        MaxWidth="280"
-                                       Foreground="#7F1D1D"/>
+                                       Foreground="{DynamicResource DangerTextBrush}"/>
                         </CheckBox>
 
                         <Button x:Name="btnUninstallOffice"

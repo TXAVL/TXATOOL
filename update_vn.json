@@ -1,8 +1,16 @@
 {
   "version": "1.0.0",
-  "release_date": "05-11-2026",
+  "release_date": "07-11-2026",
   "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.0.0/TXATOOL_Setup_v1.0.0.exe",
-  "content": [],
-  "size": "",
+  "content": [
+    "Khởi chạy bộ công cụ toàn diện TXATOOL - WIN cho kỹ thuật viên IT.",
+    "Tích hợp WSAP - Cài đặt Windows từ ISO không cần USB Boot.",
+    "Bộ công cụ sửa lỗi máy in qua mạng LAN chuyên sâu (0x11b, 0x709, RPC).",
+    "Chuyển đổi ấn bản Windows (Convert SKUs) và Quản lý bản quyền số.",
+    "Tối ưu hóa hệ thống, dọn dẹp rác, gỡ UWP bloatware và quản lý startup.",
+    "Kho phần mềm tuyển chọn và công cụ cài đặt Microsoft Office.",
+    "Giao diện Light/Dark Theme tự động, hỗ trợ song ngữ Tiếng Việt & Tiếng Anh."
+  ],
+  "size": "137 MB",
   "is_critical": false
 }

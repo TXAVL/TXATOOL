@@ -78,12 +78,27 @@ namespace TXATOOL.Views
             // Explicitly set dynamic/code-behind text if needed
             lblCheckUpdateTitle.Text = LocalizationService.Get("lblCheckUpdateTitle") ?? "Check for updates";
             btnCheckUpdate.Content = LocalizationService.Get("btnCheckUpdateText") ?? "Check Update";
+            if (lblBtnDonateVietQR != null) lblBtnDonateVietQR.Text = LocalizationService.Get("lblBtnDonateVietQR") ?? "Ủng hộ tác giả (VietQR)";
             LoadCurrentVersion(); // Refresh version string translation
         }
 
         private void Developer_Click(object sender, RoutedEventArgs e)
         {
             OpenUrl("https://fb.com/vlog.txa.2311");
+        }
+
+        private void DonateQr_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var win = new TXATOOL.Views.Components.DonateWindow();
+                win.Owner = Application.Current.MainWindow;
+                win.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error opening DonateWindow: {ex.Message}");
+            }
         }
 
         private void FacebookLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)

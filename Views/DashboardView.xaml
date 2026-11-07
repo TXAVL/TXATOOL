@@ -27,7 +27,7 @@
         <!-- LUMINOUS CRISP WHITE CARD STYLE (No Effect = 100% Crisp ClearType Subpixel Rendering) -->
         <Style x:Key="GlassCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="16,13"/>
@@ -38,7 +38,7 @@
         <!-- TOP LINK CARD STYLE (Facebook, GitHub, Website) -->
         <Style x:Key="TopLinkCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="11"/>
             <Setter Property="Padding" Value="16,13"/>
@@ -46,7 +46,7 @@
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                    <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
                     <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
                 </Trigger>
             </Style.Triggers>
@@ -54,6 +54,7 @@
 
         <!-- DASHBOARD TOGGLE SWITCH (Reusing exact App.xaml ToggleSwitchStyle: #00B2FF, White thumb with shadow, Storyboard) -->
         <Style x:Key="DashboardToggleSwitchStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -94,11 +95,12 @@
         <!-- PILL BUTTON FOR CARD HEADERS -->
         <!-- PILL/FLAT BUTTON FOR CARD HEADERS -->
         <Style x:Key="PillHeaderBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="28"/>
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="12,0"/>
             <Setter Property="Template">
@@ -109,7 +111,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
                                 <Setter TargetName="bdr" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -120,6 +122,7 @@
 
         <!-- PRIMARY BLUE PILL BUTTON (e.g. Apply All >) -->
         <Style x:Key="PrimaryBlueBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="26"/>
@@ -147,8 +150,8 @@
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="24"/>
-            <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
@@ -160,7 +163,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
                                 <Setter TargetName="bdr" Property="BorderBrush" Value="{DynamicResource LineStrongBrush}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
@@ -175,7 +178,7 @@
         <!-- HORIZONTAL PROGRESS BAR STYLE FOR STORAGE DRIVES -->
         <Style x:Key="StorageProgressBarStyle" TargetType="ProgressBar">
             <Setter Property="Height" Value="6"/>
-            <Setter Property="Background" Value="{DynamicResource AccentSoftHoverBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
             <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
@@ -204,7 +207,7 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
                     <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="True">
@@ -232,8 +235,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
@@ -277,7 +280,7 @@
                             
                             <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                                 <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource ActionBrush}" CornerRadius="6" Margin="0,3,0,4">
+                                    <Border x:Name="DropDownBorder" Background="{DynamicResource SurfaceBrush}" BorderThickness="1" BorderBrush="{DynamicResource LineBrush}" CornerRadius="6" Margin="0,3,0,4">
                                         <Border.Effect>
                                             <DropShadowEffect BlurRadius="8" ShadowDepth="2" Direction="270" Opacity="0.1" Color="#0F172A"/>
                                         </Border.Effect>
@@ -322,60 +325,71 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- CARD 1: FACEBOOK -->
-                <Border Grid.Column="0" Grid.ColumnSpan="5" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="FacebookCard_Click">
+                <Border Grid.Column="0" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="FacebookCard_Click">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="42" Height="42" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}" VerticalAlignment="Center" Margin="0,0,14,0">
-                            <Image Source="pack://application:,,,/Images/fb.png" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}" VerticalAlignment="Center" Margin="0,0,12,0">
+                            <Image Source="pack://application:,,,/Images/fb.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblFacebookTitle" Text="Facebook" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock x:Name="lblFacebookDesc" Text="TXA Vlog trên Facebook" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                            <TextBlock x:Name="lblFacebookTitle" Text="Facebook" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock x:Name="lblFacebookDesc" Text="TXA Vlog trên Facebook" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="4,0,0,0"/>
                     </Grid>
                 </Border>
 
-                <!-- CARD 2: GITHUB -->
-                <Border Grid.Column="2" Visibility="Collapsed" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="GithubCard_Click">
+                <!-- CARD 2: DONATE VIETQR -->
+                <Border Grid.Column="2" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="DonateCard_Click" BorderBrush="{DynamicResource ActionBrush}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="42" Height="42" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}" VerticalAlignment="Center" Margin="0,0,14,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" VerticalAlignment="Center" Margin="0,0,12,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="Viet" FontSize="9" FontWeight="Black" Foreground="#0054A6"/>
+                                    <TextBlock Text="QR" FontSize="9" FontWeight="Black" Foreground="#ED1C24"/>
+                                </StackPanel>
+                                <TextBlock Text="&#xE8D7;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="lblDonateCardTitle" Text="Ủng hộ tác giả TXA" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                <Border Background="#FEF2F2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="4" Padding="4,1" Margin="6,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="VietQR" FontSize="9.5" FontWeight="Bold" Foreground="#DC2626"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock x:Name="lblDonateCardDesc" Text="Quét mã ngân hàng ủng hộ dự án" FontSize="11.5" Foreground="{DynamicResource ActionBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 3: GITHUB -->
+                <Border Grid.Column="4" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="GithubCard_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10" Background="{DynamicResource SurfaceSunkenBrush}" VerticalAlignment="Center" Margin="0,0,12,0">
                             <Path Data="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                  Fill="{DynamicResource ActionBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                  Fill="{DynamicResource ActionBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblGithubTitle" Text="GitHub Repository" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock x:Name="lblGithubDesc" Text="Mã nguồn &amp; đóng góp dự án" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                            <TextBlock x:Name="lblGithubTitle" Text="GitHub Repository" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock x:Name="lblGithubDesc" Text="Mã nguồn &amp; cập nhật TXATOOL" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                    </Grid>
-                </Border>
-
-                <!-- CARD 3: WEBSITE -->
-                <Border Grid.Column="4" Visibility="Collapsed" Style="{StaticResource TopLinkCardStyle}" MouseLeftButtonUp="WebsiteCard_Click">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="42" Height="42" CornerRadius="10" Background="#ECFDF5" VerticalAlignment="Center" Margin="0,0,14,0">
-                            <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE774;" FontSize="20" Foreground="#059669" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblWebsiteTitle" Text="Website" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock x:Name="lblWebsiteDesc" Text="Trang chủ chính thức TXATOOL - WIN" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
-                        </StackPanel>
-                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                        <TextBlock Grid.Column="2" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE76C;" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="4,0,0,0"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -408,7 +422,7 @@
                             <Grid Grid.Row="0" Margin="0,0,0,8">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE9D9;" FontSize="16" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="lblPerfTracker" Text="System Performance" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblPerfTracker" Text="System Performance" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
 
                                     <!-- Scanning Indicator -->
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Center"
@@ -442,7 +456,7 @@
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
                                         <Image Source="pack://application:,,,/Images/CPU.png" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                        <TextBlock x:Name="lblCPU" Text="CPU" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="lblCPU" Text="CPU" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <components:CircularProgressBar x:Name="CpuProgress" Width="106" Height="106" ProgressColor="{StaticResource CpuBrush}" Value="0" Text="0%" Subtext="Unknown GHz"/>
                                     <TextBlock x:Name="CpuNameText" Text="Loading CPU..." FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" Margin="0,8,0,2" TextTrimming="CharacterEllipsis" MaxWidth="210"/>
@@ -452,7 +466,7 @@
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
                                         <Image Source="pack://application:,,,/Images/RAM.png" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                        <TextBlock x:Name="lblRAM" Text="RAM" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="lblRAM" Text="RAM" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <components:CircularProgressBar x:Name="RamProgress" Width="106" Height="106" ProgressColor="{StaticResource RamBrush}" Value="0" Text="0%" Subtext="0/0 GB"/>
                                     <TextBlock x:Name="RamDetailsText" Text="Loading RAM..." FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" Margin="0,8,0,2" TextTrimming="CharacterEllipsis" MaxWidth="210"/>
@@ -462,7 +476,7 @@
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
                                         <Image Source="pack://application:,,,/Images/VGA.png" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                        <TextBlock x:Name="lblGPU" Text="GPU" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="lblGPU" Text="GPU" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                         <ComboBox x:Name="GpuSelector" Style="{StaticResource GpuComboBoxStyle}" Width="78" Height="24" FontSize="11.5" Margin="6,0,0,0" SelectionChanged="GpuSelector_SelectionChanged" Visibility="Visible"/>
                                     </StackPanel>
                                     <components:CircularProgressBar x:Name="GpuProgress" Width="106" Height="106" ProgressColor="{StaticResource GpuBrush}" Value="0" Text="0%" Subtext="0% VRAM"/>
@@ -484,7 +498,7 @@
                             <Grid Grid.Row="0" Margin="0,0,0,10">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xEDA2;" FontSize="15" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="lblStorageDrives" Text="Storage &amp; Drives" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblStorageDrives" Text="Storage &amp; Drives" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <!-- Right Button: Optimize > -->
@@ -502,7 +516,7 @@
                             <ItemsControl Grid.Row="1" ItemsSource="{Binding DrivesList}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="8" Padding="13,9" Margin="0,0,0,9">
+                                        <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="13,9" Margin="0,0,0,9">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                    <ColumnDefinition Width="Auto"/>
@@ -513,7 +527,7 @@
                                                 <Grid Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
                                                     <Image Source="/Images/windows11.png" Width="28" Height="28" RenderOptions.BitmapScalingMode="HighQuality"
                                                            Visibility="{Binding IsSystemDrive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                                    <Border Width="28" Height="28" CornerRadius="6" Background="{DynamicResource AccentSoftBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    <Border Width="28" Height="28" CornerRadius="6" Background="{DynamicResource SurfaceSunkenBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                             Visibility="{Binding IsNonSystemDrive, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                         <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xEDA2;" FontSize="17" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                     </Border>
@@ -523,8 +537,8 @@
                                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                                     <!-- Title & Percent -->
                                                     <Grid Margin="0,0,0,3">
-                                                        <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
-                                                        <TextBlock Text="{Binding PercentText}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding PercentText}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                                     </Grid>
                                                     <!-- Progress Bar -->
                                                     <ProgressBar Style="{StaticResource StorageProgressBarStyle}" Value="{Binding PercentValue}" Maximum="100" Margin="0,0,0,3"/>
@@ -555,7 +569,7 @@
                         <Grid Grid.Row="0" Margin="0,0,0,8">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE7C3;" FontSize="15" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock x:Name="ChangelogHeaderTitle" Text="Changelog" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="ChangelogHeaderTitle" Text="Changelog" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <!-- View All Button -->
@@ -572,7 +586,7 @@
                                             <Grid Margin="0,0,0,5">
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                     <Ellipse Width="8.5" Height="8.5" Fill="{Binding DotBrush}" Margin="0,0,7,0" VerticalAlignment="Center"/>
-                                                    <TextBlock Text="{Binding version_value}" FontWeight="SemiBold" FontSize="14.5" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding version_value}" FontWeight="SemiBold" FontSize="14.5" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                                 </StackPanel>
                                                 <TextBlock Text="{Binding date}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12.5" FontWeight="Normal" Foreground="{DynamicResource TextMutedBrush}"/>
                                             </Grid>

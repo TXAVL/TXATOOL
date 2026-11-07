@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="700" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
     <StackPanel>
-        <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="19" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="Remove the most frequent errors that interrupt your games. Only popular issues are supported for now, but new fixes will be added regularly." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,25"/>
-        
-        <!-- <Separator Background="#A0A0A0" Margin="0,0,0,20"/> -->
-        <Separator Background="{DynamicResource SurfaceBrush}" Opacity="0.5" Margin="0,10"/>
-        <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="19" Margin="0,0,0,15" Foreground="{DynamicResource TextBrush}"/>
-        <TextBlock Text="Loại bỏ các lỗi thường gặp nhất làm gián đoạn trò chơi của bạn. Hiện tại chỉ hỗ trợ các lỗi phổ biến, nhưng các bản sửa lỗi mới sẽ được bổ sung thường xuyên." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Remove the most frequent errors that interrupt your gaming experience. Easily resolves missing DirectX, Visual C++ runtimes, and game launch crashes." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
+
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Khắc phục các lỗi phổ biến khi chơi game: thiếu thư viện DirectX, Visual C++ Redistributable, xung đột DLL và lỗi crash khi mở game." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

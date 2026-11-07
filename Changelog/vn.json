@@ -1,9 +1,20 @@
 {
     "v1.0.0": {
         "title": "TXATOOL - WIN - Nhật ký thay đổi v1.0.0",
-        "summary_title": "TÓM TẮT PHIÊN BẢN",
-        "content": [],
-        "version_label": "THÔNG TIN PHIÊN BẢN",
+        "summary_title": "TỔNG QUAN PHIÊN BẢN CHÍNH THỨC v1.0.0",
+        "content": [
+            "Khởi chạy bộ công cụ toàn diện TXATOOL - WIN dành riêng cho kỹ thuật viên IT và người dùng Windows.",
+            "Tích hợp tính năng WSAP: Cài đặt Windows tự động trực tiếp từ file ISO vào phân vùng ổ cứng mà không cần USB Boot.",
+            "Bộ công cụ sửa lỗi máy in qua mạng LAN chuyên sâu (sửa triệt để các mã lỗi 0x0000011b, 0x00000709, 0x0000007c, RPC, Firewall).",
+            "Công cụ chuyển đổi phiên bản Windows (Convert SKUs) nhanh chóng giữa Home, Pro, Enterprise, IoT Enterprise LTSC.",
+            "Quản lý bản quyền thông minh: Kiểm tra thông tin kích hoạt, sao lưu & khôi phục bản quyền số (License Backup/Restore).",
+            "Tối ưu hóa hệ thống sâu: Tắt telemetry, dịch vụ theo dõi ngầm, giảm độ trễ, tối ưu bộ nhớ và dọn dẹp file rác chuyên sâu.",
+            "Gỡ bỏ ứng dụng rác (UWP Debloat) và quản lý tiến trình khởi động cùng Windows.",
+            "Kho ứng dụng tiện ích với hàng trăm phần mềm thiết yếu được chọn lọc và cập nhật liên tục.",
+            "Công cụ triển khai Microsoft Office tùy biến theo từng ứng dụng và phiên bản.",
+            "Giao diện hiện đại phong cách Fluent Glass, hỗ trợ đầy đủ Light/Dark Theme tự động theo hệ thống và song ngữ Tiếng Việt - Tiếng Anh."
+        ],
+        "version_label": "PHIÊN BẢN PHÁT HÀNH",
         "version_value": "v1.0.0"
     }
 }

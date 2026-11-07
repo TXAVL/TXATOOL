@@ -1,9 +1,20 @@
 {
     "v1.0.0": {
         "title": "TXATOOL - WIN - Changelog v1.0.0",
-        "summary_title": "RELEASE SUMMARY",
-        "content": [],
-        "version_label": "VERSION INFORMATION",
+        "summary_title": "OFFICIAL RELEASE v1.0.0 SUMMARY",
+        "content": [
+            "Official launch of TXATOOL - WIN: The all-in-one toolkit designed for IT technicians and power users.",
+            "Integrated WSAP: Automated Windows installation directly from ISO onto target drive without requiring a USB boot drive.",
+            "Advanced network printer troubleshooting (fixes stubborn errors 0x0000011b, 0x00000709, 0x0000007c, RPC, and firewall issues).",
+            "Windows Edition Converter (Convert SKUs): Seamless switching between Home, Pro, Enterprise, and IoT Enterprise LTSC.",
+            "Smart License Manager: Check activation status, backup and restore digital licenses, and remove unwanted activation traces.",
+            "Deep system optimization: Disable telemetry, reduce latency, tune services, and comprehensive disk & cache cleaning.",
+            "UWP Debloat & Startup Apps Manager: Safely remove Windows bloatware and speed up system startup time.",
+            "Curated Software Store with hundreds of essential, verified applications ready for instant download.",
+            "Custom Microsoft Office Deployment tool for tailored installation of required Office apps and versions.",
+            "Modern Fluent Glass UI with full Light/Dark Theme auto-switching and bilingual support (Vietnamese & English)."
+        ],
+        "version_label": "RELEASE VERSION",
         "version_value": "v1.0.0"
     }
 }

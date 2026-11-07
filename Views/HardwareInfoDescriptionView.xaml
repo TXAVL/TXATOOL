@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TXATOOL.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="300"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="600" d:DesignWidth="240"
+             Foreground="{DynamicResource TextBrush}">
     <StackPanel>
-        <TextBlock Text="Description:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-        <TextBlock Text="Get a clear snapshot of your entire hardware in one place." 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="EnglishPanel">
+            <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Provides detailed specifications about your computer's hardware, including processor, memory, graphics card, storage drives, motherboard, and battery condition." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
 
-        <Separator Background="{DynamicResource PanelSelectedBrush}" Margin="0,0,0,20"/>
-
-        <TextBlock Text="Mô tả:" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,15"/>
-        <TextBlock Text="Tính năng này giúp tổng hợp thông tin phần cứng của máy bạn và hiển thị trực quan hơn" 
-                   TextWrapping="Wrap" FontSize="17" LineHeight="22" Margin="0,0,0,25" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel x:Name="VietnamesePanel">
+            <TextBlock Text="Mô tả:" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Cung cấp thông tin chi tiết về phần cứng máy tính của bạn: thông số CPU, dung lượng &amp; tốc độ RAM, card đồ họa, tình trạng sức khỏe ổ cứng, bo mạch chủ và tình trạng pin laptop." 
+                       TextWrapping="Wrap" FontSize="14" LineHeight="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

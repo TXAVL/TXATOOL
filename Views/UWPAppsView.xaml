@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <!-- Fluent Rounded Button -->
         <Style x:Key="FluentButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="12.5" />
@@ -58,7 +59,7 @@
                                     <Condition Property="IsMouseOver" Value="True" />
                                     <Condition Property="IsChecked" Value="False" />
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="tabBorder" Property="Background" Value="{DynamicResource AccentSoftHoverBrush}" />
+                                <Setter TargetName="tabBorder" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}" />
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -68,6 +69,7 @@
 
         <!-- Fluent 2 CheckBox Style -->
         <Style x:Key="FluentCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -116,6 +118,7 @@
 
         <!-- Fluent Labeled CheckBox Style -->
         <Style x:Key="FluentLabeledCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -167,6 +170,7 @@
 
         <!-- Fluent Toggle Switch Style -->
         <Style x:Key="FluentToggleSwitch" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -197,6 +201,7 @@
 
         <!-- Preset Card RadioButton Style -->
         <Style x:Key="PresetCardStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -211,7 +216,7 @@
                                 <Setter TargetName="CardBorder" Property="BorderThickness" Value="1.8" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+                                <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource SurfaceAltBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -225,7 +230,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0" />
             <Setter Property="BorderThickness" Value="0,0,0,1" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ActionBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -235,7 +240,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource SurfaceAltBrush}" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource AccentSoftBrush}" />
@@ -271,14 +276,14 @@
                     <TextBlock Text="&#xE8A9;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock x:Name="lblBloatwareTitle" Text="UWP Apps" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,3"/>
+                    <TextBlock x:Name="lblBloatwareTitle" Text="UWP Apps" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,3"/>
                     <TextBlock x:Name="lblBloatwareSub" Text="Easily manage, uninstall, and clean pre-installed Microsoft Store apps to free up space and improve privacy." 
                                TextWrapping="Wrap" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" MaxWidth="620"/>
                 </StackPanel>
             </StackPanel>
 
             <!-- Right: KPI Metric Card -->
-            <Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="12" Padding="14,10" VerticalAlignment="Center">
+            <Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="12" Padding="14,10" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="&#xE9F5;" FontFamily="Segoe MDL2 Assets" FontSize="24" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <StackPanel VerticalAlignment="Center">
@@ -299,7 +304,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Card 1: Safe -->
-            <RadioButton x:Name="rbSafe" GroupName="PresetGroup" Style="{StaticResource PresetCardStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" Grid.Column="0" Margin="0,0,8,0" Checked="Preset_Checked">
+            <RadioButton x:Name="rbSafe" GroupName="PresetGroup" Style="{StaticResource PresetCardStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" Grid.Column="0" Margin="0,0,8,0" Checked="Preset_Checked">
                 <StackPanel>
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
@@ -308,15 +313,15 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="&#xEA18;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="#10B981" Margin="0,0,10,0" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblPresetSafe" Text="Safe" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <Border Background="#ECFDF5" CornerRadius="4" HorizontalAlignment="Left" Padding="6,1" Margin="0,2,0,0">
-                                <TextBlock x:Name="lblPresetSafeApps" Text="27 apps" FontSize="11" FontWeight="SemiBold" Foreground="#059669"/>
+                            <TextBlock x:Name="lblPresetSafe" Text="Safe" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <Border Background="{DynamicResource SuccessBgBrush}" BorderBrush="{DynamicResource SuccessBorderBrush}" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Left" Padding="6,1" Margin="0,2,0,0">
+                                <TextBlock x:Name="lblPresetSafeApps" Text="27 apps" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource SuccessTextBrush}"/>
                             </Border>
                         </StackPanel>
                     </Grid>
                     <TextBlock x:Name="lblPresetSafeDesc1" Text="Removes non-essential apps while keeping core Windows features and Microsoft essentials." TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8" MinHeight="34"/>
-                    <Border Background="#F0FDF4" CornerRadius="5" Padding="0,5">
-                        <TextBlock x:Name="lblPresetSafeDesc2" Text="Recommended for beginners" FontSize="11" Foreground="#16A34A" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <Border Background="{DynamicResource SuccessBgBrush}" BorderBrush="{DynamicResource SuccessBorderBrush}" BorderThickness="1" CornerRadius="5" Padding="0,5">
+                        <TextBlock x:Name="lblPresetSafeDesc2" Text="Recommended for beginners" FontSize="11" Foreground="{DynamicResource SuccessTextBrush}" FontWeight="Medium" HorizontalAlignment="Center"/>
                     </Border>
                 </StackPanel>
             </RadioButton>
@@ -331,7 +336,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="&#xE734;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,10,0" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblPresetRecommended" Text="Recommended" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock x:Name="lblPresetRecommended" Text="Recommended" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
                             <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="4" HorizontalAlignment="Left" Padding="6,1" Margin="0,2,0,0">
                                 <TextBlock x:Name="lblPresetRecommendedApps" Text="44 apps" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
                             </Border>
@@ -345,7 +350,7 @@
             </RadioButton>
 
             <!-- Card 3: Aggressive -->
-            <RadioButton x:Name="rbAggressive" GroupName="PresetGroup" Style="{StaticResource PresetCardStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" Grid.Column="2" Margin="8,0,0,0" Checked="Preset_Checked">
+            <RadioButton x:Name="rbAggressive" GroupName="PresetGroup" Style="{StaticResource PresetCardStyle}" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" Grid.Column="2" Margin="8,0,0,0" Checked="Preset_Checked">
                 <StackPanel>
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
@@ -354,15 +359,15 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="#EF4444" Margin="0,0,10,0" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblPresetAggressive" Text="Aggressive" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}"/>
-                            <Border Background="#FEF2F2" CornerRadius="4" HorizontalAlignment="Left" Padding="6,1" Margin="0,2,0,0">
-                                <TextBlock x:Name="lblPresetAggressiveApps" Text="65 apps" FontSize="11" FontWeight="SemiBold" Foreground="#DC2626"/>
+                            <TextBlock x:Name="lblPresetAggressive" Text="Aggressive" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <Border Background="{DynamicResource DangerBgBrush}" BorderBrush="{DynamicResource DangerBorderBrush}" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Left" Padding="6,1" Margin="0,2,0,0">
+                                <TextBlock x:Name="lblPresetAggressiveApps" Text="65 apps" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource DangerTextBrush}"/>
                             </Border>
                         </StackPanel>
                     </Grid>
                     <TextBlock x:Name="lblPresetAggressiveDesc1" Text="Removes almost all non-essential apps for maximum performance and minimum background processes." TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8" MinHeight="34"/>
-                    <Border Background="#FEF2F2" CornerRadius="5" Padding="0,5">
-                        <TextBlock x:Name="lblPresetAggressiveDesc2" Text="Maximum performance" FontSize="11" Foreground="#DC2626" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <Border Background="{DynamicResource DangerBgBrush}" BorderBrush="{DynamicResource DangerBorderBrush}" BorderThickness="1" CornerRadius="5" Padding="0,5">
+                        <TextBlock x:Name="lblPresetAggressiveDesc2" Text="Maximum performance" FontSize="11" Foreground="{DynamicResource DangerTextBrush}" FontWeight="Medium" HorizontalAlignment="Center"/>
                     </Border>
                 </StackPanel>
             </RadioButton>
@@ -381,7 +386,7 @@
                 <CheckBox.ToolTip>
                     <ToolTip MaxWidth="360" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineStrongBrush}" BorderThickness="1" Padding="10,8">
                         <StackPanel>
-                            <TextBlock Text="Expert Mode" FontWeight="SemiBold" FontSize="12.5" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,3"/>
+                            <TextBlock Text="Expert Mode" FontWeight="SemiBold" FontSize="12.5" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,3"/>
                             <TextBlock x:Name="lblExpertTooltip" 
                                        Text="Unlocks and shows all Windows core and background packages. Warning: Removing critical system packages may cause Windows instability." 
                                        TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" LineHeight="16"/>
@@ -397,20 +402,20 @@
             <!-- Right: Search Box + View Toggle + Filters -->
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                 <!-- Search Box -->
-                <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="8" Padding="10,5" Width="230" Margin="0,0,10,0">
+                <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="10,5" Width="230" Margin="0,0,10,0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBox x:Name="txtSearchApps" Grid.Column="1" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource AccentTextBrush}" FontSize="12.5" VerticalAlignment="Center" TextChanged="SearchBox_TextChanged"/>
+                        <TextBox x:Name="txtSearchApps" Grid.Column="1" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource TextBrush}" FontSize="12.5" VerticalAlignment="Center" TextChanged="SearchBox_TextChanged"/>
                         <TextBlock x:Name="txtSearchAppsPlaceholder" Grid.Column="1" Text="Search apps..." Foreground="{DynamicResource TextMutedBrush}" FontSize="12.5" VerticalAlignment="Center" IsHitTestVisible="False" Margin="2,0,0,0"/>
                     </Grid>
                 </Border>
 
                 <!-- View Switcher (List / Grid) -->
-                <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="8" Padding="2">
+                <Border Background="{DynamicResource SurfaceSunkenBrush}" CornerRadius="8" Padding="2">
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="btnViewList" Style="{StaticResource FluentButtonStyle}" Background="{DynamicResource ActionBrush}" BorderThickness="0" Padding="8,5" Click="BtnViewList_Click">
                             <TextBlock x:Name="btnViewListIcon" Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="White"/>
@@ -431,7 +436,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- LEFT: APP LIST TABLE -->
-            <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="10" ClipToBounds="True">
+            <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="10" ClipToBounds="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="38"/> <!-- Header -->
@@ -439,7 +444,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Table Header -->
-                    <Border x:Name="borderTableHeader" Grid.Row="0" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="0,0,0,1" Padding="14,0">
+                    <Border x:Name="borderTableHeader" Grid.Row="0" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1" Padding="14,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="36"/> <!-- Checkbox -->
@@ -539,7 +544,7 @@
 
                                         <!-- Name & ID -->
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
                                             <TextBlock Text="{Binding PackageId}" FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </Grid>
@@ -577,12 +582,12 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <Border x:Name="CardBorder" Width="140" Height="132" CornerRadius="10" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" SnapsToDevicePixels="True">
+                                            <Border x:Name="CardBorder" Width="140" Height="132" CornerRadius="10" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" SnapsToDevicePixels="True">
                                                 <ContentPresenter/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                                                    <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
                                                     <Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource LineStrongBrush}"/>
                                                 </Trigger>
                                                 <Trigger Property="IsSelected" Value="True">
@@ -609,7 +614,7 @@
                                     <Grid Grid.Row="0">
                                         <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
                                                   Style="{StaticResource FluentCheckBox}" Checked="AppRow_CheckedChanged" Unchecked="AppRow_CheckedChanged" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="4" Padding="5,1.5" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Border Background="{DynamicResource SurfaceSunkenBrush}" CornerRadius="4" Padding="5,1.5" HorizontalAlignment="Right" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Size}" FontSize="9.5" Foreground="{DynamicResource TextMutedBrush}" FontWeight="Medium"/>
                                         </Border>
                                     </Grid>
@@ -665,7 +670,7 @@
 
                                     <!-- Bottom: App Name and Type badge -->
                                     <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Name}" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" TextAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                                        <TextBlock Text="{Binding Name}" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
                                         <TextBlock Text="{Binding AppTypeBadge}" FontSize="9.5" Foreground="{Binding AppTypeBadgeFg}" TextAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Grid>
@@ -676,7 +681,7 @@
             </Border>
 
             <!-- RIGHT: DETAIL CARD -->
-            <Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="10" Padding="14,16" Margin="12,0,0,0">
+            <Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="10" Padding="14,16" Margin="12,0,0,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/> <!-- App Header -->
@@ -745,7 +750,7 @@
 
                         <!-- Title & Package -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding SelectedApp.Name}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource AccentTextBrush}" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding SelectedApp.Name}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
                             <TextBlock Text="{Binding SelectedApp.PackageId}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" ToolTip="{Binding SelectedApp.PackageId}"/>
                         </StackPanel>
 
@@ -756,7 +761,7 @@
                     </Grid>
 
                     <!-- Separator 1 -->
-                    <Border Grid.Row="1" Height="1" Background="{DynamicResource AccentSoftBrush}" Margin="0,0,0,14"/>
+                    <Border Grid.Row="1" Height="1" Background="{DynamicResource SurfaceSunkenBrush}" Margin="0,0,0,14"/>
 
                     <!-- Metadata Rows -->
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
@@ -771,7 +776,7 @@
                                     <TextBlock Text="&#xE74C;" FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="Size" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Size}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Size}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <!-- Row 2: Version -->
@@ -784,7 +789,7 @@
                                     <TextBlock Text="&#xE8EC;" FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="Version" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Version}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Version}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <!-- Row 3: Publisher -->
@@ -797,7 +802,7 @@
                                     <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="Publisher" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Publisher}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
+                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.Publisher}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
                             </Grid>
 
                             <!-- Row 4: Install date -->
@@ -810,7 +815,7 @@
                                     <TextBlock Text="&#xE787;" FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="Install date" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.InstallDate}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource AccentTextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding SelectedApp.InstallDate}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <!-- Row 5: Description -->
@@ -829,7 +834,7 @@
                     </ScrollViewer>
 
                     <!-- Separator 2 -->
-                    <Border Grid.Row="3" Height="1" Background="{DynamicResource AccentSoftBrush}" Margin="0,10,0,12"/>
+                    <Border Grid.Row="3" Height="1" Background="{DynamicResource SurfaceSunkenBrush}" Margin="0,10,0,12"/>
 
                     <!-- Action Buttons -->
                     <Grid Grid.Row="4">
@@ -846,7 +851,7 @@
         </Grid>
 
         <!-- ROW 4: STICKY BOTTOM ACTION BAR -->
-        <Border Grid.Row="4" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,12,0,0">
+        <Border Grid.Row="4" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,12,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -854,7 +859,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Left: Selection Counter -->
-                <TextBlock Grid.Column="0" Text="{Binding SelectionSummaryText}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding SelectionSummaryText}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
 
                 <!-- Right: Action Buttons Group -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -905,18 +910,18 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <TextBlock Text="Terminal Output" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextBrush}" Margin="0,0,0,12"/>
+                        <TextBlock Text="Terminal Output" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,12"/>
                         
                         <Grid Grid.Row="1" Margin="0,0,0,12">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <ProgressBar x:Name="pbTerminalProgress" Height="4" Foreground="{DynamicResource AccentTextBrush}" Background="{DynamicResource AccentSoftHoverBrush}" BorderThickness="0" Minimum="0" Maximum="100" Margin="0,0,0,6"/>
+                            <ProgressBar x:Name="pbTerminalProgress" Height="4" Foreground="{DynamicResource AccentTextBrush}" Background="{DynamicResource SurfaceSunkenBrush}" BorderThickness="0" Minimum="0" Maximum="100" Margin="0,0,0,6"/>
                             <TextBlock x:Name="lblTerminalStatus" Grid.Row="1" Text="Preparing..." Foreground="{DynamicResource AccentTextBrush}" FontSize="12" FontWeight="Medium"/>
                         </Grid>
                         
-                        <Border Grid.Row="2" CornerRadius="6" Padding="14" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1">
+                        <Border Grid.Row="2" CornerRadius="6" Padding="14" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
                             <ScrollViewer x:Name="svTerminalOutput" VerticalScrollBarVisibility="Auto">
                                 <TextBlock x:Name="txtTerminalOutput" Foreground="{DynamicResource TextBrush}" FontFamily="Consolas" FontSize="12.5" TextWrapping="Wrap" LineHeight="19"/>
                             </ScrollViewer>

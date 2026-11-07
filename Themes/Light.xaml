@@ -33,4 +33,25 @@
     <SolidColorBrush x:Key="AccentSoftBrush" Color="#FFF1E7"/>
     <SolidColorBrush x:Key="AccentSoftHoverBrush" Color="#FFE1CC"/>
     <SolidColorBrush x:Key="AccentSoftPressedBrush" Color="#FDCFAE"/>
+
+    <!-- Semantic Feedback & Status Brushes -->
+    <SolidColorBrush x:Key="WarningBgBrush" Color="#FFFBEB"/>
+    <SolidColorBrush x:Key="WarningBorderBrush" Color="#FDE68A"/>
+    <SolidColorBrush x:Key="WarningTextBrush" Color="#92400E"/>
+    <SolidColorBrush x:Key="WarningIconBrush" Color="#D97706"/>
+
+    <SolidColorBrush x:Key="SuccessBgBrush" Color="#ECFDF5"/>
+    <SolidColorBrush x:Key="SuccessBorderBrush" Color="#A7F3D0"/>
+    <SolidColorBrush x:Key="SuccessTextBrush" Color="#065F46"/>
+    <SolidColorBrush x:Key="SuccessIconBrush" Color="#059669"/>
+
+    <SolidColorBrush x:Key="DangerBgBrush" Color="#FEF2F2"/>
+    <SolidColorBrush x:Key="DangerBorderBrush" Color="#FECACA"/>
+    <SolidColorBrush x:Key="DangerTextBrush" Color="#991B1B"/>
+    <SolidColorBrush x:Key="DangerIconBrush" Color="#DC2626"/>
+
+    <SolidColorBrush x:Key="InfoBgBrush" Color="#EFF6FF"/>
+    <SolidColorBrush x:Key="InfoBorderBrush" Color="#BFDBFE"/>
+    <SolidColorBrush x:Key="InfoTextBrush" Color="#1E40AF"/>
+    <SolidColorBrush x:Key="InfoIconBrush" Color="#2563EB"/>
 </ResourceDictionary>

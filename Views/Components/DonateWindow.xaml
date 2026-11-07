@@ -1,0 +1,106 @@
+<Window x:Class="TXATOOL.Views.Components.DonateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Ủng hộ tác giả TXA - VietQR"
+        Height="620" Width="480"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI"
+        ShowInTaskbar="True"
+        Foreground="{DynamicResource TextBrush}">
+
+    <Border Background="{DynamicResource SurfaceBrush}" 
+            BorderBrush="{DynamicResource LineBrush}" 
+            BorderThickness="1.5" 
+            CornerRadius="16"
+            Padding="24">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="25" ShadowDepth="4" Opacity="0.35" Color="#000000"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Header -->
+                <RowDefinition Height="*"/>    <!-- QR Content -->
+                <RowDefinition Height="Auto"/> <!-- Footer actions -->
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <Grid Grid.Row="0" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <!-- VietQR Official Badge -->
+                    <Border Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="12,5" HorizontalAlignment="Left" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Viet" FontSize="18" FontWeight="Black" Foreground="#0054A6" FontFamily="Segoe UI"/>
+                            <TextBlock Text="QR" FontSize="18" FontWeight="Black" Foreground="#ED1C24" FontFamily="Segoe UI"/>
+                            <Border Width="1.5" Height="16" Background="#CBD5E1" Margin="10,0"/>
+                            <TextBlock Text="napas247" FontSize="13" FontWeight="Bold" Foreground="#0054A6" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock x:Name="lblDonateTitle" Text="Ủng hộ tác giả TXA" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                    <TextBlock x:Name="lblDonateSubtitle" Text="Quét mã VietQR bằng ứng dụng ngân hàng hoặc ví điện tử bất kỳ" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                </StackPanel>
+
+                <!-- Close Button -->
+                <Button Grid.Column="1" Width="34" Height="34" VerticalAlignment="Top" Click="CloseButton_Click" Cursor="Hand" Background="Transparent" BorderThickness="0" FocusVisualStyle="{x:Null}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="17" Background="{TemplateBinding Background}">
+                                <TextBlock Text="&#xE8BB;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="Background" Value="#FEE2E2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- QR BODY -->
+            <Border Grid.Row="1" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="14" Padding="16" Margin="0,0,0,16" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.1" Color="#000000"/>
+                </Border.Effect>
+                <StackPanel HorizontalAlignment="Center">
+                    <Image Source="pack://application:,,,/Images/qr_donate.png" 
+                           Width="300" Height="300" 
+                           Stretch="Uniform" 
+                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,10,0,0">
+                        <TextBlock Text="Hỗ trợ chuyển khoản liên ngân hàng 24/7" FontSize="11.5" FontWeight="SemiBold" Foreground="#0054A6" HorizontalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- FOOTER -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnSaveQr" Content="Lưu ảnh QR" Click="BtnSaveQr_Click" 
+                        Height="38" Padding="20,0" Margin="0,0,12,0"
+                        Style="{StaticResource ActionButtonStyle}" 
+                        Background="{DynamicResource SurfaceAltBrush}" 
+                        Foreground="{DynamicResource TextBrush}" 
+                        BorderBrush="{DynamicResource LineBrush}" 
+                        BorderThickness="1"/>
+
+                <Button x:Name="btnClose" Content="Đóng" Click="CloseButton_Click" 
+                        Height="38" Padding="25,0"
+                        Style="{StaticResource ActionButtonStyle}" 
+                        Background="{DynamicResource ActionBrush}" 
+                        Foreground="White"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
+

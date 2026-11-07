@@ -13,4 +13,4 @@ Requires the .NET 9 SDK on Windows.
 dotnet build TXATOOL.csproj
 ```
 
-Installer scripts: `compile_setup.bat` (bundled .NET) and `compile_setup_NoDotNet.bat` (Inno Setup 6).
+Installer: `compile_setup.bat` builds a self-contained win-x64 publish and an NSIS 3 installer (`TXATOOL.nsi`) into `Output`.
