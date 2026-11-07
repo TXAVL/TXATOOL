@@ -1,9 +1,10 @@
-; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
+﻿; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
 ; Build: compile_setup.bat  (publishes win-x64 self-contained, then runs makensis)
 
 Unicode true
 !include "MUI2.nsh"
 !include "x64.nsh"
+!include "LogicLib.nsh"
 !include "FileFunc.nsh"
 
 !define APP_NAME      "TXATOOL - WIN"
@@ -13,6 +14,11 @@ Unicode true
 !define APP_URL       "https://fb.com/vlog.txa.2311"
 !define UNINST_KEY    "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL-WIN"
 !define PUBLISH_DIR   "bin\Release\net9.0-windows\win-x64\publish"
+
+Var PREV_VERSION
+Var PREV_DIR
+Var PREV_UNINSTALL
+Var LEGACY_UNINSTALL
 
 Name "${APP_NAME}"
 OutFile "Output\TXATOOL_Setup_v${APP_VERSION}.exe"
@@ -52,14 +58,87 @@ Function .onInit
     Abort
   ${EndIf}
   SetRegView 64
-  ; Close a running copy so files can be replaced
-  nsExec::Exec 'taskkill /F /IM ${APP_EXE}'
+
+  ; 1. Kill running instances of TXATOOL and TXATOOL so files are not locked
+  nsExec::Exec 'taskkill /F /T /IM ${APP_EXE}'
   Pop $0
+  nsExec::Exec 'taskkill /F /T /IM TXATOOL.exe'
+  Pop $0
+  Sleep 500
+
+  ; 2. Check if a previous version of TXATOOL is already installed
+  ReadRegStr $PREV_VERSION HKLM "${UNINST_KEY}" "DisplayVersion"
+  ReadRegStr $PREV_DIR HKLM "${UNINST_KEY}" "InstallLocation"
+  ReadRegStr $PREV_UNINSTALL HKLM "${UNINST_KEY}" "UninstallString"
+
+  ${If} $PREV_VERSION == ""
+    ReadRegStr $PREV_VERSION HKCU "${UNINST_KEY}" "DisplayVersion"
+    ReadRegStr $PREV_DIR HKCU "${UNINST_KEY}" "InstallLocation"
+    ReadRegStr $PREV_UNINSTALL HKCU "${UNINST_KEY}" "UninstallString"
+  ${EndIf}
+
+  ; Check if legacy TXATOOL is installed
+  ReadRegStr $LEGACY_UNINSTALL HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL-WIN" "UninstallString"
+  ${If} $LEGACY_UNINSTALL == ""
+    ReadRegStr $LEGACY_UNINSTALL HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL" "UninstallString"
+  ${EndIf}
+
+  ${If} $PREV_VERSION != ""
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 \
+      "Phát hiện ${APP_NAME} (phiên bản $PREV_VERSION) đã được cài đặt trên máy.$\n$\nBộ cài sẽ tự động gỡ bỏ phiên bản cũ trước khi cài đặt phiên bản mới để tránh xung đột.$\n$\nBạn có muốn tiếp tục cài đặt không?" \
+      IDYES init_continue
+    Abort
+  init_continue:
+  ${EndIf}
 FunctionEnd
 
 Section "Install"
   SetRegView 64
   SetShellVarContext all
+
+  ; Double check: kill running app again before writing files
+  DetailPrint "Đang kiểm tra và đóng ứng dụng nếu đang chạy..."
+  nsExec::Exec 'taskkill /F /T /IM ${APP_EXE}'
+  Pop $0
+  nsExec::Exec 'taskkill /F /T /IM TXATOOL.exe'
+  Pop $0
+  Sleep 500
+
+  ; If previous version exists, run its uninstaller silently
+  ${If} $PREV_DIR != ""
+  ${AndIf} ${FileExists} "$PREV_DIR\Uninstall.exe"
+    DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $PREV_DIR..."
+    ExecWait '"$PREV_DIR\Uninstall.exe" /S _?=$PREV_DIR' $0
+    Sleep 1000
+    Delete "$PREV_DIR\Uninstall.exe"
+    RMDir "$PREV_DIR"
+  ${ElseIf} ${FileExists} "$INSTDIR\Uninstall.exe"
+    DetailPrint "Đang tự động gỡ bỏ phiên bản cũ tại: $INSTDIR..."
+    ExecWait '"$INSTDIR\Uninstall.exe" /S _?=$INSTDIR' $0
+    Sleep 1000
+    Delete "$INSTDIR\Uninstall.exe"
+    RMDir "$INSTDIR"
+  ${ElseIf} $PREV_UNINSTALL != ""
+    DetailPrint "Đang chạy trình gỡ cài đặt của phiên bản cũ..."
+    ExecWait '$PREV_UNINSTALL /S _?=$INSTDIR' $0
+    Sleep 1000
+  ${EndIf}
+
+  ; Clean up legacy TXATOOL uninstaller/shortcuts if present
+  ${If} $LEGACY_UNINSTALL != ""
+    DetailPrint "Đang dọn dẹp phiên bản TXATOOL cũ..."
+    ExecWait '$LEGACY_UNINSTALL /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /S' $0
+    Sleep 1000
+  ${EndIf}
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL-WIN"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL-WIN"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\TXATOOL"
+  Delete "$DESKTOP\TXATOOL.lnk"
+  Delete "$DESKTOP\TXATOOL - WIN.lnk"
+  RMDir /r "$SMPROGRAMS\TXATOOL"
+  RMDir /r "$SMPROGRAMS\TXATOOL - WIN"
+
   SetOutPath "$INSTDIR"
   File /r "${PUBLISH_DIR}\*.*"
 
@@ -87,10 +166,17 @@ SectionEnd
 Section "Uninstall"
   SetRegView 64
   SetShellVarContext all
-  nsExec::Exec 'taskkill /F /IM ${APP_EXE}'
+  DetailPrint "Đang đóng ứng dụng nếu đang chạy..."
+  nsExec::Exec 'taskkill /F /T /IM ${APP_EXE}'
   Pop $0
+  nsExec::Exec 'taskkill /F /T /IM TXATOOL.exe'
+  Pop $0
+  Sleep 500
+
   Delete "$DESKTOP\${APP_NAME}.lnk"
+  Delete "$DESKTOP\TXATOOL.lnk"
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
   RMDir /r "$INSTDIR"
   DeleteRegKey HKLM "${UNINST_KEY}"
+  DeleteRegKey HKCU "${UNINST_KEY}"
 SectionEnd
