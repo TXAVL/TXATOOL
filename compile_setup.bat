@@ -37,7 +37,7 @@ if %errorlevel% neq 0 (
 echo.
 echo [3/3] Compiling NSIS installer...
 if not exist Output mkdir Output
-"%MAKENSIS%" "%~dp0TXATOOL.nsi"
+"%MAKENSIS%" /INPUTCHARSET UTF8 "%~dp0TXATOOL.nsi"
 if %errorlevel% neq 0 (
     echo [ERROR] NSIS compilation failed!
     popd

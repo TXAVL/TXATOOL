@@ -8,8 +8,9 @@ namespace TXATOOL.Services
 {
     public static class TxaRepoService
     {
-        private const string REPO_URL = "https://github.com/TXAVL/txa-repo";
-        private const string INSTALL_SCRIPT_URL = "https://raw.githubusercontent.com/TXAVL/txa-repo/main/install.ps1";
+        public const string REPO_URL = "https://github.com/TXAVL/txa-repo";
+        public const string DOCS_URL = "https://txavl.github.io/txa-repo";
+        public const string INSTALL_SCRIPT_URL = "https://raw.githubusercontent.com/TXAVL/txa-repo/main/install.ps1";
 
         public static string GetInstalledPath()
         {
@@ -62,20 +63,23 @@ namespace TXATOOL.Services
             });
         }
 
-        public static void Install(string lang = "vi")
+        public static Process? Install(string lang = "vi", bool openDocsOnSuccess = true)
         {
             try
             {
-                // Run PowerShell with install script
-                string script = $"& ([scriptblock]::Create((irm {INSTALL_SCRIPT_URL}))) -Lang {lang}";
+                string openWebCmd = openDocsOnSuccess 
+                    ? $"if ($?) {{ Write-Host 'Cai dat hoan tat! Dang mo trang chu TXA Repo: {DOCS_URL}' -ForegroundColor Green; Start-Process '{DOCS_URL}' }}" 
+                    : "";
+
+                string script = $"& ([scriptblock]::Create((irm {INSTALL_SCRIPT_URL}))) -Lang {lang}; {openWebCmd}";
                 var psi = new ProcessStartInfo
                 {
                     FileName = "powershell.exe",
-                    Arguments = $"-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '==================================================' -ForegroundColor Cyan; Write-Host '   DANG CAI DAT KHO PHAN MEM TXA (txapm)...' -ForegroundColor Green; Write-Host '   Nguon: {REPO_URL}' -ForegroundColor DarkGray; Write-Host '==================================================' -ForegroundColor Cyan; {script}\"",
+                    Arguments = $"-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '==================================================' -ForegroundColor Cyan; Write-Host '   DANG CAI DAT KHO PHAN MEM TXA (txapm)...' -ForegroundColor Green; Write-Host '   Nguon: {REPO_URL}' -ForegroundColor DarkGray; Write-Host '   Trang chu: {DOCS_URL}' -ForegroundColor DarkGray; Write-Host '==================================================' -ForegroundColor Cyan; {script}\"",
                     UseShellExecute = true,
                     Verb = "runas"
                 };
-                Process.Start(psi);
+                return Process.Start(psi);
             }
             catch (Exception ex)
             {
@@ -84,7 +88,7 @@ namespace TXATOOL.Services
             }
         }
 
-        public static void Uninstall()
+        public static Process? Uninstall()
         {
             try
             {
@@ -96,7 +100,7 @@ namespace TXATOOL.Services
                     UseShellExecute = true,
                     Verb = "runas"
                 };
-                Process.Start(psi);
+                return Process.Start(psi);
             }
             catch (Exception ex)
             {
@@ -130,7 +134,7 @@ namespace TXATOOL.Services
                 var psi = new ProcessStartInfo
                 {
                     FileName = "powershell.exe",
-                    Arguments = "-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '=== TXA PACKAGE MANAGER (txapm) CONSOLE ===' -ForegroundColor Cyan; Write-Host 'Go txapm --help de xem danh sach lenh.' -ForegroundColor Gray; txapm --version\"",
+                    Arguments = $"-NoExit -ExecutionPolicy Bypass -Command \"Write-Host '=== TXA PACKAGE MANAGER (txapm) CONSOLE ===' -ForegroundColor Cyan; Write-Host 'Trang chu: {DOCS_URL}' -ForegroundColor DarkGray; Write-Host 'Go txapm --help de xem danh sach lenh.' -ForegroundColor Gray; txapm --version\"",
                     UseShellExecute = true
                 };
                 Process.Start(psi);
@@ -140,6 +144,17 @@ namespace TXATOOL.Services
                 Logger.LogCrash(ex, "TxaRepoService.OpenTerminal");
             }
         }
+
+        public static void OpenDocs()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(DOCS_URL) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogCrash(ex, "TxaRepoService.OpenDocs");
+            }
+        }
     }
 }
-

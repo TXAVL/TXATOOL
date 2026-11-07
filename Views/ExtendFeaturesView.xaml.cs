@@ -1525,12 +1525,32 @@ namespace TXATOOL.Views
             try
             {
                 string lang = Helpers.LocalizationService.CurrentLanguage?.ToLower().Contains("en") == true ? "en" : "vi";
-                Services.TxaRepoService.Install(lang);
+                var proc = Services.TxaRepoService.Install(lang, openDocsOnSuccess: true);
                 Components.CustomMessageBoxWindow.Show(
-                    "Đang mở cửa sổ PowerShell để cài đặt TXA Package Manager (txapm).\nVui lòng theo dõi tiến trình trên màn hình console.", 
+                    "Đang mở cửa sổ PowerShell để cài đặt TXA Package Manager (txapm).\nSau khi cài đặt thành công, hệ thống sẽ tự động mở trang chủ kho https://txavl.github.io/txa-repo", 
                     "TXA Repo Installer");
-                await Task.Delay(3000);
-                await UpdateTxaRepoStatusAsync();
+
+                if (proc != null)
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await proc.WaitForExitAsync();
+                            await Task.Delay(1000);
+                            await Dispatcher.InvokeAsync(async () =>
+                            {
+                                await UpdateTxaRepoStatusAsync();
+                            });
+                        }
+                        catch { }
+                    });
+                }
+                else
+                {
+                    await Task.Delay(3000);
+                    await UpdateTxaRepoStatusAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -1550,9 +1570,28 @@ namespace TXATOOL.Views
 
                 if (confirm == MessageBoxResult.Yes)
                 {
-                    Services.TxaRepoService.Uninstall();
-                    await Task.Delay(3000);
-                    await UpdateTxaRepoStatusAsync();
+                    var proc = Services.TxaRepoService.Uninstall();
+                    if (proc != null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                await proc.WaitForExitAsync();
+                                await Task.Delay(1000);
+                                await Dispatcher.InvokeAsync(async () =>
+                                {
+                                    await UpdateTxaRepoStatusAsync();
+                                });
+                            }
+                            catch { }
+                        });
+                    }
+                    else
+                    {
+                        await Task.Delay(3000);
+                        await UpdateTxaRepoStatusAsync();
+                    }
                 }
             }
             catch (Exception ex)
@@ -1573,11 +1612,7 @@ namespace TXATOOL.Views
 
         private void ViewTxaRepoWeb_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Process.Start(new ProcessStartInfo("https://github.com/TXAVL/txa-repo") { UseShellExecute = true });
-            }
-            catch { }
+            Services.TxaRepoService.OpenDocs();
         }
 
         private void OpenRAMMap_Click(object sender, RoutedEventArgs e)

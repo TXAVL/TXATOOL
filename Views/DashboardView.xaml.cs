@@ -1601,7 +1601,7 @@ namespace TXATOOL.Views
                     if (result == MessageBoxResult.Yes)
                     {
                         string lang = Helpers.LocalizationService.CurrentLanguage?.ToLower().Contains("en") == true ? "en" : "vi";
-                        Services.TxaRepoService.Install(lang);
+                        Services.TxaRepoService.Install(lang, openDocsOnSuccess: true);
                     }
                 }
             }

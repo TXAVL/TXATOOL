@@ -1,4 +1,4 @@
-; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
+﻿; TXATOOL - WIN installer (NSIS 3, Modern UI 2)
 ; Build: compile_setup.bat  (publishes win-x64 self-contained, then runs makensis)
 
 Unicode true
