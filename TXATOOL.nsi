@@ -214,12 +214,19 @@ Section "Install"
   CreateDirectory "$SMPROGRAMS\${APP_NAME}"
   CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
   CreateShortcut "$SMPROGRAMS\${APP_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0 "" "" "$(SHORTCUT_UNINST_DESC)"
-  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
 
-  ; Đảm bảo Desktop của người dùng hiện tại luôn có shortcut
+  ; Dọn dẹp triệt để các shortcut cũ (cả ở User Desktop và Public Desktop) để tránh bị nhân đôi (2 shortcuts)
   SetShellVarContext current
-  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
+  Delete "$DESKTOP\${APP_NAME}.lnk"
+  Delete "$DESKTOP\TXATOOL.lnk"
+  Delete "$DESKTOP\TXATOOL - WIN.lnk"
   SetShellVarContext all
+  Delete "$DESKTOP\${APP_NAME}.lnk"
+  Delete "$DESKTOP\TXATOOL.lnk"
+  Delete "$DESKTOP\TXATOOL - WIN.lnk"
+
+  ; Chỉ tạo duy nhất 1 shortcut trên Desktop chung (Public Desktop)
+  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0 "" "" "$(SHORTCUT_DESC)"
 
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME}"
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayVersion" "${APP_VERSION}"
@@ -245,11 +252,13 @@ Section "Uninstall"
   SetShellVarContext current
   Delete "$DESKTOP\${APP_NAME}.lnk"
   Delete "$DESKTOP\TXATOOL.lnk"
+  Delete "$DESKTOP\TXATOOL - WIN.lnk"
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
 
   SetShellVarContext all
   Delete "$DESKTOP\${APP_NAME}.lnk"
   Delete "$DESKTOP\TXATOOL.lnk"
+  Delete "$DESKTOP\TXATOOL - WIN.lnk"
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
   RMDir /r "$INSTDIR"
   DeleteRegKey HKLM "${UNINST_KEY}"
