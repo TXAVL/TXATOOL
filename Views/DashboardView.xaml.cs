@@ -1696,6 +1696,7 @@ namespace TXATOOL.Views
 
                         var dateMap = new System.Collections.Generic.Dictionary<string, string>
                         {
+                            { "v1.3.0", "2026-11-08" },
                             { "v1.2.1", "2026-11-08" },
                             { "v1.2.0", "2026-11-08" },
                             { "v1.1.0", "2026-11-07" },

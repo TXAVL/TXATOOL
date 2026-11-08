@@ -1,4 +1,18 @@
 {
+    "v1.3.0": {
+        "title": "TXATOOL - WIN - Nhật ký thay đổi v1.3.0",
+        "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.3.0 (PRO GAMING & SMART REPO)",
+        "content": [
+            "Tích hợp bộ cấu hình Esport tối ưu cho game bóng đá: EA SPORTS FC (FC 26 / FC 25 / FC 24), FIFA 23, FIFA 19 và eFootball / PES 2026 (PES 2021).",
+            "Tự động triệt tiêu giật lag tóc sợi (Strand-Based Hair = 0), tắt VSync (WaitforVSync = 0), tắt độ phân giải động (Dynamic Resolution = 0) và gán GPU High Performance độc quyền.",
+            "Tích hợp cơ chế nguồn tải TXA Repo (txapm) trong Cài đặt với tính năng thông minh: ưu tiên kho txapm và tự động fallback sang Winget kèm thông báo rõ ràng.",
+            "Cải tiến tìm kiếm không dấu (diacritics-insensitive) trên toàn bộ kho ứng dụng và game.",
+            "Nâng cấp bộ chẩn đoán Intel RST: tự động nhận diện thế hệ CPU Intel (Gen 6-15/Ultra) để chọn đúng driver và cảnh báo nếu chạy CPU AMD.",
+            "Tối ưu nhận diện Visual C++ 2015-2022 (v14.51+) từ Registry, xử lý chuẩn xác trạng thái phiên bản mới nhất."
+        ],
+        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_value": "v1.3.0"
+    },
     "v1.2.1": {
         "title": "TXATOOL - WIN - Nhật ký thay đổi v1.2.1",
         "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.2.1 (HOTFIX & STABILITY)",
@@ -8,7 +22,7 @@
             "Tối ưu hóa luồng điều hướng mượt mà và trực quan từ trang Tổng quan đến các công cụ Game Doctor.",
             "Đồng bộ phiên bản v1.2.1 trên toàn bộ hệ thống, Cài đặt và hệ sinh thái cập nhật tự động."
         ],
-        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_label": "PHIÊN BẢN PHÁT HÀNH",
         "version_value": "v1.2.1"
     },
     "v1.2.0": {

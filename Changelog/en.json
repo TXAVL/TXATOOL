@@ -1,4 +1,18 @@
 {
+    "v1.3.0": {
+        "title": "TXATOOL - WIN - Changelog v1.3.0",
+        "summary_title": "OFFICIAL UPDATE v1.3.0 (PRO GAMING & SMART REPO)",
+        "content": [
+            "Integrated competitive pro optimization presets for soccer titles: EA SPORTS FC (FC 26 / 25 / 24), FIFA 23, FIFA 19, and eFootball / PES 2026 (PES 2021).",
+            "Eliminates cutscene frame drops (Strand-Based Hair = 0), removes input delay (WaitforVSync = 0), locks crisp 1080p (Dynamic Resolution = 0), and assigns High Performance GPU.",
+            "Integrated TXA Repo (txapm) download source in Settings with smart fallback to Winget and explicit user notifications.",
+            "Added diacritics-insensitive smart search across all downloadable apps and games.",
+            "Upgraded Intel RST diagnostics: auto-detects Intel CPU generations (Gen 6 to 15/Ultra) and disclaims for AMD systems.",
+            "Optimized Visual C++ 2015-2022 (v14.51+) registry detection and handled Winget exit code 1 cleanly."
+        ],
+        "version_label": "LATEST RELEASE",
+        "version_value": "v1.3.0"
+    },
     "v1.2.1": {
         "title": "TXATOOL - WIN - Changelog v1.2.1",
         "summary_title": "OFFICIAL UPDATE v1.2.1 (HOTFIX & STABILITY)",
@@ -8,7 +22,7 @@
             "Streamlined seamless navigation directly from Dashboard to Gaming Optimization tools.",
             "Synchronized version v1.2.1 across entire app ecosystem, Settings, and auto-update channels."
         ],
-        "version_label": "LATEST RELEASE",
+        "version_label": "RELEASED",
         "version_value": "v1.2.1"
     },
     "v1.2.0": {
