@@ -311,7 +311,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!-- Row 0: 3 Link Cards -->
                 <RowDefinition Height="12"/>   <!-- Spacer -->
-                <RowDefinition Height="*"/>    <!-- Row 2: 2-Column Dashboard Grid -->
+                <RowDefinition Height="Auto"/> <!-- Row 2: Turbo Boost & Pro Tools Dock -->
+                <RowDefinition Height="12"/>   <!-- Spacer -->
+                <RowDefinition Height="*"/>    <!-- Row 4: 2-Column Dashboard Grid -->
             </Grid.RowDefinitions>
 
             <!-- ROW 0: TOP LINK CARDS (FB, DONATE, GITHUB, TXA REPO) -->
@@ -415,8 +417,51 @@
                 </Border>
             </Grid>
 
-            <!-- ROW 2: 2-COLUMN DASHBOARD GRID -->
-            <Grid Grid.Row="2">
+            <!-- ROW 2: TURBO BOOST & PRO TOOLS DOCK -->
+            <Border Grid.Row="2" Style="{StaticResource GlassCardStyle}" Padding="16,11">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Turbo Badge & Info -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="38" Height="38" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}" Margin="0,0,12,0" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE7E8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="TURBO BOOST &amp; GAMING" FontSize="13.5" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                <Border Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1" CornerRadius="5" Padding="5,1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TurboBadgeText" Text="HYPER-PERFORMANCE" FontSize="9.5" FontWeight="Bold" Foreground="#B45309"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock x:Name="TurboSubtitleText" Text="Giải phóng bộ nhớ RAM, dọn sạch DNS/Temp cache và kích hoạt độ trễ thấp tức thì." FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Middle: Spacer -->
+                    <Grid Grid.Column="1"/>
+
+                    <!-- Right: Quick Turbo Boost Button & Tools -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button x:Name="BtnQuickTurboBoost" Height="34" Style="{StaticResource PrimaryBlueBtnStyle}" Padding="14,0" Margin="0,0,10,0" Click="BtnQuickTurboBoost_Click">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE7E8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" Foreground="White" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="⚡ Turbo Boost (Dọn RAM)" FontSize="12" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Content="⏱️ 0.5ms Timer" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnDashboardTimer_Click" ToolTip="Kích hoạt TimerResolution 0.5ms"/>
+                        <Button Content="🎮 Sửa Lỗi Game" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnDashboardFixGame_Click" ToolTip="Mở trình chẩn đoán &amp; khắc phục lỗi Game"/>
+                        <Button Content="⚙️ Cấu Hình Game" Style="{StaticResource SmallActionBtnStyle}" Height="32" Padding="10,0" Click="BtnDashboardGameConfigs_Click" ToolTip="Mở trình tối ưu cấu hình Game"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ROW 4: 2-COLUMN DASHBOARD GRID -->
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.55*"/> <!-- Left Column (~61%) -->
                     <ColumnDefinition Width="16"/>

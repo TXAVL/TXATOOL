@@ -1,16 +1,16 @@
 {
-  "version": "1.1.0",
-  "release_date": "07-11-2026",
-  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.1.0/TXATOOL_Setup_v1.1.0.exe",
+  "version": "1.2.0",
+  "release_date": "08-11-2026",
+  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.0/TXATOOL_Setup_v1.2.0.exe",
   "content": [
-    "Tích hợp kho phần mềm dòng lệnh TXA Package Manager (txapm) chính thức.",
-    "Bổ sung bộ công cụ tối ưu & tinh chỉnh nâng cao: NTLite, RAMMap64, NVIDIA Profile Inspector, Chris Titus WinUtil, MSI Util v3, Timer Resolution.",
-    "Bộ cài đặt NSIS hoàn toàn mới: Hỗ trợ song ngữ Tiếng Việt & English, giao diện Fluent bóng bẩy với Banner phát sáng.",
-    "Cơ chế nâng cấp & cài đè thông minh (Overwrite mode), tự động xử lý ứng dụng đang chạy.",
-    "Hỗ trợ hệ sinh thái kiểm tra cập nhật tự động qua định dạng txa.yml.",
-    "Card & Popup ủng hộ VietQR dành riêng cho tác giả TXA.",
-    "Phân tách rõ ràng liên kết Kho phần mềm (txavl.github.io/txa-repo) và Tài liệu hướng dẫn (txavl.github.io/txa-repo/docs/)."
+    "Kích hoạt bộ công cụ Game Doctor & Tối ưu hóa Game chuyên nghiệp lấy cảm hứng từ HyperLis.",
+    "Bổ sung thanh Turbo Boost & Pro Tools Dock ngay trên Dashboard: Giải phóng RAM Working Sets và Standby List tức thì, flush DNS/Temp và mở nhanh TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
+    "Kích hoạt tính năng Sửa lỗi Game: Sửa giật lag FPS (MMCSS Priority), sửa crash GPU Driver, xóa sạch toàn bộ DirectX & NVIDIA/AMD Shader Cache.",
+    "Tích hợp tính năng chẩn đoán Secure Boot & TPM 2.0 thời gian thực, hướng dẫn sửa lỗi Anti-Cheat và VAN 9003 cho Valorant/Riot Games.",
+    "Kích hoạt bộ cấu hình game e-Sports tối ưu: Hỗ trợ Delta Force (Hawks Ops), Counter-Strike 2, PUBG và Battlefield series với tính năng tự động nhận diện, sao lưu và khôi phục 1-click.",
+    "Kiểm tra và hỗ trợ tự động cài đặt thư viện Visual C++ All-in-One Redistributable và DirectX Runtime.",
+    "Cải thiện độ mượt mà và tối ưu hóa toàn diện giao diện Fluent Design."
   ],
-  "size": "137 MB",
+  "size": "140 MB",
   "is_critical": false
 }

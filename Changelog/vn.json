@@ -1,4 +1,19 @@
 {
+    "v1.2.0": {
+        "title": "TXATOOL - WIN - Nhật ký thay đổi v1.2.0",
+        "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.2.0 (HYPER GAMING & TURBO BOOST)",
+        "content": [
+            "Kích hoạt bộ công cụ Game Doctor & Tối ưu hóa Game chuyên nghiệp lấy cảm hứng từ HyperLis.",
+            "Bổ sung thanh Turbo Boost & Pro Tools Dock ngay trên Dashboard: Giải phóng RAM Working Sets và Standby List tức thì, flush DNS/Temp và mở nhanh TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
+            "Kích hoạt tính năng Sửa lỗi Game: Sửa giật lag FPS (MMCSS Priority), sửa crash GPU Driver, xóa sạch toàn bộ DirectX & NVIDIA/AMD Shader Cache.",
+            "Tích hợp tính năng chẩn đoán Secure Boot & TPM 2.0 thời gian thực, hướng dẫn sửa lỗi Anti-Cheat và VAN 9003 cho Valorant/Riot Games.",
+            "Kích hoạt bộ cấu hình game e-Sports tối ưu: Hỗ trợ Delta Force (Hawks Ops), Counter-Strike 2, PUBG và Battlefield series với tính năng tự động nhận diện, sao lưu và khôi phục 1-click.",
+            "Kiểm tra và hỗ trợ tự động cài đặt thư viện Visual C++ All-in-One Redistributable và DirectX Runtime.",
+            "Cải thiện độ mượt mà và tối ưu hóa toàn diện giao diện Fluent Design."
+        ],
+        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_value": "v1.2.0"
+    },
     "v1.1.0": {
         "title": "TXATOOL - WIN - Nhật ký thay đổi v1.1.0",
         "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.1.0",
@@ -11,7 +26,7 @@
             "Card & Popup ủng hộ VietQR dành riêng cho tác giả TXA.",
             "Phân tách rõ liên kết Kho phần mềm (txavl.github.io/txa-repo) và Tài liệu hướng dẫn (txavl.github.io/txa-repo/docs/)."
         ],
-        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_label": "PHIÊN BẢN PHÁT HÀNH",
         "version_value": "v1.1.0"
     },
     "v1.0.0": {
@@ -29,7 +44,7 @@
             "Công cụ triển khai Microsoft Office tùy biến theo từng ứng dụng và phiên bản.",
             "Giao diện hiện đại phong cách Fluent Glass, hỗ trợ đầy đủ Light/Dark Theme tự động theo hệ thống và song ngữ Tiếng Việt - Tiếng Anh."
         ],
-        "version_label": "PHIÊN BẢN PHÁT HÀNH",
+        "version_label": "PHIÊN BẢN BAN ĐẦU",
         "version_value": "v1.0.0"
     }
 }

@@ -1,4 +1,19 @@
 {
+    "v1.2.0": {
+        "title": "TXATOOL - WIN - Changelog v1.2.0",
+        "summary_title": "OFFICIAL UPDATE v1.2.0 (HYPER GAMING & TURBO BOOST)",
+        "content": [
+            "Activated official Game Doctor & Gaming Optimization suite inspired by HyperLis.",
+            "Added Turbo Boost & Pro Tools Dock on Dashboard: Instant RAM working sets & standby list purging, DNS/Temp flush, and quick launch for TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
+            "Activated Fix Game Errors view: Fix FPS stutters (MMCSS Priority), GPU driver crashes, and clean DirectX/NVIDIA/AMD shader caches.",
+            "Integrated live Secure Boot & TPM 2.0 diagnostics, with guided repairs for Valorant VAN 9003 and anti-cheat errors.",
+            "Activated Game Configs & Presets: Custom optimized profiles for Delta Force (Hawks Ops), CS2, PUBG, and Battlefield with 1-click auto-detect, backup, and restore.",
+            "Integrated automatic checking and installation for Visual C++ All-in-One Redistributables and DirectX Runtimes.",
+            "Enhanced Fluent Design responsiveness and performance."
+        ],
+        "version_label": "LATEST RELEASE",
+        "version_value": "v1.2.0"
+    },
     "v1.1.0": {
         "title": "TXATOOL - WIN - Changelog v1.1.0",
         "summary_title": "OFFICIAL UPDATE v1.1.0 SUMMARY",
@@ -11,7 +26,7 @@
             "Dedicated VietQR donation card & popup supporting TXA.",
             "Distinct routing for Software Store (txavl.github.io/txa-repo) and Documentation (txavl.github.io/txa-repo/docs/)."
         ],
-        "version_label": "LATEST RELEASE",
+        "version_label": "PREVIOUS RELEASE",
         "version_value": "v1.1.0"
     },
     "v1.0.0": {

@@ -4,70 +4,222 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1000"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="950" d:DesignWidth="1100"
+             Background="Transparent"
+             FontFamily="Segoe UI"
+             Foreground="{DynamicResource TextBrush}">
 
     <UserControl.Resources>
-        <!-- Use existing ActionButtonStyle if available, or define local styles -->
+        <Style x:Key="ProCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,18"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style x:Key="ProToolBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.FontSize="13" TextElement.FontWeight="SemiBold" TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+                                <Setter TargetName="bdr" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ActionBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryActionBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr" CornerRadius="8" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.FontSize="13.5" TextElement.FontWeight="Bold" TextElement.Foreground="White"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bdr" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="20,20,0,20">
-        <StackPanel Margin="0,0,340,0">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="20,10,10,20">
+        <StackPanel Margin="0,0,15,0">
             
             <!-- HEADER -->
-            <TextBlock Text="Select your game" FontSize="29" FontWeight="SemiBold" Margin="0,0,0,20"/>
-            
-            <!-- GAME SELECTION CARD -->
-            <Border Background="{DynamicResource PanelBrush}" CornerRadius="15" Padding="20" Margin="0,0,0,30">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/> <!-- Icon -->
-                        <ColumnDefinition Width="*"/>    <!-- Text -->
-                        <ColumnDefinition Width="200"/>  <!-- ComboBox -->
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Icon Placeholder (Gamepad) -->
-                    <Image Source="pack://application:,,,/Images/game2.png" Width="40" Height="40" VerticalAlignment="Center" Margin="0,0,20,0"/>
-
-                    <!-- Description -->
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="Choose a game:" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBlock Text="Battlefield, Delta Force, PUBG, CS2, Marvel Rival, Call of Duty" FontSize="14" Opacity="0.7" TextWrapping="Wrap"/>
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource AccentSoftBrush}" Margin="0,0,15,0" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE7FC;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="24" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Cấu Hình Game Tối Ưu (Game Configs &amp; Presets)" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                        <Border Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="FPS BOOST" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource ActionBrush}"/>
+                        </Border>
                     </StackPanel>
+                    <TextBlock Text="Tự động tạo và áp dụng cấu hình in-game tối đa hóa số khung hình (FPS), giảm giật lag và giữ hình ảnh sắc nét khi thi đấu." 
+                               FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Grid>
 
-                    <!-- Dropdown -->
-                    <ComboBox Grid.Column="2" VerticalAlignment="Center" Height="36" SelectedIndex="0" Style="{StaticResource WinUIComboBoxStyle}">
-                        <ComboBoxItem Content="Delta Force"/>
-                        <ComboBoxItem Content="Battlefield"/>
-                         <ComboBoxItem Content="PUBG"/>
-                         <ComboBoxItem Content="CS2"/>
-                         <ComboBoxItem Content="Marvel Rival"/>
-                         <ComboBoxItem Content="Call of Duty"/>
-                    </ComboBox>
-                </Grid>
+            <!-- GAME & PATH SELECTION CARD -->
+            <Border Style="{StaticResource ProCardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="280"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="pack://application:,,,/Images/game2.png" Width="38" Height="38" VerticalAlignment="Center" Margin="0,0,16,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Chọn Tựa Game" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="Delta Force, Counter-Strike 2, PUBG, Battlefield" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <ComboBox x:Name="GameSelectorCombo" Grid.Column="2" Height="36" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Center" SelectionChanged="GameSelectorCombo_SelectionChanged">
+                            <ComboBoxItem Content="Delta Force (Hawks Ops)" IsSelected="True"/>
+                            <ComboBoxItem Content="Counter-Strike 2 (CS2)"/>
+                            <ComboBoxItem Content="PUBG: BATTLEGROUNDS"/>
+                            <ComboBoxItem Content="Battlefield 2042"/>
+                            <ComboBoxItem Content="Battlefield V"/>
+                            <ComboBoxItem Content="Battlefield 1"/>
+                        </ComboBox>
+                    </Grid>
+
+                    <Separator Background="{DynamicResource LineBrush}" Margin="0,0,0,14"/>
+
+                    <!-- PATH FIELD -->
+                    <TextBlock Text="Đường Dẫn Thư Mục Cấu Hình (Config Directory):" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="GameLocationTextBox" Height="36" VerticalContentAlignment="Center" Padding="10,0" FontSize="13" 
+                                 Background="{DynamicResource SurfaceAltBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+
+                        <Button Grid.Column="2" Content="🔍 Tự Động Tìm" Style="{StaticResource ProToolBtnStyle}" Click="BtnAutoDetectPath_Click"/>
+                        <Button Grid.Column="4" Content="📂 Duyệt..." Style="{StaticResource ProToolBtnStyle}" Click="BrowseGameLocationBtn_Click"/>
+                    </Grid>
+                </StackPanel>
             </Border>
 
-            <!-- GAME LOCATION -->
-            <TextBlock Text="Choose the game location" FontSize="29" FontWeight="SemiBold" Margin="0,0,0,20"/>
-            <Grid Margin="0,0,0,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox x:Name="GameLocationTextBox" Text="C:\Delta Force\Delta Force\DeltaForce\Saved\Config\WindowsClient" 
-                         FontSize="17" Padding="10" VerticalContentAlignment="Center" Background="{DynamicResource SurfaceBrush}" BorderThickness="0">
-                    <TextBox.Resources>
-                        <Style TargetType="Border">
-                             <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
-                <Button x:Name="BrowseGameLocationBtn" Grid.Column="1" Content="Browse" Margin="10,0,0,0" Style="{StaticResource ActionButtonStyle}" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}" Padding="20,10" Click="BrowseGameLocationBtn_Click"/>
-            </Grid>
-            
-            <!-- IMPORT CONFIG -->
-             <TextBlock Text="Import Configuration" FontSize="29" FontWeight="SemiBold" Margin="0,0,0,20"/>
-             <Button Content="Start" HorizontalAlignment="Left" Width="150" Style="{StaticResource ActionButtonStyle}"/>
+            <!-- PRESET DETAILS CARD -->
+            <Border Style="{StaticResource ProCardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE735;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Cấu Hình Đề Xuất (Optimization Preset)" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Border Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="COMPETITIVE PRO" FontSize="10" FontWeight="Bold" Foreground="#15803D"/>
+                        </Border>
+                    </Grid>
+
+                    <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="8" Padding="14,12" Margin="0,0,0,14">
+                        <TextBlock x:Name="TxtPresetDetails" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" LineHeight="20"/>
+                    </Border>
+
+                    <!-- OPTIONS -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <CheckBox x:Name="ChkReadOnly" Content="Khóa file (Read-Only) để game không tự reset cài đặt" IsChecked="True" Style="{StaticResource ToggleSwitchStyle}" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                        <CheckBox x:Name="ChkBackup" Content="Tự động sao lưu cấu hình cũ (.bak)" IsChecked="True" Style="{StaticResource ToggleSwitchStyle}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- ACTION BUTTONS -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" x:Name="btnApplyConfig" Content="⚡ Áp Dụng Cấu Hình Tối Ưu" Style="{StaticResource PrimaryActionBtnStyle}" Click="BtnApplyConfig_Click"/>
+                        <Button Grid.Column="2" x:Name="btnRestoreBackup" Content="🔄 Khôi Phục Cũ" Style="{StaticResource ProToolBtnStyle}" Height="40" Click="BtnRestoreBackup_Click"/>
+                        <Button Grid.Column="4" x:Name="btnOpenFolder" Content="📁 Mở Thư Mục" Style="{StaticResource ProToolBtnStyle}" Height="40" Click="BtnOpenFolder_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- CONSOLE LOG -->
+            <Border Style="{StaticResource ProCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="180"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE756;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="15" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Nhật Ký Thực Thi (Execution Console)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Content="Xóa Nhật Ký" Style="{StaticResource ProToolBtnStyle}" Height="28" Padding="10,0" HorizontalAlignment="Right" Click="BtnClearLog_Click"/>
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="{DynamicResource SurfaceSunkenBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10">
+                        <ScrollViewer x:Name="LogScrollViewer" VerticalScrollBarVisibility="Auto">
+                            <TextBox x:Name="TxtLogConsole" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextSecondaryBrush}" 
+                                     FontFamily="Consolas, Cascadia Code, Courier New" FontSize="12.5" IsReadOnly="True" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Border>
 
         </StackPanel>
     </ScrollViewer>

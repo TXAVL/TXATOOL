@@ -233,8 +233,8 @@
                                     <RadioButton GroupName="MainNav" x:Name="NavNetwork" Content="Network" Tag="&#xE909;" Style="{StaticResource MenuButtonStyle}" Checked="Network_Checked"/>
                                     <RadioButton GroupName="MainNav" x:Name="NavPrinterErrors" Content="Printer Errors" Tag="&#xF56D;" Style="{StaticResource MenuButtonStyle}" Checked="PrinterErrors_Checked"/>
                                     <RadioButton GroupName="MainNav" x:Name="NavWindowsErrors" Content="Windows Errors" Tag="&#xED15;" Style="{StaticResource MenuButtonStyle}" Checked="WindowsErrors_Checked"/>
-                                    <RadioButton GroupName="MainNav" x:Name="NavFixGame" Content="Fix game errors" Tag="&#xE90F;" Style="{StaticResource MenuButtonStyle}" Checked="FixGameErrors_Checked" Visibility="Collapsed"/>
-                                    <RadioButton GroupName="MainNav" x:Name="NavGameConfigs" Content="Game Configs" Tag="&#xE7FC;" Style="{StaticResource MenuButtonStyle}" Checked="GameConfigs_Checked" Visibility="Collapsed"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavFixGame" Content="Fix game errors" Tag="&#xE90F;" Style="{StaticResource MenuButtonStyle}" Checked="FixGameErrors_Checked" Visibility="Visible"/>
+                                    <RadioButton GroupName="MainNav" x:Name="NavGameConfigs" Content="Game Configs" Tag="&#xE7FC;" Style="{StaticResource MenuButtonStyle}" Checked="GameConfigs_Checked" Visibility="Visible"/>
                                 </StackPanel>
                             </StackPanel>
                         </ScrollViewer>

@@ -21,13 +21,16 @@ if not exist "%MAKENSIS%" (
     exit /b 1
 )
 
+set "DOTNET_EXE=C:\Program Files\dotnet\dotnet.exe"
+if not exist "%DOTNET_EXE%" set "DOTNET_EXE=dotnet"
+
 echo [1/3] Cleaning old build files...
-dotnet clean "%PROJECT_FILE%" -c Release
+"%DOTNET_EXE%" clean "%PROJECT_FILE%" -c Release
 if exist "bin\Release" rmdir /s /q "bin\Release"
 
 echo.
 echo [2/3] Publishing win-x64 (self-contained, .NET included)...
-dotnet publish "%PROJECT_FILE%" -c Release -r win-x64 --self-contained true
+"%DOTNET_EXE%" publish "%PROJECT_FILE%" -c Release -r win-x64 --self-contained true
 if %errorlevel% neq 0 (
     echo [ERROR] Dotnet publish failed!
     popd
@@ -46,6 +49,6 @@ if %errorlevel% neq 0 (
 
 echo.
 echo ==========================================
-echo    SUCCESS: Output\TXATOOL_Setup_v1.1.0.exe
+echo    SUCCESS: Output\TXATOOL_Setup_v1.2.0.exe
 echo ==========================================
 popd

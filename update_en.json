@@ -1,16 +1,16 @@
 {
-  "version": "1.1.0",
-  "release_date": "07-11-2026",
-  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.1.0/TXATOOL_Setup_v1.1.0.exe",
+  "version": "1.2.0",
+  "release_date": "08-11-2026",
+  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.0/TXATOOL_Setup_v1.2.0.exe",
   "content": [
-    "Integrated official command-line TXA Package Manager (txapm).",
-    "Added advanced tuning & optimization suite: NTLite, RAMMap64, NVIDIA Profile Inspector, Chris Titus WinUtil, MSI Util v3, Timer Resolution.",
-    "Brand new NSIS installer: Multilingual (Vietnamese & English), Fluent Dark Blue styling with glowing tech banners.",
-    "Smart conflict handling and safe in-place overwrite upgrade mode.",
-    "Auto-updater integration powered by txa.yml format.",
-    "Dedicated VietQR donation card & popup supporting TXA.",
-    "Distinct routing for Software Store (txavl.github.io/txa-repo) and Documentation (txavl.github.io/txa-repo/docs/)."
+    "Activated official Game Doctor & Gaming Optimization suite inspired by HyperLis.",
+    "Added Turbo Boost & Pro Tools Dock on Dashboard: Instant RAM working sets & standby list purging, DNS/Temp flush, and quick launch for TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
+    "Activated Fix Game Errors view: Fix FPS stutters (MMCSS Priority), GPU driver crashes, and clean DirectX/NVIDIA/AMD shader caches.",
+    "Integrated live Secure Boot & TPM 2.0 diagnostics, with guided repairs for Valorant VAN 9003 and anti-cheat errors.",
+    "Activated Game Configs & Presets: Custom optimized profiles for Delta Force (Hawks Ops), CS2, PUBG, and Battlefield with 1-click auto-detect, backup, and restore.",
+    "Integrated automatic checking and installation for Visual C++ All-in-One Redistributables and DirectX Runtimes.",
+    "Enhanced Fluent Design responsiveness and performance."
   ],
-  "size": "137 MB",
+  "size": "140 MB",
   "is_critical": false
 }

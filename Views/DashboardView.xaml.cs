@@ -1824,6 +1824,66 @@ namespace TXATOOL.Views
             OnPropertyChanged(nameof(IsDisableSmartScreenEnabled));
         }
 
+        private async void BtnQuickTurboBoost_Click(object sender, RoutedEventArgs e)
+        {
+            if (BtnQuickTurboBoost == null) return;
+            BtnQuickTurboBoost.IsEnabled = false;
+
+            try
+            {
+                var progress = new Progress<string>(msg =>
+                {
+                    if (TurboSubtitleText != null) TurboSubtitleText.Text = msg;
+                });
+
+                var (freedBytes, summary) = await GameDoctorHelper.TurboBoostMemoryAndCacheAsync(progress);
+
+                if (TurboBadgeText != null)
+                {
+                    TurboBadgeText.Text = "BOOSTED!";
+                }
+
+                if (TurboSubtitleText != null)
+                {
+                    TurboSubtitleText.Text = summary;
+                }
+
+                // Force refresh CPU & RAM counters right away
+                _ = UpdateCpuRamStatsAsync();
+
+                TXATOOL.Views.Components.CustomMessageBoxWindow.Show(
+                    $"Turbo Boost hoàn tất!\n\n{summary}",
+                    "Turbo Boost");
+            }
+            catch (Exception ex)
+            {
+                TXATOOL.Views.Components.CustomMessageBoxWindow.Show($"Lỗi: {ex.Message}", "Lỗi");
+            }
+            finally
+            {
+                BtnQuickTurboBoost.IsEnabled = true;
+            }
+        }
+
+        private void BtnDashboardTimer_Click(object sender, RoutedEventArgs e)
+        {
+            bool ok = GameDoctorHelper.LaunchTool("TimerResolution.exe");
+            if (!ok)
+            {
+                TXATOOL.Views.Components.CustomMessageBoxWindow.Show("Không tìm thấy TimerResolution.exe trong thư mục Tools.", "Thông báo");
+            }
+        }
+
+        private void BtnDashboardFixGame_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateRequested?.Invoke(this, "FixGameErrors");
+        }
+
+        private void BtnDashboardGameConfigs_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateRequested?.Invoke(this, "GameConfigs");
+        }
+
         private void ApplyDashboardTranslations()
         {
             Dispatcher.Invoke(() =>

@@ -5,85 +5,355 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TXATOOL.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="900"
-        Foreground="{DynamicResource TextBrush}">
+             d:DesignHeight="950" d:DesignWidth="1100"
+             Background="Transparent"
+             FontFamily="Segoe UI"
+             Foreground="{DynamicResource TextBrush}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="20,10,0,20">
-        <StackPanel Margin="0,0,20,0">
+    <UserControl.Resources>
+        <Style x:Key="ProCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18,16"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style x:Key="ProToolBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.FontSize="12.5" TextElement.FontWeight="SemiBold" TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+                                <Setter TargetName="bdr" Property="BorderBrush" Value="{DynamicResource ActionBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ActionBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryActionBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="{DynamicResource ActionBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr" CornerRadius="8" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.FontSize="13" TextElement.FontWeight="Bold" TextElement.Foreground="White"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bdr" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="20,10,10,20">
+        <StackPanel Margin="0,0,15,0">
             
-            <!-- Select game -->
-            <TextBlock Text="Select game" FontSize="29" FontWeight="SemiBold" Margin="0,0,0,20"/>
-            
-            <!-- Game Selection Card -->
-            <Border Background="{DynamicResource PanelHoverBrush}" CornerRadius="12" Padding="20" Margin="0,0,0,30">
+            <!-- HEADER -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource AccentSoftBrush}" Margin="0,0,15,0" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE90F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="24" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Game Doctor &amp; Optimization" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                        <Border Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource ActionBrush}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="PRO GAMING" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource ActionBrush}"/>
+                        </Border>
+                    </StackPanel>
+                    <TextBlock Text="Khắc phục triệt để lỗi giật lag, drop FPS, crash GPU Driver, thiếu DirectX/VC++ Runtime và cấu hình Anti-Cheat/Secure Boot." 
+                               FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- GAME SELECTION CARD -->
+            <Border Style="{StaticResource ProCardStyle}" Margin="0,0,0,16">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/> <!-- Icon -->
-                        <ColumnDefinition Width="*"/>    <!-- Text -->
-                        <ColumnDefinition Width="250"/>  <!-- Combo -->
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <!-- Game Controller Icon -->
-                    <Image Source="pack://application:,,,/Images/game.png" Width="40" Height="40" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                    <Image Source="pack://application:,,,/Images/game.png" Width="38" Height="38" VerticalAlignment="Center" Margin="0,0,16,0" RenderOptions.BitmapScalingMode="HighQuality"/>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="Choose Your Game" FontWeight="Bold" FontSize="16" Margin="0,0,0,2"/>
-                        <TextBlock Text="Pick the game you want to repair so we can load the right fixes for it." FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                        <TextBlock Text="Tựa Game Cần Khắc Phục / Tối Ưu" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock Text="Chọn trò chơi để kích hoạt các tinh chỉnh phù hợp nhất cho hệ thống." FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                     </StackPanel>
 
-                    <ComboBox Grid.Column="2" SelectedIndex="0" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Center">
-                         <ComboBoxItem Content="Select"/>
-                         <ComboBoxItem Content="Battlefield 1"/>
-                         <ComboBoxItem Content="Battlefield V"/>
-                         <ComboBoxItem Content="Battlefield 2042"/>
-                         <ComboBoxItem Content="Battlefield 6"/>
-                         <ComboBoxItem Content="PUBG"/>
-                         <ComboBoxItem Content="Valorant"/>
-                         <ComboBoxItem Content="League of Legends"/>
-                         <ComboBoxItem Content="Delta Force"/>
+                    <ComboBox x:Name="GameSelectCombo" Grid.Column="2" Height="36" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Center" SelectionChanged="GameSelectCombo_SelectionChanged">
+                        <ComboBoxItem Content="Tất cả / Tối ưu chung (General Games)" IsSelected="True"/>
+                        <ComboBoxItem Content="Delta Force (Hawks Ops)"/>
+                        <ComboBoxItem Content="Counter-Strike 2 (CS2)"/>
+                        <ComboBoxItem Content="PUBG: BATTLEGROUNDS"/>
+                        <ComboBoxItem Content="Valorant (Riot Games)"/>
+                        <ComboBoxItem Content="League of Legends (LMHT)"/>
+                        <ComboBoxItem Content="Battlefield (1 / V / 2042)"/>
+                        <ComboBoxItem Content="Call of Duty / Warzone"/>
                     </ComboBox>
                 </Grid>
             </Border>
 
-            <!-- Pick an error -->
-            <TextBlock Text="Pick an error" FontSize="29" FontWeight="SemiBold" Margin="0,0,0,20"/>
+            <!-- 2-COLUMN ACTION CARDS -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- Error Selection Card -->
-            <Border Background="{DynamicResource PanelHoverBrush}" CornerRadius="12" Padding="20" Margin="0,0,0,30">
+                <!-- CARD 1: GAME TURBO & LOW LATENCY -->
+                <Border Grid.Column="0" Style="{StaticResource ProCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE9D9;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Game Turbo &amp; Low Latency" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="MMCSS 100%" FontSize="10" FontWeight="Bold" Foreground="#B45309"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Description -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,14">
+                            <TextBlock Text="• Ưu tiên GPU &amp; CPU tối đa cho Game (SystemResponsiveness = 0, GPU Priority = 8)" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Tắt bóp băng thông mạng (NetworkThrottlingIndex = 0xFFFFFFFF)" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Giảm Ping mạng (TCPNoDelay = 1, TcpAckFrequency = 1)" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Tắt gia tốc chuột Windows (Raw 1:1 mouse input cho FPS)" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Vô hiệu hóa GameDVR và giật lag Fullscreen Optimizations" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                        </StackPanel>
+
+                        <!-- Action -->
+                        <Button Grid.Row="2" x:Name="btnApplyTurbo" Content="Kích hoạt Game Turbo Ngay" Style="{StaticResource PrimaryActionBtnStyle}" HorizontalAlignment="Stretch" Click="BtnApplyTurbo_Click"/>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 2: GPU CRASH & SHADER CACHE -->
+                <Border Grid.Column="2" Style="{StaticResource ProCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE7F4;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="GPU Crash &amp; Xóa Cache Shader" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border Background="#EDE9FE" BorderBrush="#8B5CF6" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="DIRECTX / GPU" FontSize="10" FontWeight="Bold" Foreground="#6D28D9"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Description -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,14">
+                            <TextBlock Text="• Xóa DirectX Shader Cache, NVIDIA DXCache/GLCache, AMD DxCache" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Giải quyết triệt để lỗi giật khựng do shader cũ bị xung đột" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Khởi động lại dịch vụ hiển thị DWM &amp; GPU Driver soft reset" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                            <TextBlock Text="• Hỗ trợ mở MSI Utility để bật Message Signaled Interrupts" FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+                        </StackPanel>
+
+                        <!-- Actions -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="btnClearShaders" Content="🧹 Dọn Shader Cache" Style="{StaticResource ProToolBtnStyle}" Click="BtnClearShaders_Click"/>
+                            <Button Grid.Column="2" x:Name="btnRestartGpu" Content="🔄 Reset Driver VGA" Style="{StaticResource ProToolBtnStyle}" Click="BtnRestartGpu_Click"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- 2-COLUMN DIAGNOSTIC CARDS (Secure Boot & Runtimes) -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- CARD 3: SECURE BOOT, TPM & ANTI-CHEAT -->
+                <Border Grid.Column="0" Style="{StaticResource ProCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE8D7;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Secure Boot, TPM &amp; Anti-Cheat" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border x:Name="AntiCheatStatusBadge" Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock x:Name="AntiCheatBadgeText" Text="DIAGNOSTIC" FontSize="10" FontWeight="Bold" Foreground="#15803D"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Details -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,14">
+                            <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                                <TextBlock x:Name="txtSecureBootDetails" Text="Đang kiểm tra Secure Boot &amp; TPM..." FontSize="12.5" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" LineHeight="19"/>
+                            </Border>
+                            <TextBlock Text="Khắc phục lỗi Valorant VAN 9003, Vanguard Crash, Easy Anti-Cheat không khởi chạy." FontSize="12" Foreground="{DynamicResource TextMutedBrush}"/>
+                        </StackPanel>
+
+                        <!-- Actions -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="1.2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="btnCheckSecureBoot" Content="🔍 Kiểm Tra Lại" Style="{StaticResource ProToolBtnStyle}" Click="BtnCheckSecureBoot_Click"/>
+                            <Button Grid.Column="2" x:Name="btnFixAntiCheatGuide" Content="📖 Hướng Dẫn VAN9003" Style="{StaticResource ProToolBtnStyle}" Click="BtnFixAntiCheatGuide_Click"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 4: DIRECTX & VISUAL C++ RUNTIMES -->
+                <Border Grid.Column="2" Style="{StaticResource ProCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE7B8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Thư Viện DirectX &amp; Visual C++" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border Background="#E0F2FE" BorderBrush="#7DD3FC" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="RUNTIMES" FontSize="10" FontWeight="Bold" Foreground="#0369A1"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Details -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,14">
+                            <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                                <TextBlock x:Name="txtRuntimesStatus" Text="Sửa lỗi thiếu msvcp140.dll, vcruntime140.dll, d3dx9_43.dll hoặc lỗi mã 0xc000007b khi mở game." FontSize="12.5" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" LineHeight="19"/>
+                            </Border>
+                            <TextBlock Text="Cài đặt đầy đủ bộ Visual C++ Redistributable 2005-2022 (x86 &amp; x64) và DirectX End-User Runtime." FontSize="12" Foreground="{DynamicResource TextMutedBrush}"/>
+                        </StackPanel>
+
+                        <!-- Actions -->
+                        <Button Grid.Row="2" x:Name="btnInstallRuntimes" Content="Tải &amp; Cài Đặt Visual C++ AIO + DirectX" Style="{StaticResource PrimaryActionBtnStyle}" HorizontalAlignment="Stretch" Click="BtnInstallRuntimes_Click"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- PRO TOOLS DOCK -->
+            <Border Style="{StaticResource ProCardStyle}" Margin="0,0,0,16">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/> <!-- Icon -->
-                        <ColumnDefinition Width="*"/>    <!-- Text -->
-                        <ColumnDefinition Width="250"/>  <!-- Combo -->
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <!-- Icon -->
-                    <Grid Grid.Column="0" VerticalAlignment="Top" Margin="0,0,20,0">
-                         <Image Source="pack://application:,,,/Images/gameerrors.png" Width="40" Height="40"/>
-                    </Grid>
 
-                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Top">
-                        <TextBlock Text="Choose Error Type" FontWeight="Bold" FontSize="16" Margin="0,0,0,2"/>
-                        <TextBlock Text="Select the error or issue you're facing, and we'll apply the best solution for you." FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,10,15"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+                        <TextBlock Text="&#xE81E;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Tiện Ích Chuyên Dụng Cho Game Thủ (Pro Gaming Tools)" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    
 
-                   
-                    <ComboBox Grid.Column="2" Grid.Row="0" SelectedIndex="2" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Top">
-                         <ComboBoxItem Content="Driver VGA"/>
-                         <ComboBoxItem Content="Secure Boot"/>
-                         <ComboBoxItem Content="FPS Stuttering"/>
-                         <ComboBoxItem Content="DirectX"/>
-                         <ComboBoxItem Content="Other Fixes"/>
-                    </ComboBox>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Content="⏱️ Timer (0.5ms)" Style="{StaticResource ProToolBtnStyle}" Click="BtnTimerResolution_Click" ToolTip="Mở TimerResolution để hạ độ trễ Timer hệ thống xuống 0.5ms"/>
+                        <Button Grid.Column="2" Content="🎮 MSI Utility v3" Style="{StaticResource ProToolBtnStyle}" Click="BtnMsiUtility_Click" ToolTip="Mở MSI Utility v3 để bật Message Signaled Interrupts cho GPU"/>
+                        <Button Grid.Column="4" Content="🔍 NV Inspector" Style="{StaticResource ProToolBtnStyle}" Click="BtnNvInspector_Click" ToolTip="Mở NVIDIA Profile Inspector để tối ưu FPS"/>
+                        <Button Grid.Column="6" Content="🧹 RAMMap" Style="{StaticResource ProToolBtnStyle}" Click="BtnRamMap_Click" ToolTip="Mở Sysinternals RAMMap để kiểm tra và dọn dẹp Standby memory"/>
+                    </Grid>
                 </Grid>
             </Border>
-            
-            <Button Content="Let's go" Style="{StaticResource ActionButtonStyle}" Width="150" HorizontalAlignment="Left" Margin="20,0,0,30"/>
+
+            <!-- TERMINAL LOG PANEL -->
+            <Border Style="{StaticResource ProCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="180"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE756;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="15" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Nhật Ký Thực Thi (Execution Console)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Content="Xóa Nhật Ký" Style="{StaticResource ProToolBtnStyle}" Height="28" Padding="10,0" HorizontalAlignment="Right" Click="BtnClearLog_Click"/>
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="{DynamicResource SurfaceSunkenBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10">
+                        <ScrollViewer x:Name="LogScrollViewer" VerticalScrollBarVisibility="Auto">
+                            <TextBox x:Name="TxtLogConsole" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextSecondaryBrush}" 
+                                     FontFamily="Consolas, Cascadia Code, Courier New" FontSize="12.5" IsReadOnly="True" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Border>
 
         </StackPanel>
     </ScrollViewer>
