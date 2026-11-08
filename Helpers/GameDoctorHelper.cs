@@ -437,6 +437,25 @@ namespace TXATOOL.Helpers
         }
 
         /// <summary>
+        /// Checks if Game Turbo and Low Latency tweaks are currently active in Registry.
+        /// </summary>
+        public static bool IsGameTurboActive()
+        {
+            try
+            {
+                int sysResp = Utilities.GetRegistryValue(@"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "SystemResponsiveness", -1);
+                int netThrottling = Utilities.GetRegistryValue(@"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 0);
+                int gpuPriority = Utilities.GetRegistryValue(@"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 0);
+
+                return sysResp == 0 && (netThrottling == unchecked((int)0xFFFFFFFF) || gpuPriority == 8);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Checks for missing Visual C++ Redistributable DLLs and DirectX 9/11 components.
         /// </summary>
         public static (bool hasVcRedist, bool hasDirectX, List<string> missingItems) CheckGameRuntimes()
@@ -445,17 +464,43 @@ namespace TXATOOL.Helpers
             string sys32 = Environment.GetFolderPath(Environment.SpecialFolder.System);
             string sysWow64 = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
 
-            string[] vcFiles = new[] { "vcruntime140.dll", "msvcp140.dll", "msvcr120.dll", "msvcp120.dll", "vcruntime140_1.dll" };
+            // vcruntime140_1.dll is an x64-only exception handling library (__CxxFrameHandler4); Microsoft never provides it for 32-bit (x86)
+            string[] commonVcFiles = new[] { "vcruntime140.dll", "msvcp140.dll", "msvcr120.dll", "msvcp120.dll" };
+            string[] x64OnlyVcFiles = new[] { "vcruntime140_1.dll" };
             string[] dxFiles = new[] { "d3dx9_43.dll", "d3dcompiler_47.dll", "xinput1_3.dll" };
 
-            foreach (var f in vcFiles)
+            // Check 64-bit System32
+            foreach (var f in commonVcFiles)
             {
-                if (!File.Exists(Path.Combine(sys32, f)) || (!string.IsNullOrEmpty(sysWow64) && !File.Exists(Path.Combine(sysWow64, f))))
+                if (!File.Exists(Path.Combine(sys32, f)))
                 {
-                    missing.Add($"Visual C++: {f}");
+                    missing.Add($"Visual C++ (x64): {f}");
+                }
+            }
+            if (Environment.Is64BitOperatingSystem)
+            {
+                foreach (var f in x64OnlyVcFiles)
+                {
+                    if (!File.Exists(Path.Combine(sys32, f)))
+                    {
+                        missing.Add($"Visual C++ (x64): {f}");
+                    }
                 }
             }
 
+            // Check 32-bit SysWOW64 on 64-bit Windows
+            if (!string.IsNullOrEmpty(sysWow64) && Directory.Exists(sysWow64))
+            {
+                foreach (var f in commonVcFiles)
+                {
+                    if (!File.Exists(Path.Combine(sysWow64, f)))
+                    {
+                        missing.Add($"Visual C++ (x86): {f}");
+                    }
+                }
+            }
+
+            // Check DirectX runtime
             foreach (var f in dxFiles)
             {
                 if (!File.Exists(Path.Combine(sys32, f)))

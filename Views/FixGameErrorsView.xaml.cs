@@ -45,11 +45,12 @@ namespace TXATOOL.Views
                 txtSecureBootDetails.Text = "Đang kiểm tra trạng thái Secure Boot & TPM 2.0...";
                 txtRuntimesStatus.Text = "Đang quét các thư viện Visual C++ & DirectX...";
 
-                var (sbInfo, rtInfo) = await Task.Run(() =>
+                var (sbInfo, rtInfo, isTurbo) = await Task.Run(() =>
                 {
                     var sb = GameDoctorHelper.CheckSecureBootAndTpm();
                     var rt = GameDoctorHelper.CheckGameRuntimes();
-                    return (sb, rt);
+                    var turbo = GameDoctorHelper.IsGameTurboActive();
+                    return (sb, rt, turbo);
                 });
 
                 txtSecureBootDetails.Text = sbInfo.summary;
@@ -62,6 +63,7 @@ namespace TXATOOL.Views
                 var yellowBorder = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F59E0B"));
                 var yellowText = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B45309"));
 
+                // 1. Trạng thái Secure Boot & TPM
                 if (sbInfo.secureBoot && sbInfo.tpm)
                 {
                     AntiCheatBadgeText.Text = "READY";
@@ -77,13 +79,70 @@ namespace TXATOOL.Views
                     AntiCheatBadgeText.Foreground = yellowText;
                 }
 
+                // 2. Trạng thái Game Turbo & Low Latency
+                if (isTurbo)
+                {
+                    if (TurboBadgeText != null) TurboBadgeText.Text = "ĐÃ KÍCH HOẠT";
+                    if (TurboStatusBadge != null)
+                    {
+                        TurboStatusBadge.Background = greenBg;
+                        TurboStatusBadge.BorderBrush = greenBorder;
+                        if (TurboBadgeText != null) TurboBadgeText.Foreground = greenText;
+                    }
+                    if (btnApplyTurbo != null)
+                    {
+                        btnApplyTurbo.Content = "✓ Game Turbo Đang Hoạt Động (Kích hoạt lại)";
+                        btnApplyTurbo.Style = (Style)FindResource("ProToolBtnStyle");
+                    }
+                }
+                else
+                {
+                    if (TurboBadgeText != null) TurboBadgeText.Text = "CHƯA BẬT";
+                    if (TurboStatusBadge != null)
+                    {
+                        TurboStatusBadge.Background = yellowBg;
+                        TurboStatusBadge.BorderBrush = yellowBorder;
+                        if (TurboBadgeText != null) TurboBadgeText.Foreground = yellowText;
+                    }
+                    if (btnApplyTurbo != null)
+                    {
+                        btnApplyTurbo.Content = "Kích hoạt Game Turbo Ngay";
+                        btnApplyTurbo.Style = (Style)FindResource("PrimaryActionBtnStyle");
+                    }
+                }
+
+                // 3. Trạng thái Runtimes & DirectX
                 if (rtInfo.missingItems.Count == 0)
                 {
-                    txtRuntimesStatus.Text = "✓ Hệ thống đã có đầy đủ Visual C++ Redistributable và DirectX. Không phát hiện file DLL bị thiếu.";
+                    txtRuntimesStatus.Text = "✓ Hệ thống đã có đầy đủ Visual C++ Redistributable (2005-2022) và DirectX. Không phát hiện thành phần bị thiếu.";
+                    if (RuntimesBadgeText != null) RuntimesBadgeText.Text = "READY";
+                    if (RuntimesStatusBadge != null)
+                    {
+                        RuntimesStatusBadge.Background = greenBg;
+                        RuntimesStatusBadge.BorderBrush = greenBorder;
+                        if (RuntimesBadgeText != null) RuntimesBadgeText.Foreground = greenText;
+                    }
+                    if (btnInstallRuntimes != null)
+                    {
+                        btnInstallRuntimes.Content = "✓ Đã Đầy Đủ Runtimes (Cài đặt lại)";
+                        btnInstallRuntimes.Style = (Style)FindResource("ProToolBtnStyle");
+                    }
                 }
                 else
                 {
                     txtRuntimesStatus.Text = $"! Phát hiện {rtInfo.missingItems.Count} thành phần runtime bị thiếu:\n• {string.Join("\n• ", rtInfo.missingItems)}";
+                    if (RuntimesBadgeText != null) RuntimesBadgeText.Text = "CẦN CÀI ĐẶT";
+                    if (RuntimesStatusBadge != null)
+                    {
+                        RuntimesStatusBadge.Background = yellowBg;
+                        RuntimesStatusBadge.BorderBrush = yellowBorder;
+                        if (RuntimesBadgeText != null) RuntimesBadgeText.Foreground = yellowText;
+                    }
+                    if (btnInstallRuntimes != null)
+                    {
+                        btnInstallRuntimes.Content = "Tải & Cài Đặt Visual C++ AIO + DirectX";
+                        btnInstallRuntimes.Style = (Style)FindResource("PrimaryActionBtnStyle");
+                    }
                 }
             }
             catch (Exception ex)
@@ -142,6 +201,7 @@ namespace TXATOOL.Views
                 CustomMessageBoxWindow.Show(
                     "Đã kích hoạt thành công chế độ Game Turbo!\n\n• MMCSS Priority 100% Gaming\n• Network Throttling Disabled\n• TCP Gaming Low-Latency Enabled\n• Raw Mouse Input 1:1",
                     "Game Turbo");
+                await RefreshDiagnosticsAsync();
             }
             catch (Exception ex)
             {
