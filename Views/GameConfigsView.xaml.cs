@@ -13,6 +13,8 @@ namespace TXATOOL.Views
 {
     public partial class GameConfigsView : UserControl
     {
+        private bool _isLoaded = false;
+
         public GameConfigsView()
         {
             InitializeComponent();
@@ -21,14 +23,17 @@ namespace TXATOOL.Views
 
         private void GameConfigsView_Loaded(object sender, RoutedEventArgs e)
         {
+            _isLoaded = true;
             UpdatePresetDetails();
             AutoDetectCurrentGamePath();
         }
 
         private void AppendLog(string message)
         {
+            if (TxtLogConsole == null || LogScrollViewer == null) return;
             Dispatcher.Invoke(() =>
             {
+                if (TxtLogConsole == null || LogScrollViewer == null) return;
                 string timestamp = DateTime.Now.ToString("HH:mm:ss");
                 TxtLogConsole.AppendText($"[{timestamp}] {message}\n");
                 LogScrollViewer.ScrollToEnd();
@@ -52,6 +57,7 @@ namespace TXATOOL.Views
 
         private void UpdatePresetDetails()
         {
+            if (TxtPresetDetails == null) return;
             string game = GetSelectedGameName();
             switch (game)
             {
@@ -89,6 +95,7 @@ namespace TXATOOL.Views
 
         private void AutoDetectCurrentGamePath()
         {
+            if (GameLocationTextBox == null) return;
             string game = GetSelectedGameName();
             string detected = GameDoctorHelper.DetectGameConfigPath(game);
             if (!string.IsNullOrEmpty(detected))
@@ -104,6 +111,7 @@ namespace TXATOOL.Views
 
         private void GameSelectorCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!_isLoaded || GameSelectorCombo == null) return;
             UpdatePresetDetails();
             AutoDetectCurrentGamePath();
         }

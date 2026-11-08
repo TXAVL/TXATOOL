@@ -12,6 +12,8 @@ namespace TXATOOL.Views
 {
     public partial class FixGameErrorsView : UserControl
     {
+        private bool _isLoaded = false;
+
         public FixGameErrorsView()
         {
             InitializeComponent();
@@ -20,13 +22,16 @@ namespace TXATOOL.Views
 
         private async void FixGameErrorsView_Loaded(object sender, RoutedEventArgs e)
         {
+            _isLoaded = true;
             await RefreshDiagnosticsAsync();
         }
 
         private void AppendLog(string message)
         {
+            if (TxtLogConsole == null || LogScrollViewer == null) return;
             Dispatcher.Invoke(() =>
             {
+                if (TxtLogConsole == null || LogScrollViewer == null) return;
                 string timestamp = DateTime.Now.ToString("HH:mm:ss");
                 TxtLogConsole.AppendText($"[{timestamp}] {message}\n");
                 LogScrollViewer.ScrollToEnd();
@@ -89,6 +94,7 @@ namespace TXATOOL.Views
 
         private void GameSelectCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!_isLoaded || GameSelectCombo == null) return;
             if (GameSelectCombo.SelectedItem is ComboBoxItem item)
             {
                 string title = item.Content.ToString() ?? "";
