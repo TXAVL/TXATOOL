@@ -2199,13 +2199,13 @@
         "link": "https://rustdesk.com/",
         "winget": "RustDesk.RustDesk"
     },
-    "rustlang": {
+    "rustup": {
         "category": "Development",
-        "choco": "rust",
-        "content": "Rust",
-        "description": "Rust is a programming language designed for safety and performance, particularly focused on systems programming.",
+        "choco": "rustup.install",
+        "content": "Rust (Rustup & Cargo)",
+        "description": "Trình cài đặt và quản lý chuỗi công cụ chính thức cho ngôn ngữ lập trình Rust (Rustup, Rustc và Cargo package manager).",
         "link": "https://www.rust-lang.org/",
-        "winget": "Rustlang.Rust.MSVC"
+        "winget": "Rustlang.Rustup"
     },
     "sagethumbs": {
         "category": "Utilities",
