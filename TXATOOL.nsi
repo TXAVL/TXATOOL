@@ -109,9 +109,9 @@ LangString SHORTCUT_UNINST_DESC ${LANG_VIETNAMESE} "Gỡ cài đặt ${APP_NAME}
 LangString UNINST_CLOSING ${LANG_VIETNAMESE} "Đang đóng ứng dụng nếu đang chạy trước khi gỡ bỏ..."
 
 ; ------------------- ENGLISH -------------------
-LangString MSG_REQ_64BIT ${LANG_ENGLISH} "${APP_NAME} requires 64-bit Windows 10 or Windows 11."
-LangString MSG_SAME_VER ${LANG_ENGLISH} "Version ${APP_VERSION} is already installed on your computer.$\n$\nDo you want to reinstall and overwrite all existing files?"
-LangString MSG_PREV_VER ${LANG_ENGLISH} "A previous version ($PREV_VERSION) of ${APP_NAME} was detected on this computer.$\n$\nThe setup will upgrade to the new version ${APP_VERSION}.$\n$\nDo you want to continue?"
+LangString MSG_REQ_64BIT ${LANG_ENGLISH} "${APP_NAME} yêu cầu hệ điều hành Windows 10 hoặc Windows 11 (64-bit) / requires 64-bit Windows 10 or 11."
+LangString MSG_SAME_VER ${LANG_ENGLISH} "Phiên bản ${APP_VERSION} hiện đã được cài đặt trên máy tính của bạn (Version ${APP_VERSION} is already installed).$\n$\nBạn có muốn cài đè (ghi đè toàn bộ tệp tin) phiên bản này không? (Do you want to reinstall and overwrite all existing files?)"
+LangString MSG_PREV_VER ${LANG_ENGLISH} "Phát hiện phiên bản cũ ($PREV_VERSION) đã được cài đặt trên máy (Previous version $PREV_VERSION detected).$\n$\nBộ cài sẽ tiến hành nâng cấp lên phiên bản mới ${APP_VERSION} (Upgrade to version ${APP_VERSION}).$\n$\nBạn có muốn tiếp tục nâng cấp không? (Do you want to continue?)"
 
 LangString WELCOME_TITLE ${LANG_ENGLISH} "Welcome to the ${APP_NAME} Setup Wizard"
 LangString WELCOME_TEXT ${LANG_ENGLISH} "This wizard will guide you through the installation of ${APP_NAME} ${APP_VERSION}.$\n$\n${APP_NAME} is an all-in-one suite designed for IT technicians and power users:$\n• Direct Windows ISO Deployment (WSAP - No USB Boot needed)$\n• In-depth Network LAN Printer Repair Toolkit$\n• Windows SKU Conversion & Digital Licensing Manager$\n• Deep OS Performance Optimization & UWP Bloatware Cleaner$\n• Curated App Store & Customizable Microsoft Office Deployment$\n$\nClick 'Next' to continue."
@@ -146,6 +146,9 @@ Function .onInit
   nsExec::Exec 'taskkill /F /T /IM ${APP_EXE}'
   Pop $0
   Sleep 500
+
+  ; Default installer language to Vietnamese
+  StrCpy $LANGUAGE ${LANG_VIETNAMESE}
 
   ; 2. Language selection dialog (skip if running silent e.g. /S)
   ${IfNot} ${Silent}
@@ -235,6 +238,7 @@ Section "Install"
   WriteRegStr   HKLM "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${APP_EXE}"
   WriteRegStr   HKLM "${UNINST_KEY}" "InstallLocation" "$INSTDIR"
   WriteRegStr   HKLM "${UNINST_KEY}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+  WriteRegStr   HKLM "${UNINST_KEY}" "InstallerLanguage" "$LANGUAGE"
   WriteRegDWORD HKLM "${UNINST_KEY}" "NoModify" 1
   WriteRegDWORD HKLM "${UNINST_KEY}" "NoRepair" 1
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2

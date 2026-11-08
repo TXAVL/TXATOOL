@@ -16,7 +16,7 @@ namespace TXATOOL.Views
 
         private void UpdateLanguage()
         {
-            bool isVn = string.Equals(LocalizationService.CurrentLanguage, "vi", StringComparison.OrdinalIgnoreCase);
+            bool isVn = LocalizationService.IsVietnamese;
             if (VietnamesePanel != null) VietnamesePanel.Visibility = isVn ? Visibility.Visible : Visibility.Collapsed;
             if (EnglishPanel != null) EnglishPanel.Visibility = isVn ? Visibility.Collapsed : Visibility.Visible;
         }

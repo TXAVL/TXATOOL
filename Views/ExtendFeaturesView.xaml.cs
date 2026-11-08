@@ -907,10 +907,40 @@ namespace TXATOOL.Views
              {
                  try
                  {
+                     string cpuName = "";
+                     try
+                     {
+                         cpuName = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0", "ProcessorNameString", "") as string ?? "";
+                     }
+                     catch { }
+                     if (string.IsNullOrWhiteSpace(cpuName))
+                     {
+                         cpuName = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "";
+                     }
+                     cpuName = cpuName.Trim();
+
+                     bool isAmd = cpuName.IndexOf("AMD", StringComparison.OrdinalIgnoreCase) >= 0;
+                     bool isIntel = cpuName.IndexOf("Intel", StringComparison.OrdinalIgnoreCase) >= 0;
+                     int detectedGen = 0;
+                     if (isIntel)
+                     {
+                         if (cpuName.IndexOf("Ultra", StringComparison.OrdinalIgnoreCase) >= 0)
+                         {
+                             detectedGen = 15;
+                         }
+                         else
+                         {
+                             var match = System.Text.RegularExpressions.Regex.Match(cpuName, @"i[3579]-(\d{1,2})\d{3}");
+                             if (match.Success && int.TryParse(match.Groups[1].Value, out int g))
+                             {
+                                 detectedGen = g;
+                             }
+                         }
+                     }
+
                      string jsonPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Download", "intelirst.json");
                      if (!System.IO.File.Exists(jsonPath))
                      {
-                         // Dispatch UI update
                          Dispatcher.Invoke(() =>
                          {
                              IRSTComboBox.Items.Clear();
@@ -926,22 +956,59 @@ namespace TXATOOL.Views
 
                      Dispatcher.Invoke(() =>
                      {
+                         bool isVn = Helpers.LocalizationService.IsVietnamese;
+                         if (lblExtendIrstDesc != null)
+                         {
+                             if (isAmd)
+                             {
+                                 lblExtendIrstDesc.Text = isVn 
+                                     ? $"🔍 CPU hiện tại: {cpuName}\n⚠️ Máy sử dụng CPU AMD — Không cần/không hỗ trợ driver Intel RST. Bạn vẫn có thể tải các gói driver bên dưới nếu cần sửa lỗi cài đặt cho máy Intel khác."
+                                     : $"🔍 Detected CPU: {cpuName}\n⚠️ AMD Processor detected — Intel RST driver is not required. You can still download packages below for other Intel PCs.";
+                             }
+                             else if (isIntel)
+                             {
+                                 string genNotice = detectedGen > 0 ? (isVn ? $"(Thế hệ {detectedGen})" : $"(Gen {detectedGen})") : "";
+                                 lblExtendIrstDesc.Text = isVn
+                                     ? $"🔍 CPU hiện tại: {cpuName} {genNotice}\n✅ Đã tự động nhận diện và chọn driver Intel RST tối ưu cho cấu hình máy của bạn."
+                                     : $"🔍 Detected CPU: {cpuName} {genNotice}\n✅ Automatically matched and selected the optimal Intel RST driver for your system.";
+                             }
+                             else if (!string.IsNullOrEmpty(cpuName))
+                             {
+                                 lblExtendIrstDesc.Text = isVn
+                                     ? $"🔍 CPU hiện tại: {cpuName}\nChọn phiên bản driver Intel RST phù hợp với đời CPU của bạn."
+                                     : $"🔍 Detected CPU: {cpuName}\nSelect the Intel RST driver version matching your CPU.";
+                             }
+                         }
+
                          IRSTComboBox.Items.Clear();
                          if (data != null && data.Count > 0)
                          {
+                             int selectIndex = 0;
+                             int currentIndex = 0;
+
                              foreach (var kvp in data)
                              {
                                  var cbItem = new ComboBoxItem();
                                  cbItem.Content = kvp.Value.name;
                                  cbItem.Tag = kvp.Value.link;
+
+                                 if (isIntel && detectedGen > 0)
+                                 {
+                                     if (detectedGen >= 12 && kvp.Key.Contains("12th")) selectIndex = currentIndex;
+                                     else if ((detectedGen == 10 || detectedGen == 11) && kvp.Key.Contains("10th")) selectIndex = currentIndex;
+                                     else if ((detectedGen == 8 || detectedGen == 9) && kvp.Key.Contains("8th")) selectIndex = currentIndex;
+                                     else if ((detectedGen == 6 || detectedGen == 7) && kvp.Key.Contains("6th")) selectIndex = currentIndex;
+                                 }
+
                                  IRSTComboBox.Items.Add(cbItem);
+                                 currentIndex++;
                              }
-                             IRSTComboBox.SelectedIndex = 0;
+                             IRSTComboBox.SelectedIndex = selectIndex;
                          }
                          else
                          {
-                               IRSTComboBox.Items.Add(new ComboBoxItem { Content = "No drivers found" }); // Localize if key avail
-                               IRSTComboBox.SelectedIndex = 0;
+                             IRSTComboBox.Items.Add(new ComboBoxItem { Content = "No drivers found" });
+                             IRSTComboBox.SelectedIndex = 0;
                          }
                      });
                  }

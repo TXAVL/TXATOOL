@@ -22,6 +22,11 @@ namespace TXATOOL.Helpers
         /// <summary>Current language code (e.g. "EN", "VN")</summary>
         public static string CurrentLanguage => _currentLanguage;
 
+        /// <summary>True if the current language is Vietnamese</summary>
+        public static bool IsVietnamese =>
+            (_currentLanguage ?? "EN").IndexOf("vi", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            (_currentLanguage ?? "EN").IndexOf("vn", StringComparison.OrdinalIgnoreCase) >= 0;
+
         /// <summary>Event fired when language changes, so Views can refresh.</summary>
         public static event Action? LanguageChanged;
 

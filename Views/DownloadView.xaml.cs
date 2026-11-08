@@ -34,6 +34,18 @@ namespace TXATOOL.Views
             btnClearSelection.Content = Helpers.LocalizationService.Get("btnClearSelection");
             btnUpdateAll.Content = Helpers.LocalizationService.Get("btnUpdateAll");
 
+            bool isVn = Helpers.LocalizationService.IsVietnamese;
+            if (txtDownloadSearch != null)
+            {
+                txtDownloadSearch.ToolTip = isVn ? "Gõ tên ứng dụng để tìm kiếm nhanh..." : "Type application name to search...";
+            }
+            if (txtNoResultsDesc != null)
+            {
+                txtNoResultsDesc.Text = isVn 
+                    ? "Hãy thử tìm kiếm bằng từ khóa khác hoặc tên gói phần mềm." 
+                    : "Try searching with a different keyword or package name.";
+            }
+
             UpdateAppStatusTexts();
         }
 
@@ -444,24 +456,104 @@ namespace TXATOOL.Views
             }
             return null;
         }
+        private bool _isFilteringInternal = false;
+
+        private void DownloadSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isFilteringInternal) return;
+            string query = txtDownloadSearch?.Text ?? "";
+            FilterApps(query);
+
+            try
+            {
+                var mainWindow = Window.GetWindow(this) as MainWindow;
+                if (mainWindow?.SearchBox != null && mainWindow.SearchBox.Text != query)
+                {
+                    _isFilteringInternal = true;
+                    mainWindow.SearchBox.Text = query;
+                    _isFilteringInternal = false;
+                }
+            }
+            catch { }
+        }
+
+        private static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+            var normalizedString = text.Normalize(System.Text.NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
+                .Replace('đ', 'd').Replace('Đ', 'D');
+        }
+
         public void FilterApps(string searchText)
         {
             if (_allCategories == null) return;
 
-            if (string.IsNullOrWhiteSpace(searchText))
+            if (!_isFilteringInternal && txtDownloadSearch != null && txtDownloadSearch.Text != searchText)
+            {
+                _isFilteringInternal = true;
+                txtDownloadSearch.Text = searchText;
+                _isFilteringInternal = false;
+            }
+
+            string cleanSearch = searchText?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(cleanSearch))
             {
                 Categories = _allCategories;
+                if (pnlNoResults != null) pnlNoResults.Visibility = Visibility.Collapsed;
             }
             else
             {
+                string lowerQuery = cleanSearch.ToLowerInvariant();
+                string normQuery = RemoveDiacritics(lowerQuery);
+
                 var filteredGroups = new List<CategoryGroup>();
                 foreach (var group in _allCategories)
                 {
                     if (group.Apps == null) continue;
 
-                    var matchingApps = group.Apps
-                        .Where(app => app.Name != null && app.Name.IndexOf(searchText, System.StringComparison.OrdinalIgnoreCase) >= 0)
-                        .ToList();
+                    var matchingApps = group.Apps.Where(app =>
+                    {
+                        if (app == null) return false;
+
+                        // 1. Direct name match
+                        string name = app.Name ?? "";
+                        if (name.IndexOf(cleanSearch, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        // 2. Unaccented name match (e.g. coc coc -> Cốc Cốc)
+                        string normName = RemoveDiacritics(name.ToLowerInvariant());
+                        if (normName.IndexOf(normQuery, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        // 3. ID match (e.g. vscode, googlechrome, unikey)
+                        string id = app.Id ?? "";
+                        if (id.IndexOf(lowerQuery, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        // 4. Description match
+                        string desc = app.Description ?? "";
+                        if (desc.IndexOf(cleanSearch, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+                        string normDesc = RemoveDiacritics(desc.ToLowerInvariant());
+                        if (normDesc.IndexOf(normQuery, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        // 5. Package IDs
+                        if (!string.IsNullOrEmpty(app.WingetId) && app.WingetId.IndexOf(lowerQuery, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+                        if (!string.IsNullOrEmpty(app.ChocoId) && app.ChocoId.IndexOf(lowerQuery, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        // 6. Category match
+                        string cat = app.Category ?? "";
+                        if (cat.IndexOf(cleanSearch, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+
+                        return false;
+                    }).ToList();
 
                     if (matchingApps.Any())
                     {
@@ -473,7 +565,19 @@ namespace TXATOOL.Views
                     }
                 }
                 Categories = filteredGroups;
+
+                if (pnlNoResults != null)
+                {
+                    bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                    if (txtNoResultsTitle != null)
+                        txtNoResultsTitle.Text = isVn 
+                            ? $"Không tìm thấy ứng dụng phù hợp với \"{cleanSearch}\""
+                            : $"No applications found for \"{cleanSearch}\"";
+                    pnlNoResults.Visibility = (filteredGroups.Count == 0) ? Visibility.Visible : Visibility.Collapsed;
+                }
             }
+
+            CategoriesList.ItemsSource = null;
             CategoriesList.ItemsSource = Categories;
         }
     }

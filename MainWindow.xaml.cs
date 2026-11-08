@@ -432,7 +432,7 @@ public partial class MainWindow : Window
     }
     private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
     {
-        if (sender is TextBox textBox && textBox.Text == _searchPlaceholder)
+        if (sender is TextBox textBox && (textBox.Text == _searchPlaceholder || textBox.Text == "Type here to search..." || textBox.Text == "Nhập để tìm kiếm..."))
         {
             textBox.Text = string.Empty;
             textBox.Foreground = Helpers.ThemeBrushes.Get("TextBrush");
@@ -450,12 +450,14 @@ public partial class MainWindow : Window
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (_downloadView != null)
+        try
         {
-            string query = SearchBox.Text;
-            if (query == _searchPlaceholder) query = string.Empty;
-            _downloadView.FilterApps(query);
+            string query = SearchBox?.Text?.Trim() ?? "";
+            if (query == _searchPlaceholder || query == "Type here to search..." || query == "Nhập để tìm kiếm...") 
+                query = string.Empty;
+            DownloadView?.FilterApps(query);
         }
+        catch { }
     }
 
     private void Border_MouseDown(object sender, MouseButtonEventArgs e)
