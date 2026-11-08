@@ -70,10 +70,18 @@ public partial class App : Application
                     return; // Đã bỏ qua bản này
                 }
 
-                // Kiểm tra xem người dùng có chọn Nhắc lại sau không
-                if (AppConfigManager.Config.RemindDate.HasValue && AppConfigManager.Config.RemindDate.Value > DateTime.Now)
+                // Nếu có bản cập nhật mới khác với bản người dùng từng hoãn nhắc nhở, xóa hạn hoãn để thông báo ngay
+                if (!string.IsNullOrEmpty(AppConfigManager.Config.RemindVersion) &&
+                    AppConfigManager.Config.RemindVersion != updateInfo.Version)
                 {
-                    return; // Chưa đến ngày nhắc lại
+                    AppConfigManager.Config.RemindDate = null;
+                    AppConfigManager.Config.RemindVersion = string.Empty;
+                    AppConfigManager.SaveConfig();
+                }
+                // Kiểm tra xem người dùng có chọn Nhắc lại sau không (cho bản hiện tại)
+                else if (AppConfigManager.Config.RemindDate.HasValue && AppConfigManager.Config.RemindDate.Value > DateTime.Now)
+                {
+                    return; // Chưa đến hạn nhắc lại của bản này
                 }
 
                 Dispatcher.Invoke(() =>
