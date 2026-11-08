@@ -990,6 +990,228 @@ namespace TXATOOL.Helpers
             }
         }
 
+        public class GameConfigStatusInfo
+        {
+            public bool IsGameDetected { get; set; }
+            public bool IsConfigFileExists { get; set; }
+            public bool IsOptimized { get; set; }
+            public bool IsReadOnly { get; set; }
+            public string ConfigFileName { get; set; } = string.Empty;
+            public string FullConfigFilePath { get; set; } = string.Empty;
+            public int BackupCount { get; set; }
+            public string StatusMessage { get; set; } = string.Empty;
+        }
+
+        /// <summary>
+        /// Checks whether the game configuration file exists and has optimized competitive parameters applied.
+        /// </summary>
+        public static GameConfigStatusInfo CheckGameConfigStatus(string gameName, string configFolder)
+        {
+            var status = new GameConfigStatusInfo();
+
+            if (string.IsNullOrWhiteSpace(configFolder) || !Directory.Exists(configFolder))
+            {
+                string detected = DetectGameConfigPath(gameName);
+                if (!string.IsNullOrEmpty(detected) && Directory.Exists(detected))
+                {
+                    configFolder = detected;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(configFolder) || !Directory.Exists(configFolder))
+            {
+                status.IsGameDetected = false;
+                status.StatusMessage = "Chưa phát hiện game trên máy tính.";
+                return status;
+            }
+
+            status.IsGameDetected = true;
+
+            try
+            {
+                var dirInfo = new DirectoryInfo(configFolder);
+                status.BackupCount = dirInfo.GetFiles("*Backup*").Length;
+
+                string targetFileName = "";
+                switch (gameName)
+                {
+                    case "EA SPORTS FC":
+                        targetFileName = "fcsetup.ini";
+                        break;
+                    case "FIFA 23":
+                    case "FIFA 19":
+                        targetFileName = "fifasetup.ini";
+                        break;
+                    case "eFootball / PES":
+                        string engineIni = Path.Combine(configFolder, "Engine.ini");
+                        string settingsIni = Path.Combine(configFolder, "settings.ini");
+                        if (File.Exists(engineIni)) targetFileName = "Engine.ini";
+                        else if (File.Exists(settingsIni)) targetFileName = "settings.ini";
+                        else targetFileName = "Engine.ini";
+                        break;
+                    case "Delta Force":
+                        targetFileName = "Engine.ini";
+                        break;
+                    case "CS2":
+                        targetFileName = "autoexec.cfg";
+                        break;
+                    case "PUBG":
+                        targetFileName = "GameUserSettings.ini";
+                        break;
+                    case "Battlefield 2042":
+                    case "Battlefield V":
+                    case "Battlefield 1":
+                        targetFileName = "user.cfg";
+                        break;
+                    default:
+                        targetFileName = "Engine.ini";
+                        break;
+                }
+
+                status.ConfigFileName = targetFileName;
+                status.FullConfigFilePath = Path.Combine(configFolder, targetFileName);
+
+                if (!File.Exists(status.FullConfigFilePath))
+                {
+                    status.IsConfigFileExists = false;
+                    status.IsOptimized = false;
+                    status.StatusMessage = $"Chưa tạo file cấu hình '{targetFileName}'.";
+                    return status;
+                }
+
+                status.IsConfigFileExists = true;
+                var fi = new FileInfo(status.FullConfigFilePath);
+                status.IsReadOnly = fi.IsReadOnly;
+
+                string content = File.ReadAllText(status.FullConfigFilePath);
+
+                switch (gameName)
+                {
+                    case "EA SPORTS FC":
+                    case "FIFA 23":
+                        if (content.IndexOf("STRAND_BASED_HAIR = 0", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("STRAND_BASED_HAIR=0", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            (content.IndexOf("WAITFORVSYNC = 0", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                             content.IndexOf("CONFIG_APP_MAX_FRAME_RATE = 0", StringComparison.OrdinalIgnoreCase) >= 0))
+                        {
+                            status.IsOptimized = true;
+                            status.StatusMessage = "Cấu hình chuẩn Esport Pro (Tắt Strand Hair, tắt VSync, mở khóa FPS)";
+                        }
+                        else
+                        {
+                            status.IsOptimized = false;
+                            status.StatusMessage = "File cấu hình gốc (Chưa tắt Strand Hair & VSync)";
+                        }
+                        break;
+
+                    case "FIFA 19":
+                        if (content.IndexOf("WAITFORVSYNC = 0", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("WAITFORVSYNC=0", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            status.IsOptimized = true;
+                            status.StatusMessage = "Đã tối ưu thi đấu (Tắt VSync, Fullscreen 1080p)";
+                        }
+                        else
+                        {
+                            status.IsOptimized = false;
+                            status.StatusMessage = "File cấu hình chưa tối ưu";
+                        }
+                        break;
+
+                    case "eFootball / PES":
+                        if (targetFileName.Equals("Engine.ini", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (content.IndexOf("r.MotionBlurQuality=0", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                content.IndexOf("Streaming.PoolSize=3072", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                status.IsOptimized = true;
+                                status.StatusMessage = "Đã tối ưu Engine Unreal (Tắt Motion Blur, mờ viền, tối ưu VRAM)";
+                            }
+                            else
+                            {
+                                status.IsOptimized = false;
+                                status.StatusMessage = "Chưa tối ưu đồ họa Unreal Engine";
+                            }
+                        }
+                        else
+                        {
+                            if (content.IndexOf("VSync=0", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                status.IsOptimized = true;
+                                status.StatusMessage = "Đã tối ưu VSync=0 cho PES";
+                            }
+                            else
+                            {
+                                status.IsOptimized = false;
+                                status.StatusMessage = "File settings.ini chưa tắt VSync";
+                            }
+                        }
+                        break;
+
+                    case "Delta Force":
+                        if (content.IndexOf("r.MotionBlurQuality=0", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("Streaming.PoolSize=3072", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            status.IsOptimized = true;
+                            status.StatusMessage = "Đã tối ưu Engine (Tắt Motion Blur, Bloom, chống tụt FPS)";
+                        }
+                        else
+                        {
+                            status.IsOptimized = false;
+                            status.StatusMessage = "Engine.ini gốc chưa được tinh chỉnh";
+                        }
+                        break;
+
+                    case "CS2":
+                        if (content.IndexOf("rate 1000000", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("engine_low_latency_sleep_after_client_tick", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("fps_max 0", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            status.IsOptimized = true;
+                            status.StatusMessage = "Cấu hình chuẩn CS2 Pro (rate 1000000, low latency tick, fps_max 0)";
+                        }
+                        else
+                        {
+                            status.IsOptimized = false;
+                            status.StatusMessage = "autoexec.cfg chưa có các lệnh tối ưu mạng và tick";
+                        }
+                        break;
+
+                    case "Battlefield 2042":
+                    case "Battlefield V":
+                    case "Battlefield 1":
+                        if (content.IndexOf("Thread.ProcessorCount", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            content.IndexOf("GstRender.WeaponDOF 0", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            status.IsOptimized = true;
+                            status.StatusMessage = "Đã gán luồng CPU đa nhân và tắt hiệu ứng làm mờ vũ khí";
+                        }
+                        else
+                        {
+                            status.IsOptimized = false;
+                            status.StatusMessage = "user.cfg chưa tối ưu đa luồng CPU";
+                        }
+                        break;
+
+                    case "PUBG":
+                        status.IsOptimized = true;
+                        status.StatusMessage = "File cấu hình hợp lệ";
+                        break;
+
+                    default:
+                        status.IsOptimized = false;
+                        status.StatusMessage = "Chưa rõ trạng thái cấu hình";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                status.StatusMessage = $"Không thể đọc file cấu hình: {ex.Message}";
+            }
+
+            return status;
+        }
+
         /// <summary>
         /// Generates an optimal Delta Force config to prevent stutters and maximize FPS.
         /// </summary>

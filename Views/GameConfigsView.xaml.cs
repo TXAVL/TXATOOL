@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.Win32;
 using TXATOOL.Helpers;
 using TXATOOL.Views.Components;
@@ -26,6 +27,7 @@ namespace TXATOOL.Views
             _isLoaded = true;
             UpdatePresetDetails();
             AutoDetectCurrentGamePath();
+            RefreshGameStatus();
         }
 
         private void AppendLog(string message)
@@ -146,16 +148,130 @@ namespace TXATOOL.Views
             }
         }
 
+        private void RefreshGameStatus()
+        {
+            if (!_isLoaded || GameSelectorCombo == null || GameLocationTextBox == null) return;
+
+            string game = GetSelectedGameName();
+            string path = GameLocationTextBox.Text.Trim();
+
+            var status = GameDoctorHelper.CheckGameConfigStatus(game, path);
+
+            // 1. Update Game Detected Badge
+            if (GameFoundBadge != null && TxtGameFoundStatus != null)
+            {
+                if (status.IsGameDetected)
+                {
+                    GameFoundBadge.Background = new SolidColorBrush(Color.FromRgb(220, 252, 231));
+                    GameFoundBadge.BorderBrush = new SolidColorBrush(Color.FromRgb(134, 239, 172));
+                    TxtGameFoundStatus.Foreground = new SolidColorBrush(Color.FromRgb(21, 128, 61));
+                    TxtGameFoundStatus.Text = "✓ ĐÃ PHÁT HIỆN";
+                }
+                else
+                {
+                    GameFoundBadge.Background = new SolidColorBrush(Color.FromRgb(254, 243, 199));
+                    GameFoundBadge.BorderBrush = new SolidColorBrush(Color.FromRgb(252, 211, 77));
+                    TxtGameFoundStatus.Foreground = new SolidColorBrush(Color.FromRgb(180, 83, 9));
+                    TxtGameFoundStatus.Text = "⚠ CHƯA PHÁT HIỆN";
+                }
+            }
+
+            // 2. Update Config Optimization Badge & Apply Button
+            if (ConfigStatusBadge != null && TxtConfigStatus != null)
+            {
+                if (status.IsOptimized)
+                {
+                    ConfigStatusBadge.Background = new SolidColorBrush(Color.FromRgb(220, 252, 231));
+                    ConfigStatusBadge.BorderBrush = new SolidColorBrush(Color.FromRgb(134, 239, 172));
+                    TxtConfigStatus.Foreground = new SolidColorBrush(Color.FromRgb(21, 128, 61));
+                    TxtConfigStatus.Text = "✓ ĐÃ TỐI ƯU";
+
+                    if (btnApplyConfig != null)
+                    {
+                        btnApplyConfig.Content = "✓ Cấu Hình Đang Tối Ưu (Áp Dụng Lại)";
+                    }
+                }
+                else if (status.IsConfigFileExists)
+                {
+                    ConfigStatusBadge.Background = new SolidColorBrush(Color.FromRgb(254, 243, 199));
+                    ConfigStatusBadge.BorderBrush = new SolidColorBrush(Color.FromRgb(252, 211, 77));
+                    TxtConfigStatus.Foreground = new SolidColorBrush(Color.FromRgb(180, 83, 9));
+                    TxtConfigStatus.Text = "⚡ CHƯA TỐI ƯU";
+
+                    if (btnApplyConfig != null)
+                    {
+                        btnApplyConfig.Content = "⚡ Áp Dụng Cấu Hình Tối Ưu";
+                    }
+                }
+                else
+                {
+                    ConfigStatusBadge.Background = new SolidColorBrush(Color.FromRgb(243, 244, 246));
+                    ConfigStatusBadge.BorderBrush = new SolidColorBrush(Color.FromRgb(229, 231, 235));
+                    TxtConfigStatus.Foreground = new SolidColorBrush(Color.FromRgb(107, 114, 128));
+                    TxtConfigStatus.Text = "i CHƯA CÓ FILE";
+
+                    if (btnApplyConfig != null)
+                    {
+                        btnApplyConfig.Content = "⚡ Áp Dụng Cấu Hình Tối Ưu";
+                    }
+                }
+            }
+
+            // 3. Update Live Summary Bar
+            if (TxtConfigStatusSummary != null)
+            {
+                TxtConfigStatusSummary.Text = status.StatusMessage;
+            }
+
+            if (TxtConfigFilePath != null)
+            {
+                if (!string.IsNullOrEmpty(status.FullConfigFilePath))
+                {
+                    TxtConfigFilePath.Text = $"File: {status.FullConfigFilePath}";
+                }
+                else
+                {
+                    TxtConfigFilePath.Text = "File: Chưa xác định đường dẫn cấu hình game";
+                }
+            }
+
+            if (ReadOnlyTag != null)
+            {
+                ReadOnlyTag.Visibility = status.IsReadOnly ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            // 4. Update Backup Button
+            if (btnRestoreBackup != null)
+            {
+                if (status.BackupCount > 0)
+                {
+                    btnRestoreBackup.Content = $"🔄 Khôi Phục Cũ ({status.BackupCount})";
+                }
+                else
+                {
+                    btnRestoreBackup.Content = "🔄 Khôi Phục Cũ";
+                }
+            }
+        }
+
         private void GameSelectorCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_isLoaded || GameSelectorCombo == null) return;
             UpdatePresetDetails();
             AutoDetectCurrentGamePath();
+            RefreshGameStatus();
+        }
+
+        private void GameLocationTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_isLoaded) return;
+            RefreshGameStatus();
         }
 
         private void BtnAutoDetectPath_Click(object sender, RoutedEventArgs e)
         {
             AutoDetectCurrentGamePath();
+            RefreshGameStatus();
         }
 
         private void BrowseGameLocationBtn_Click(object sender, RoutedEventArgs e)
@@ -170,6 +286,7 @@ namespace TXATOOL.Views
             {
                 GameLocationTextBox.Text = dialog.FolderName;
                 AppendLog($"Đã chọn thư mục: {dialog.FolderName}");
+                RefreshGameStatus();
             }
         }
 
@@ -258,6 +375,7 @@ namespace TXATOOL.Views
                 mainWindow?.UpdateLoadingProgress(1, 100, "Hoàn tất!");
                 AppendLog("=== ÁP DỤNG CẤU HÌNH HOÀN TẤT ===");
                 mainWindow?.HideLoading();
+                RefreshGameStatus();
                 CustomMessageBoxWindow.Show($"Đã áp dụng thành công cấu hình tối ưu cho {game}!", "Thành công");
             }
             catch (Exception ex)
@@ -270,6 +388,7 @@ namespace TXATOOL.Views
             {
                 mainWindow?.HideLoading();
                 btnApplyConfig.IsEnabled = true;
+                RefreshGameStatus();
             }
         }
 
@@ -297,8 +416,13 @@ namespace TXATOOL.Views
                 }
 
                 var latestBackup = backups.First();
-                string targetFileName = latestBackup.Name.Contains("Engine") ? "Engine.ini" :
-                                        latestBackup.Name.Contains("autoexec") ? "autoexec.cfg" : "user.cfg";
+                string targetFileName;
+                if (latestBackup.Name.Contains("fcsetup")) targetFileName = "fcsetup.ini";
+                else if (latestBackup.Name.Contains("fifasetup")) targetFileName = "fifasetup.ini";
+                else if (latestBackup.Name.Contains("Engine")) targetFileName = "Engine.ini";
+                else if (latestBackup.Name.Contains("settings")) targetFileName = "settings.ini";
+                else if (latestBackup.Name.Contains("autoexec")) targetFileName = "autoexec.cfg";
+                else targetFileName = "user.cfg";
 
                 string targetFile = Path.Combine(path, targetFileName);
 
@@ -310,6 +434,7 @@ namespace TXATOOL.Views
 
                 File.Copy(latestBackup.FullName, targetFile, true);
                 AppendLog($"[OK] Đã khôi phục file cấu hình từ bản sao lưu: {latestBackup.Name}");
+                RefreshGameStatus();
                 CustomMessageBoxWindow.Show($"Đã khôi phục thành công cấu hình từ file {latestBackup.Name}!", "Khôi phục");
             }
             catch (Exception ex)

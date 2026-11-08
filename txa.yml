@@ -1,8 +1,8 @@
 version: 1.3.0
 files:
   - url: TXATOOL_Setup_v1.3.0.exe
-    sha512: KzB8vWL2VcKZN1Tzlz9tQH4DDZGYnxRTPzKf9Y3BY0gAgp0p7FNrGWhnmgmblhqXe6+QW7VU51ejSeIfnPOQsQ==
-    size: 143858564
+    sha512: XloJaj4TQQivwqeyQVKRbB8n34aVk7vptHLNnYX9uBtEq1jwjK0RU3pKDiTmDGciE1YZvLLlXrkWFAEolgHsOg==
+    size: 143874429
 path: TXATOOL_Setup_v1.3.0.exe
-sha512: KzB8vWL2VcKZN1Tzlz9tQH4DDZGYnxRTPzKf9Y3BY0gAgp0p7FNrGWhnmgmblhqXe6+QW7VU51ejSeIfnPOQsQ==
-releaseDate: '2026-11-08T18:03:00.000Z'
+sha512: XloJaj4TQQivwqeyQVKRbB8n34aVk7vptHLNnYX9uBtEq1jwjK0RU3pKDiTmDGciE1YZvLLlXrkWFAEolgHsOg==
+releaseDate: '2026-11-08T18:18:00.000Z'

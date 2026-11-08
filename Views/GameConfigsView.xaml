@@ -114,7 +114,12 @@
                         <Image Source="pack://application:,,,/Images/game2.png" Width="38" Height="38" VerticalAlignment="Center" Margin="0,0,16,0" RenderOptions.BitmapScalingMode="HighQuality"/>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="Chọn Tựa Game" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Chọn Tựa Game" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                                <Border x:Name="GameFoundBadge" Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TxtGameFoundStatus" Text="✓ ĐÃ PHÁT HIỆN" FontSize="10.5" FontWeight="Bold" Foreground="#15803D"/>
+                                </Border>
+                            </StackPanel>
                             <TextBlock Text="EA FC, FIFA, PES, Delta Force, CS2, PUBG, Battlefield" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
 
@@ -146,7 +151,8 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox x:Name="GameLocationTextBox" Height="36" VerticalContentAlignment="Center" Padding="10,0" FontSize="13" 
-                                 Background="{DynamicResource SurfaceAltBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+                                 Background="{DynamicResource SurfaceAltBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                                 TextChanged="GameLocationTextBox_TextChanged">
                             <TextBox.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="8"/>
@@ -168,10 +174,36 @@
                             <TextBlock Text="&#xE735;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="17" Foreground="{DynamicResource ActionBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Cấu Hình Đề Xuất (Optimization Preset)" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                         </StackPanel>
-                        <Border Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <TextBlock Text="COMPETITIVE PRO" FontSize="10" FontWeight="Bold" Foreground="#15803D"/>
-                        </Border>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Border Background="#E0F2FE" BorderBrush="#7DD3FC" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                                <TextBlock Text="COMPETITIVE PRO" FontSize="10" FontWeight="Bold" Foreground="#0369A1"/>
+                            </Border>
+
+                            <Border x:Name="ConfigStatusBadge" Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="6,2" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtConfigStatus" Text="✓ ĐÃ TỐI ƯU" FontSize="10" FontWeight="Bold" Foreground="#15803D"/>
+                            </Border>
+                        </StackPanel>
                     </Grid>
+
+                    <!-- LIVE STATUS SUMMARY BAR -->
+                    <Border Background="{DynamicResource SurfaceSunkenBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="&#xE946;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="15" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtConfigStatusSummary" Text="Đang kiểm tra trạng thái cấu hình..." FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                                <TextBlock x:Name="TxtConfigFilePath" Text="File: Chưa xác định" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" x:Name="ReadOnlyTag" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="6" Padding="8,3" VerticalAlignment="Center" Visibility="Collapsed">
+                                <TextBlock x:Name="TxtReadOnlyTag" Text="🔒 READ-ONLY" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            </Border>
+                        </Grid>
+                    </Border>
 
                     <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="8" Padding="14,12" Margin="0,0,0,14">
                         <TextBlock x:Name="TxtPresetDetails" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" LineHeight="20"/>
