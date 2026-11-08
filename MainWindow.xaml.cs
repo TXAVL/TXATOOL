@@ -336,7 +336,6 @@ public partial class MainWindow : Window
     private void GameConfigs_Checked(object sender, RoutedEventArgs e) 
     {
         UpdateView(GameConfigsView, GameConfigsDescriptionView);
-        ShowInProgressMessage();
     }
     private void Cleaning_Checked(object sender, RoutedEventArgs e) => UpdateView(CleaningView, CleaningRightView);
     private void Startup_Checked(object sender, RoutedEventArgs e) => UpdateView(StartupAppsView, StartupDescriptionView);
@@ -352,7 +351,6 @@ public partial class MainWindow : Window
     private void FixGameErrors_Checked(object sender, RoutedEventArgs e) 
     {
         UpdateView(FixGameErrorsView, FixGameErrorsDescriptionView, false);
-        ShowInProgressMessage();
     }
     private void WSAP_Checked(object sender, RoutedEventArgs e) 
     {
@@ -367,19 +365,36 @@ public partial class MainWindow : Window
 
     private void Network_Checked(object sender, RoutedEventArgs e) => UpdateView(NetworkView, NetworkDescriptionView, false);
 
-    private void ShowInProgressMessage()
+    private void NavDashboard_Click(object sender, RoutedEventArgs e)
     {
-        string message1 = "This feature is still being polished. Many of the buttons in this area hide fun Easter eggs—go ahead and try them out!";
-        string message2 = "Tính năng này vẫn đang được hoàn thiện. Nhiều nút trong khu vực này ẩn chứa các easter eggs thú vị, hãy bấm thử và khám phá nhé!";
-        
-        var msg = new Views.InfoPopupWindow(message1, "Info", message2);
-        if (this.IsVisible) msg.Owner = this;
-        msg.ShowDialog();
+        if (MainContentControl?.Content == SettingsView || NavDashboard.IsChecked != true)
+        {
+            NavDashboard.IsChecked = true;
+            UpdateView(_dashboardView, null, true);
+        }
+    }
+
+    private void UncheckAllNavButtons()
+    {
+        var navButtons = new RadioButton?[]
+        {
+            NavDashboard, NavGeneral, NavWindows, NavStartup, NavUWPApps, NavCleaning, NavHardware, NavNetwork,
+            NavUSBBoot, NavDownload, NavOffice, NavExtendFeatures, NavWSAP, NavConvertSKU, NavLicense,
+            NavWindowsErrors, NavPrinterErrors, NavFixGame, NavGameConfigs
+        };
+        foreach (var rb in navButtons)
+        {
+            if (rb != null)
+            {
+                rb.IsChecked = false;
+            }
+        }
     }
 
     private void SettingsButton_Click(object sender, RoutedEventArgs e)
     {
-         UpdateView(SettingsView, SettingsDescriptionView, false);
+        UncheckAllNavButtons();
+        UpdateView(SettingsView, SettingsDescriptionView, false);
     }
 
     private void GlobalRestart_Click(object sender, RoutedEventArgs e)

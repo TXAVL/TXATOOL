@@ -177,7 +177,7 @@
                     <Border Grid.Row="1" Grid.Column="0" Background="{DynamicResource PanelBrush}" CornerRadius="15" Margin="15,20,5,20" Padding="0,10">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,0">
                             <StackPanel>
-                                <RadioButton GroupName="MainNav" x:Name="NavDashboard" IsChecked="True" Content="Dashboard" Tag="&#xE80F;" Style="{StaticResource MenuButtonStyle}" Checked="Dashboard_Checked"/>
+                                <RadioButton GroupName="MainNav" x:Name="NavDashboard" IsChecked="True" Content="Dashboard" Tag="&#xE80F;" Style="{StaticResource MenuButtonStyle}" Checked="Dashboard_Checked" Click="NavDashboard_Click"/>
                                 
                                 <!-- GROUP 1: OS DEPLOYMENT & SETUP -->
                                 <Button Style="{StaticResource NavGroupHeaderButtonStyle}" Click="NavGroup_Click" Tag="GroupDeploy" AutomationProperties.Name="NavGroupDeploy">

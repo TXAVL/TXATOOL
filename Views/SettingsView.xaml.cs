@@ -115,28 +115,36 @@ namespace TXATOOL.Views
         {
             try
             {
-                var lang = (LocalizationService.CurrentLanguage ?? "en").ToLower();
-                string path = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Changelog", $"{lang}.json");
-                
-                // Fallback to en.json if language file doesn't exist
-                if (!System.IO.File.Exists(path))
-                {
-                    path = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Changelog", "en.json");
-                }
+                var assemblyVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                string verStr = (assemblyVer != null && assemblyVer.Major > 0)
+                    ? $"v{assemblyVer.Major}.{assemblyVer.Minor}.{assemblyVer.Build}"
+                    : "v1.2.0";
 
-                if (System.IO.File.Exists(path))
+                var infoLabel = LocalizationService.Get("lblVersionInfo") ?? "THÔNG TIN PHIÊN BẢN";
+                lblCurrentVersion.Text = $"{infoLabel} {verStr}";
+
+                var isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                if (lblVersion != null)
                 {
-                    string json = System.IO.File.ReadAllText(path);
-                    var allVersions = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, DashboardView.ChangelogData>>(json);
-                    if (allVersions != null && allVersions.Count > 0)
-                    {
-                        var sortedKeys = System.Linq.Enumerable.ToList(System.Linq.Enumerable.OrderByDescending(allVersions.Keys, k => k));
-                        var latestData = allVersions[sortedKeys[0]];
-                        lblCurrentVersion.Text = $"{LocalizationService.Get("lblVersionInfo") ?? "Current Version:"} {latestData.version_value}";
-                    }
+                    lblVersion.Text = isVn 
+                        ? $"Phiên bản TXATOOL - WIN: {verStr} (Bản chính thức)" 
+                        : $"TXATOOL - WIN Version: {verStr} (Official Release)";
+                }
+                if (lblFirstBuild != null)
+                {
+                    lblFirstBuild.Text = isVn 
+                        ? $"Bản dựng: {verStr.Replace("v", "")} (Build 2026.11.08)" 
+                        : $"Build: {verStr.Replace("v", "")} (Build 2026.11.08)";
+                }
+                if (lblReleaseDate != null)
+                {
+                    lblReleaseDate.Text = isVn ? "Ngày phát hành: 08/11/2026" : "Release Date: November 08, 2026";
                 }
             }
-            catch { }
+            catch
+            {
+                lblCurrentVersion.Text = "THÔNG TIN PHIÊN BẢN v1.2.0";
+            }
         }
 
         private async void btnCheckUpdate_Click(object sender, RoutedEventArgs e)

@@ -1686,12 +1686,17 @@ namespace TXATOOL.Views
                     
                     if (allVersions != null && allVersions.Count > 0)
                     {
-                        var sortedKeys = allVersions.Keys.OrderByDescending(k => k).ToList();
+                        var sortedKeys = allVersions.Keys.OrderByDescending(k =>
+                        {
+                            var clean = k.TrimStart('v', 'V');
+                            return Version.TryParse(clean, out var v) ? v : new Version(0, 0);
+                        }).ToList();
                         
                         ChangelogItems.Clear();
 
                         var dateMap = new System.Collections.Generic.Dictionary<string, string>
                         {
+                            { "v1.2.0", "2026-11-08" },
                             { "v1.1.0", "2026-11-07" },
                             { "v1.0.7", "2026-11-05" },
                             { "v1.0.6", "2026-10-20" },
@@ -1713,7 +1718,7 @@ namespace TXATOOL.Views
                         int count = 0;
                         foreach (var key in sortedKeys)
                         {
-                            if (count >= 2) break;
+                            if (count >= 3) break;
                             var data = allVersions[key];
 
                             string dateStr = "2026-10-20";

@@ -90,15 +90,31 @@ namespace TXATOOL.Services
         private const string TXA_YML_URL = "https://raw.githubusercontent.com/TXAVL/TXATOOL/refs/heads/main/txa.yml";
         private const string UPDATE_EN_URL = "https://raw.githubusercontent.com/TXAVL/TXATOOL/refs/heads/main/update_en.json";
         private const string UPDATE_VN_URL = "https://raw.githubusercontent.com/TXAVL/TXATOOL/refs/heads/main/update_vn.json";
+        private const string GITHUB_API_LATEST = "https://api.github.com/repos/TXAVL/TXATOOL/releases/latest";
         private static readonly HttpClient _httpClient = new HttpClient();
 
         public UpdateService()
         {
-            // Set User-Agent as required by some APIs/servers
+            // Set User-Agent as required by GitHub API and CDNs
             if (!_httpClient.DefaultRequestHeaders.Contains("User-Agent"))
             {
                 _httpClient.DefaultRequestHeaders.Add("User-Agent", "TXATOOL-AutoUpdater");
             }
+        }
+
+        private static async Task<string> FetchFreshStringAsync(string url)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true,
+                MustRevalidate = true
+            };
+            request.Headers.Pragma.ParseAdd("no-cache");
+            using var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         public Version GetCurrentVersion()
@@ -122,11 +138,11 @@ namespace TXATOOL.Services
                 long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 var currentVersion = GetCurrentVersion();
 
-                // 1. First, attempt to check via txa.yml
+                // 1. First, attempt to check via txa.yml with no-cache headers
                 try
                 {
                     var ymlUrl = $"{TXA_YML_URL}?t={timestamp}";
-                    var ymlResponse = await _httpClient.GetStringAsync(ymlUrl);
+                    var ymlResponse = await FetchFreshStringAsync(ymlUrl);
                     var ymlInfo = TxaYmlInfo.Parse(ymlResponse);
 
                     if (ymlInfo != null && !string.IsNullOrWhiteSpace(ymlInfo.Version))
@@ -157,26 +173,82 @@ namespace TXATOOL.Services
                     Logger.LogCrash(ymlEx, "UpdateService.CheckForUpdateAsync.TxaYml");
                 }
 
-                // 2. Fallback to update_vn.json / update_en.json
-                var currentLang = LocalizationService.CurrentLanguage?.ToLower() ?? "en";
-                var baseUrl = currentLang.Contains("vn") ? UPDATE_VN_URL : UPDATE_EN_URL;
-                var url = $"{baseUrl}?t={timestamp}";
-                var response = await _httpClient.GetStringAsync(url);
-
-                if (string.IsNullOrWhiteSpace(response))
-                    return null;
-
-                var jsonUpdateInfo = JsonSerializer.Deserialize<UpdateInfo>(response);
-                if (jsonUpdateInfo == null || string.IsNullOrWhiteSpace(jsonUpdateInfo.Version))
-                    return null;
-
-                var cleanVersion = jsonUpdateInfo.Version.ToLower().Replace("v", "").Trim();
-                if (Version.TryParse(cleanVersion, out var serverVersion))
+                // 2. Fallback to update_vn.json / update_en.json with no-cache headers
+                try
                 {
-                    if (serverVersion > currentVersion)
+                    var currentLang = LocalizationService.CurrentLanguage?.ToLower() ?? "en";
+                    var baseUrl = currentLang.Contains("vn") ? UPDATE_VN_URL : UPDATE_EN_URL;
+                    var url = $"{baseUrl}?t={timestamp}";
+                    var response = await FetchFreshStringAsync(url);
+
+                    if (!string.IsNullOrWhiteSpace(response))
                     {
-                        return jsonUpdateInfo;
+                        var jsonUpdateInfo = JsonSerializer.Deserialize<UpdateInfo>(response);
+                        if (jsonUpdateInfo != null && !string.IsNullOrWhiteSpace(jsonUpdateInfo.Version))
+                        {
+                            var cleanVersion = jsonUpdateInfo.Version.ToLower().Replace("v", "").Trim();
+                            if (Version.TryParse(cleanVersion, out var serverVersion))
+                            {
+                                if (serverVersion > currentVersion)
+                                {
+                                    return jsonUpdateInfo;
+                                }
+                            }
+                        }
                     }
+                }
+                catch (Exception jsonEx)
+                {
+                    Logger.LogCrash(jsonEx, "UpdateService.CheckForUpdateAsync.Json");
+                }
+
+                // 3. Fallback to GitHub Releases API (always real-time, no raw caching)
+                try
+                {
+                    var ghResponse = await FetchFreshStringAsync(GITHUB_API_LATEST);
+                    using var doc = JsonDocument.Parse(ghResponse);
+                    var root = doc.RootElement;
+                    if (root.TryGetProperty("tag_name", out var tagElem))
+                    {
+                        var tag = tagElem.GetString() ?? "";
+                        var cleanTag = tag.ToLower().Replace("v", "").Trim();
+                        if (Version.TryParse(cleanTag, out var ghVersion) && ghVersion > currentVersion)
+                        {
+                            string downloadUrl = "";
+                            long exeSize = 0;
+                            if (root.TryGetProperty("assets", out var assetsElem) && assetsElem.ValueKind == JsonValueKind.Array)
+                            {
+                                foreach (var asset in assetsElem.EnumerateArray())
+                                {
+                                    if (asset.TryGetProperty("name", out var nameElem) && nameElem.GetString()?.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) == true)
+                                    {
+                                        if (asset.TryGetProperty("browser_download_url", out var dlElem))
+                                            downloadUrl = dlElem.GetString() ?? "";
+                                        if (asset.TryGetProperty("size", out var szElem))
+                                            exeSize = szElem.GetInt64();
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(downloadUrl))
+                            {
+                                var ghUpdate = new UpdateInfo
+                                {
+                                    Version = cleanTag,
+                                    ReleaseDate = root.TryGetProperty("published_at", out var pubElem) ? pubElem.GetString() ?? "" : "",
+                                    DownloadUrlSetup = downloadUrl,
+                                    Size = exeSize > 0 ? $"{Math.Round(exeSize / (1024.0 * 1024.0), 1)} MB" : "140 MB"
+                                };
+                                await PopulateChangelogFromJsonAsync(ghUpdate, timestamp);
+                                return ghUpdate;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ghEx)
+                {
+                    Logger.LogCrash(ghEx, "UpdateService.CheckForUpdateAsync.GitHubApi");
                 }
 
                 return null;
@@ -195,7 +267,7 @@ namespace TXATOOL.Services
                 var currentLang = LocalizationService.CurrentLanguage?.ToLower() ?? "en";
                 var baseUrl = currentLang.Contains("vn") ? UPDATE_VN_URL : UPDATE_EN_URL;
                 var url = $"{baseUrl}?t={timestamp}";
-                var response = await _httpClient.GetStringAsync(url);
+                var response = await FetchFreshStringAsync(url);
                 if (!string.IsNullOrWhiteSpace(response))
                 {
                     var jsonInfo = JsonSerializer.Deserialize<UpdateInfo>(response);
