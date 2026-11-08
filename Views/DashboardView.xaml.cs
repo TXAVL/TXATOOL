@@ -1879,6 +1879,11 @@ namespace TXATOOL.Views
             }
         }
 
+        private void TurboBanner_Click(object sender, MouseButtonEventArgs e)
+        {
+            NavigateRequested?.Invoke(this, "FixGameErrors");
+        }
+
         private void BtnDashboardFixGame_Click(object sender, RoutedEventArgs e)
         {
             NavigateRequested?.Invoke(this, "FixGameErrors");

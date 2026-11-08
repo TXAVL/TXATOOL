@@ -410,8 +410,8 @@ namespace TXATOOL.Helpers
                 using var searcher = new ManagementObjectSearcher(@"root\CIMv2\Security\MicrosoftTpm", "SELECT * FROM Win32_Tpm");
                 foreach (ManagementObject mo in searcher.Get())
                 {
-                    bool isActivated = (bool)(mo["IsActivated_InitialValue"] ?? false);
-                    bool isEnabled = (bool)(mo["IsEnabled_InitialValue"] ?? false);
+                    bool isActivated = mo["IsActivated_InitialValue"]?.ToString()?.Equals("True", StringComparison.OrdinalIgnoreCase) == true;
+                    bool isEnabled = mo["IsEnabled_InitialValue"]?.ToString()?.Equals("True", StringComparison.OrdinalIgnoreCase) == true;
                     tpm = isActivated || isEnabled;
                     break;
                 }

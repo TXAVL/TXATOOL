@@ -310,24 +310,24 @@ public partial class MainWindow : Window
     {
          switch (target)
          {
-             case "General": NavGeneral.IsChecked = true; break;
-             case "Windows": NavWindows.IsChecked = true; break;
-             case "Download": NavDownload.IsChecked = true; break;
-             case "Office": NavOffice.IsChecked = true; break;
-             case "ExtendFeatures": NavExtendFeatures.IsChecked = true; break;
-             case "UWPApps": NavUWPApps.IsChecked = true; break;
-             case "StartupApps": NavStartup.IsChecked = true; break;
-             case "Cleaning": NavCleaning.IsChecked = true; break;
-             case "Network": NavNetwork.IsChecked = true; break;
-             case "USBBoot": NavUSBBoot.IsChecked = true; break;
-             case "HardwareInfo": NavHardware.IsChecked = true; break;
-             case "GameConfigs": NavGameConfigs.IsChecked = true; break;
-             case "FixGameErrors": NavFixGame.IsChecked = true; break;
-             case "WSAP": NavWSAP.IsChecked = true; break;
-             case "ConvertSKU": NavConvertSKU.IsChecked = true; break;
-             case "License": NavLicense.IsChecked = true; break;
-             case "PrinterErrors": NavPrinterErrors.IsChecked = true; break;
-             case "WindowsErrors": NavWindowsErrors.IsChecked = true; break;
+             case "General": NavGeneral.IsChecked = true; UpdateView(GeneralView, DefaultDescriptionView); break;
+             case "Windows": NavWindows.IsChecked = true; UpdateView(WindowsView, WindowsDescriptionView); break;
+             case "Download": NavDownload.IsChecked = true; UpdateView(DownloadView, null, true); break;
+             case "Office": NavOffice.IsChecked = true; UpdateView(OfficeView, null, true); break;
+             case "ExtendFeatures": NavExtendFeatures.IsChecked = true; UpdateView(ExtendFeaturesView, ExtendFeaturesDescriptionView, false); break;
+             case "UWPApps": NavUWPApps.IsChecked = true; UpdateView(UWPAppsView, null, true); break;
+             case "StartupApps": NavStartup.IsChecked = true; UpdateView(StartupAppsView, StartupDescriptionView); break;
+             case "Cleaning": NavCleaning.IsChecked = true; UpdateView(CleaningView, CleaningRightView); break;
+             case "Network": NavNetwork.IsChecked = true; UpdateView(NetworkView, NetworkDescriptionView, false); break;
+             case "USBBoot": NavUSBBoot.IsChecked = true; UpdateView(USBBootView, USBBootDescriptionView, false); break;
+             case "HardwareInfo": NavHardware.IsChecked = true; UpdateView(HardwareInfoView, HardwareInfoDescriptionView, false); break;
+             case "GameConfigs": NavGameConfigs.IsChecked = true; UpdateView(GameConfigsView, null, true); break;
+             case "FixGameErrors": NavFixGame.IsChecked = true; UpdateView(FixGameErrorsView, null, true); break;
+             case "WSAP": NavWSAP.IsChecked = true; UpdateView(WSAPView, WSAPDescriptionView, false); break;
+             case "ConvertSKU": NavConvertSKU.IsChecked = true; UpdateView(ConvertSKUView, null, true); break;
+             case "License": NavLicense.IsChecked = true; UpdateView(LicenseView, null, true); break;
+             case "PrinterErrors": NavPrinterErrors.IsChecked = true; UpdateView(PrinterErrorsView, PrinterErrorsDescriptionView, false); break;
+             case "WindowsErrors": NavWindowsErrors.IsChecked = true; UpdateView(WindowsErrorsView, WindowsErrorsDescriptionView, false); break;
          }
     }
 
@@ -335,7 +335,7 @@ public partial class MainWindow : Window
     private void Windows_Checked(object sender, RoutedEventArgs e) => UpdateView(WindowsView, WindowsDescriptionView);
     private void GameConfigs_Checked(object sender, RoutedEventArgs e) 
     {
-        UpdateView(GameConfigsView, GameConfigsDescriptionView);
+        UpdateView(GameConfigsView, null, true);
     }
     private void Cleaning_Checked(object sender, RoutedEventArgs e) => UpdateView(CleaningView, CleaningRightView);
     private void Startup_Checked(object sender, RoutedEventArgs e) => UpdateView(StartupAppsView, StartupDescriptionView);
@@ -350,7 +350,7 @@ public partial class MainWindow : Window
     private void USBBoot_Checked(object sender, RoutedEventArgs e) => UpdateView(USBBootView, USBBootDescriptionView, false);
     private void FixGameErrors_Checked(object sender, RoutedEventArgs e) 
     {
-        UpdateView(FixGameErrorsView, FixGameErrorsDescriptionView, false);
+        UpdateView(FixGameErrorsView, null, true);
     }
     private void WSAP_Checked(object sender, RoutedEventArgs e) 
     {

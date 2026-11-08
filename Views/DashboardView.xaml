@@ -426,19 +426,19 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left: Turbo Badge & Info -->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Left: Turbo Badge & Info (Clickable to open Game Doctor) -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand" MouseLeftButtonUp="TurboBanner_Click" ToolTip="Nhấn để mở giao diện Tăng Tốc &amp; Sửa Lỗi Game chi tiết">
                         <Border Width="38" Height="38" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}" Margin="0,0,12,0" VerticalAlignment="Center">
                             <TextBlock Text="&#xE7E8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="TURBO BOOST &amp; GAMING" FontSize="13.5" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                <TextBlock Text="TĂNG TỐC GAME &amp; TURBO BOOST" FontSize="13.5" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
                                 <Border Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1" CornerRadius="5" Padding="5,1" Margin="8,0,0,0" VerticalAlignment="Center">
                                     <TextBlock x:Name="TurboBadgeText" Text="HYPER-PERFORMANCE" FontSize="9.5" FontWeight="Bold" Foreground="#B45309"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock x:Name="TurboSubtitleText" Text="Giải phóng bộ nhớ RAM, dọn sạch DNS/Temp cache và kích hoạt độ trễ thấp tức thì." FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                            <TextBlock x:Name="TurboSubtitleText" Text="Tối ưu độ trễ MMCSS, dọn RAM Standby, reset GPU Driver và nạp cấu hình FPS." FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -447,15 +447,15 @@
 
                     <!-- Right: Quick Turbo Boost Button & Tools -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button x:Name="BtnQuickTurboBoost" Height="34" Style="{StaticResource PrimaryBlueBtnStyle}" Padding="14,0" Margin="0,0,10,0" Click="BtnQuickTurboBoost_Click">
+                        <Button x:Name="BtnOpenGameTurbo" Height="34" Style="{StaticResource PrimaryBlueBtnStyle}" Padding="14,0" Margin="0,0,8,0" Click="BtnDashboardFixGame_Click" ToolTip="Mở trình Tăng Tốc &amp; Sửa Lỗi Game chuyên sâu">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="&#xE7E8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="12" Foreground="White" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="⚡ Turbo Boost (Dọn RAM)" FontSize="12" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Text="🎮" FontSize="13" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Tăng Tốc Game" FontSize="12.5" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Content="⏱️ 0.5ms Timer" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnDashboardTimer_Click" ToolTip="Kích hoạt TimerResolution 0.5ms"/>
-                        <Button Content="🎮 Sửa Lỗi Game" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnDashboardFixGame_Click" ToolTip="Mở trình chẩn đoán &amp; khắc phục lỗi Game"/>
-                        <Button Content="⚙️ Cấu Hình Game" Style="{StaticResource SmallActionBtnStyle}" Height="32" Padding="10,0" Click="BtnDashboardGameConfigs_Click" ToolTip="Mở trình tối ưu cấu hình Game"/>
+                        <Button x:Name="BtnQuickTurboBoost" Content="⚡ Dọn RAM Nhanh" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnQuickTurboBoost_Click" ToolTip="Giải phóng bộ nhớ RAM Working Sets &amp; Standby List tức thì"/>
+                        <Button Content="⚙️ Cấu Hình Game" Style="{StaticResource SmallActionBtnStyle}" Height="32" Margin="0,0,6,0" Padding="10,0" Click="BtnDashboardGameConfigs_Click" ToolTip="Mở trình tối ưu cấu hình Game"/>
+                        <Button Content="⏱️ 0.5ms Timer" Style="{StaticResource SmallActionBtnStyle}" Height="32" Padding="10,0" Click="BtnDashboardTimer_Click" ToolTip="Kích hoạt TimerResolution 0.5ms"/>
                     </StackPanel>
                 </Grid>
             </Border>

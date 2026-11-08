@@ -18,9 +18,9 @@ namespace TXATOOL.Views
             Loaded += FixGameErrorsView_Loaded;
         }
 
-        private void FixGameErrorsView_Loaded(object sender, RoutedEventArgs e)
+        private async void FixGameErrorsView_Loaded(object sender, RoutedEventArgs e)
         {
-            RefreshDiagnostics();
+            await RefreshDiagnosticsAsync();
         }
 
         private void AppendLog(string message)
@@ -33,29 +33,45 @@ namespace TXATOOL.Views
             });
         }
 
-        private void RefreshDiagnostics()
+        private async Task RefreshDiagnosticsAsync()
         {
             try
             {
-                var sbInfo = GameDoctorHelper.CheckSecureBootAndTpm();
+                txtSecureBootDetails.Text = "Đang kiểm tra trạng thái Secure Boot & TPM 2.0...";
+                txtRuntimesStatus.Text = "Đang quét các thư viện Visual C++ & DirectX...";
+
+                var (sbInfo, rtInfo) = await Task.Run(() =>
+                {
+                    var sb = GameDoctorHelper.CheckSecureBootAndTpm();
+                    var rt = GameDoctorHelper.CheckGameRuntimes();
+                    return (sb, rt);
+                });
+
                 txtSecureBootDetails.Text = sbInfo.summary;
+
+                var greenBg = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#DCFCE7"));
+                var greenBorder = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#86EFAC"));
+                var greenText = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#15803D"));
+
+                var yellowBg = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FEF3C7"));
+                var yellowBorder = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F59E0B"));
+                var yellowText = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B45309"));
 
                 if (sbInfo.secureBoot && sbInfo.tpm)
                 {
                     AntiCheatBadgeText.Text = "READY";
-                    AntiCheatStatusBadge.Background = (System.Windows.Media.Brush)FindResource("SuccessBgBrush");
-                    AntiCheatStatusBadge.BorderBrush = (System.Windows.Media.Brush)FindResource("SuccessBorderBrush");
-                    AntiCheatBadgeText.Foreground = (System.Windows.Media.Brush)FindResource("SuccessTextBrush");
+                    AntiCheatStatusBadge.Background = greenBg;
+                    AntiCheatStatusBadge.BorderBrush = greenBorder;
+                    AntiCheatBadgeText.Foreground = greenText;
                 }
                 else
                 {
                     AntiCheatBadgeText.Text = "ATTENTION";
-                    AntiCheatStatusBadge.Background = (System.Windows.Media.Brush)FindResource("WarningBgBrush");
-                    AntiCheatStatusBadge.BorderBrush = (System.Windows.Media.Brush)FindResource("WarningBorderBrush");
-                    AntiCheatBadgeText.Foreground = (System.Windows.Media.Brush)FindResource("WarningTextBrush");
+                    AntiCheatStatusBadge.Background = yellowBg;
+                    AntiCheatStatusBadge.BorderBrush = yellowBorder;
+                    AntiCheatBadgeText.Foreground = yellowText;
                 }
 
-                var rtInfo = GameDoctorHelper.CheckGameRuntimes();
                 if (rtInfo.missingItems.Count == 0)
                 {
                     txtRuntimesStatus.Text = "✓ Hệ thống đã có đầy đủ Visual C++ Redistributable và DirectX. Không phát hiện file DLL bị thiếu.";
@@ -173,10 +189,10 @@ namespace TXATOOL.Views
             }
         }
 
-        private void BtnCheckSecureBoot_Click(object sender, RoutedEventArgs e)
+        private async void BtnCheckSecureBoot_Click(object sender, RoutedEventArgs e)
         {
             AppendLog("Đang kiểm tra lại trạng thái Secure Boot và TPM 2.0...");
-            RefreshDiagnostics();
+            await RefreshDiagnosticsAsync();
             AppendLog("Đã cập nhật trạng thái chẩn đoán hệ thống.");
         }
 
@@ -209,7 +225,7 @@ namespace TXATOOL.Views
                 var resX86 = await Utilities.RunCommandAsync(cmdX86, true);
                 AppendLog($"Kết quả cài đặt VC++ x86: Mã thoát {resX86.ExitCode}");
 
-                RefreshDiagnostics();
+                await RefreshDiagnosticsAsync();
                 CustomMessageBoxWindow.Show("Đã tiến hành cài đặt/cập nhật Visual C++ Runtimes mới nhất!", "Runtimes");
             }
             catch (Exception ex)
