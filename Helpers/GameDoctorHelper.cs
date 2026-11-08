@@ -858,6 +858,88 @@ namespace TXATOOL.Helpers
                     if (Directory.Exists(bf1)) return bf1;
                     return string.Empty;
 
+                case "EA SPORTS FC":
+                    string[] fcCandidates = new[]
+                    {
+                        Path.Combine(localAppData, "EA SPORTS FC 26"),
+                        Path.Combine(myDocuments, "FC 26"),
+                        Path.Combine(localAppData, "EA SPORTS FC 25"),
+                        Path.Combine(myDocuments, "FC 25"),
+                        Path.Combine(myDocuments, "FC 24"),
+                        Path.Combine(myDocuments, "EA SPORTS FC 24"),
+                        Path.Combine(localAppData, "EA SPORTS FC 24")
+                    };
+                    foreach (var c in fcCandidates)
+                    {
+                        if (Directory.Exists(c)) return c;
+                    }
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string[] steamFc = new[]
+                        {
+                            Path.Combine(baseDir, "steamapps", "common", "EA SPORTS FC 26"),
+                            Path.Combine(baseDir, "steamapps", "common", "EA SPORTS FC 25"),
+                            Path.Combine(baseDir, "steamapps", "common", "EA SPORTS FC 24")
+                        };
+                        foreach (var s in steamFc)
+                        {
+                            if (Directory.Exists(s)) return s;
+                        }
+                    }
+                    return string.Empty;
+
+                case "FIFA 23":
+                    string fifa23Doc = Path.Combine(myDocuments, "FIFA 23");
+                    if (Directory.Exists(fifa23Doc)) return fifa23Doc;
+                    string fifa23Local = Path.Combine(localAppData, "FIFA 23");
+                    if (Directory.Exists(fifa23Local)) return fifa23Local;
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string s23 = Path.Combine(baseDir, "steamapps", "common", "FIFA 23");
+                        if (Directory.Exists(s23)) return s23;
+                    }
+                    return string.Empty;
+
+                case "FIFA 19":
+                    string fifa19Doc = Path.Combine(myDocuments, "FIFA 19");
+                    if (Directory.Exists(fifa19Doc)) return fifa19Doc;
+                    string fifa19Local = Path.Combine(localAppData, "FIFA 19");
+                    if (Directory.Exists(fifa19Local)) return fifa19Local;
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string s19 = Path.Combine(baseDir, "steamapps", "common", "FIFA 19");
+                        if (Directory.Exists(s19)) return s19;
+                    }
+                    return string.Empty;
+
+                case "eFootball / PES":
+                    string[] pesCandidates = new[]
+                    {
+                        Path.Combine(localAppData, "eFootball", "Saved", "Config", "Windows"),
+                        Path.Combine(localAppData, "eFootball", "Saved", "Config", "WindowsNoEditor"),
+                        Path.Combine(myDocuments, "KONAMI", "eFootball PES 2021 SEASON UPDATE"),
+                        Path.Combine(myDocuments, "KONAMI", "PRO EVOLUTION SOCCER 2019"),
+                        Path.Combine(myDocuments, "KONAMI", "eFootball")
+                    };
+                    foreach (var p in pesCandidates)
+                    {
+                        if (Directory.Exists(p)) return p;
+                    }
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string[] steamPes = new[]
+                        {
+                            Path.Combine(baseDir, "steamapps", "common", "eFootball", "eFootball", "Saved", "Config", "Windows"),
+                            Path.Combine(baseDir, "steamapps", "common", "eFootball"),
+                            Path.Combine(baseDir, "steamapps", "common", "eFootball PES 2021 SEASON UPDATE")
+                        };
+                        foreach (var s in steamPes)
+                        {
+                            if (Directory.Exists(s)) return s;
+                        }
+                    }
+                    return string.Empty;
+
                 default:
                     return string.Empty;
             }
@@ -1052,6 +1134,293 @@ WorldRender.LightTileCsPathEnable 0
                 catch (Exception ex)
                 {
                     logs.Add($"[!] Lỗi Battlefield Config: {ex.Message}");
+                }
+                return logs;
+            });
+        }
+
+        /// <summary>
+        /// Generates optimal fcsetup.ini for EA SPORTS FC (FC 24 / FC 25 / FC 26).
+        /// Disables strand-based hair (eliminates cutscene FPS drop), disables VSync, and enables competitive pro rendering.
+        /// </summary>
+        public static async Task<List<string>> ApplyEaSportsFcOptimizedConfigAsync(string configFolder, bool makeReadOnly)
+        {
+            return await Task.Run(() =>
+            {
+                var logs = new List<string>();
+                try
+                {
+                    if (!Directory.Exists(configFolder))
+                    {
+                        Directory.CreateDirectory(configFolder);
+                    }
+
+                    string iniPath = Path.Combine(configFolder, "fcsetup.ini");
+                    if (File.Exists(iniPath))
+                    {
+                        string backup = Path.Combine(configFolder, $"fcsetup_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.ini");
+                        File.Copy(iniPath, backup, true);
+                        logs.Add($"[OK] Đã sao lưu fcsetup.ini cũ sang: {Path.GetFileName(backup)}");
+
+                        var fi = new FileInfo(iniPath);
+                        if (fi.IsReadOnly) fi.IsReadOnly = false;
+                    }
+
+                    string content = @"AUDIO_MIX_MODE = 0
+CONFIG_APP_MAX_FRAME_RATE = 0
+FULLSCREEN = 1
+MSAA_LEVEL = 0
+RENDERINGQUALITY = 1
+RESOLUTIONHEIGHT = 1080
+RESOLUTIONWIDTH = 1920
+VOICECHAT = 0
+WAITFORVSYNC = 0
+WINDOWED_BORDERLESS = 0
+STRAND_BASED_HAIR = 0
+DYNAMIC_RESOLUTION = 0
+WINDOW_TITLE = ""EA SPORTS FC""
+";
+                    File.WriteAllText(iniPath, content, Encoding.UTF8);
+                    logs.Add("[OK] Đã tạo fcsetup.ini tối ưu thi đấu cho EA SPORTS FC:");
+                    logs.Add("     • Tắt STRAND_BASED_HAIR = 0 (loại bỏ hiện tượng khựng drop FPS khi cận cảnh/ăn mừng bàn thắng)");
+                    logs.Add("     • Tắt DYNAMIC_RESOLUTION = 0 (khóa độ phân giải sắc nét, không bị mờ nhòe)");
+                    logs.Add("     • Tắt WAITFORVSYNC = 0 (triệt tiêu triệt để độ trễ input khi chuyền và sút bóng)");
+                    logs.Add("     • Mở khóa CONFIG_APP_MAX_FRAME_RATE = 0 và cấu hình Fullscreen 1080p");
+
+                    if (makeReadOnly)
+                    {
+                        var fi = new FileInfo(iniPath);
+                        fi.IsReadOnly = true;
+                        logs.Add("[OK] Đã đặt thuộc tính Read-Only cho fcsetup.ini để game không tự reset.");
+                    }
+
+                    // Windows GPU High Performance preference for FC
+                    string[] exes = new[] { "FC26.exe", "FC25.exe", "FC24.exe" };
+                    foreach (var baseDir in GetAllGameSearchFolders())
+                    {
+                        foreach (var exe in exes)
+                        {
+                            string p = Path.Combine(baseDir, "steamapps", "common", Path.GetFileNameWithoutExtension(exe), exe);
+                            if (File.Exists(p))
+                            {
+                                try
+                                {
+                                    Utilities.SetRegistryValue(@"HKCU\Software\Microsoft\DirectX\UserGpuPreferences", p, "GpuPreference=2;", RegistryValueKind.String);
+                                    logs.Add($"[OK] Đã gán High Performance GPU cho {exe}");
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logs.Add($"[!] Lỗi khi áp dụng cấu hình EA SPORTS FC: {ex.Message}");
+                }
+                return logs;
+            });
+        }
+
+        /// <summary>
+        /// Generates optimal fifasetup.ini for FIFA 23.
+        /// </summary>
+        public static async Task<List<string>> ApplyFifa23OptimizedConfigAsync(string configFolder, bool makeReadOnly)
+        {
+            return await Task.Run(() =>
+            {
+                var logs = new List<string>();
+                try
+                {
+                    if (!Directory.Exists(configFolder))
+                    {
+                        Directory.CreateDirectory(configFolder);
+                    }
+
+                    string iniPath = Path.Combine(configFolder, "fifasetup.ini");
+                    if (File.Exists(iniPath))
+                    {
+                        string backup = Path.Combine(configFolder, $"fifasetup_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.ini");
+                        File.Copy(iniPath, backup, true);
+                        logs.Add($"[OK] Đã sao lưu fifasetup.ini cũ sang: {Path.GetFileName(backup)}");
+
+                        var fi = new FileInfo(iniPath);
+                        if (fi.IsReadOnly) fi.IsReadOnly = false;
+                    }
+
+                    string content = @"AUDIO_MIX_MODE = 0
+CONFIG_APP_MAX_FRAME_RATE = 0
+FULLSCREEN = 1
+MSAA_LEVEL = 0
+RENDERINGQUALITY = 1
+RESOLUTIONHEIGHT = 1080
+RESOLUTIONWIDTH = 1920
+VOICECHAT = 0
+WAITFORVSYNC = 0
+WINDOWED_BORDERLESS = 0
+STRAND_BASED_HAIR = 0
+DYNAMIC_RESOLUTION = 0
+WINDOW_TITLE = ""FIFA 23""
+";
+                    File.WriteAllText(iniPath, content, Encoding.UTF8);
+                    logs.Add("[OK] Đã tạo fifasetup.ini tối ưu FIFA 23 (Tắt Strand Hair, tắt VSync, mở khóa FPS, Fullscreen).");
+
+                    if (makeReadOnly)
+                    {
+                        var fi = new FileInfo(iniPath);
+                        fi.IsReadOnly = true;
+                        logs.Add("[OK] Đã đặt thuộc tính Read-Only cho fifasetup.ini.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logs.Add($"[!] Lỗi khi áp dụng cấu hình FIFA 23: {ex.Message}");
+                }
+                return logs;
+            });
+        }
+
+        /// <summary>
+        /// Generates optimal fifasetup.ini for FIFA 19.
+        /// </summary>
+        public static async Task<List<string>> ApplyFifa19OptimizedConfigAsync(string configFolder, bool makeReadOnly)
+        {
+            return await Task.Run(() =>
+            {
+                var logs = new List<string>();
+                try
+                {
+                    if (!Directory.Exists(configFolder))
+                    {
+                        Directory.CreateDirectory(configFolder);
+                    }
+
+                    string iniPath = Path.Combine(configFolder, "fifasetup.ini");
+                    if (File.Exists(iniPath))
+                    {
+                        string backup = Path.Combine(configFolder, $"fifasetup19_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.ini");
+                        File.Copy(iniPath, backup, true);
+                        logs.Add($"[OK] Đã sao lưu fifasetup.ini cũ sang: {Path.GetFileName(backup)}");
+
+                        var fi = new FileInfo(iniPath);
+                        if (fi.IsReadOnly) fi.IsReadOnly = false;
+                    }
+
+                    string content = @"AUDIO_MIX_MODE = 0
+CONFIG_APP_MAX_FRAME_RATE = 0
+FULLSCREEN = 1
+MSAA_LEVEL = 0
+RENDERINGQUALITY = 1
+RESOLUTIONHEIGHT = 1080
+RESOLUTIONWIDTH = 1920
+VOICECHAT = 0
+WAITFORVSYNC = 0
+WINDOWED_BORDERLESS = 0
+WINDOW_TITLE = ""FIFA 19""
+";
+                    File.WriteAllText(iniPath, content, Encoding.UTF8);
+                    logs.Add("[OK] Đã tạo fifasetup.ini tối ưu FIFA 19 (Tắt VSync chống delay input, Fullscreen 1080p, tối ưu đồ họa).");
+
+                    if (makeReadOnly)
+                    {
+                        var fi = new FileInfo(iniPath);
+                        fi.IsReadOnly = true;
+                        logs.Add("[OK] Đã đặt thuộc tính Read-Only cho fifasetup.ini.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logs.Add($"[!] Lỗi khi áp dụng cấu hình FIFA 19: {ex.Message}");
+                }
+                return logs;
+            });
+        }
+
+        /// <summary>
+        /// Generates optimal configuration for eFootball (PES 2026 / 2024) and classic PES series.
+        /// Disables Unreal Engine motion blur, chromatic aberration, bloom, and optimizes streaming memory.
+        /// </summary>
+        public static async Task<List<string>> ApplyEFootballPesOptimizedConfigAsync(string configFolder, bool makeReadOnly)
+        {
+            return await Task.Run(() =>
+            {
+                var logs = new List<string>();
+                try
+                {
+                    if (!Directory.Exists(configFolder))
+                    {
+                        Directory.CreateDirectory(configFolder);
+                    }
+
+                    // 1. For Unreal Engine eFootball: Engine.ini
+                    string engineIni = Path.Combine(configFolder, "Engine.ini");
+                    if (File.Exists(engineIni) || configFolder.IndexOf("eFootball", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        if (File.Exists(engineIni))
+                        {
+                            string backup = Path.Combine(configFolder, $"Engine_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.ini");
+                            File.Copy(engineIni, backup, true);
+                            logs.Add($"[OK] Đã sao lưu Engine.ini sang: {Path.GetFileName(backup)}");
+
+                            var fi = new FileInfo(engineIni);
+                            if (fi.IsReadOnly) fi.IsReadOnly = false;
+                        }
+
+                        string ueContent = @"[SystemSettings]
+r.MotionBlurQuality=0
+r.MotionBlur.Max=0
+r.MotionBlur.Amount=0
+r.DepthOfFieldQuality=0
+r.DepthOfField.DepthBlur.Amount=0
+r.SceneColorFringeQuality=0
+r.SceneColorFringe.Max=0
+r.DefaultFeature.Bloom=0
+r.Tonemapper.Quality=0
+r.Tonemapper.GrainQuantization=0
+r.PostProcessAAQuality=2
+r.EyeAdaptationQuality=0
+r.ShadowQuality=1
+r.Streaming.PoolSize=3072
+r.Streaming.LimitPoolSizeToVRAM=1
+r.OneFrameThreadLag=1
+r.MaxAnisotropy=4
+";
+                        File.WriteAllText(engineIni, ueContent, Encoding.UTF8);
+                        logs.Add("[OK] Đã tạo Engine.ini eFootball (Tắt Motion Blur, Depth of Field, Bloom, khử mờ viền hạt, tối ưu VRAM streaming).");
+
+                        if (makeReadOnly)
+                        {
+                            var fi = new FileInfo(engineIni);
+                            fi.IsReadOnly = true;
+                            logs.Add("[OK] Đã đặt thuộc tính Read-Only cho Engine.ini.");
+                        }
+                    }
+
+                    // 2. For Classic PES (settings.ini)
+                    string settingsIni = Path.Combine(configFolder, "settings.ini");
+                    if (File.Exists(settingsIni) || configFolder.IndexOf("KONAMI", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        if (File.Exists(settingsIni))
+                        {
+                            string bakSettings = Path.Combine(configFolder, $"settings_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.ini");
+                            File.Copy(settingsIni, bakSettings, true);
+                            logs.Add($"[OK] Đã sao lưu settings.ini sang: {Path.GetFileName(bakSettings)}");
+
+                            var fi = new FileInfo(settingsIni);
+                            if (fi.IsReadOnly) fi.IsReadOnly = false;
+                        }
+
+                        string pesContent = @"[Settings]
+Quality=1
+FullScreen=1
+VSync=0
+";
+                        File.WriteAllText(settingsIni, pesContent, Encoding.UTF8);
+                        logs.Add("[OK] Đã ghi file settings.ini (Chất lượng đồ họa tối ưu, Fullscreen, Tắt VSync).");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logs.Add($"[!] Lỗi khi áp dụng cấu hình eFootball / PES: {ex.Message}");
                 }
                 return logs;
             });

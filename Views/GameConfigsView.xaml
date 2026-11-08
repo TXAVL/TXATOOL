@@ -115,11 +115,15 @@
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock Text="Chọn Tựa Game" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
-                            <TextBlock Text="Delta Force, Counter-Strike 2, PUBG, Battlefield" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                            <TextBlock Text="EA FC, FIFA, PES, Delta Force, CS2, PUBG, Battlefield" FontSize="12.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <ComboBox x:Name="GameSelectorCombo" Grid.Column="2" Height="36" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Center" SelectionChanged="GameSelectorCombo_SelectionChanged">
-                            <ComboBoxItem Content="Delta Force (Hawks Ops)" IsSelected="True"/>
+                            <ComboBoxItem Content="EA SPORTS FC 26 / 25 / 24" IsSelected="True"/>
+                            <ComboBoxItem Content="FIFA 23"/>
+                            <ComboBoxItem Content="FIFA 19 (FC 19)"/>
+                            <ComboBoxItem Content="eFootball / PES 26 (PES 2021)"/>
+                            <ComboBoxItem Content="Delta Force (Hawks Ops)"/>
                             <ComboBoxItem Content="Counter-Strike 2 (CS2)"/>
                             <ComboBoxItem Content="PUBG: BATTLEGROUNDS"/>
                             <ComboBoxItem Content="Battlefield 2042"/>

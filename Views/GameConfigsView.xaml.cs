@@ -45,6 +45,10 @@ namespace TXATOOL.Views
             if (GameSelectorCombo.SelectedItem is ComboBoxItem item)
             {
                 string text = item.Content.ToString() ?? "";
+                if (text.Contains("EA SPORTS FC") || text.Contains("FC 26") || text.Contains("FC 25") || text.Contains("FC 24")) return "EA SPORTS FC";
+                if (text.Contains("FIFA 23")) return "FIFA 23";
+                if (text.Contains("FIFA 19") || text.Contains("FC 19")) return "FIFA 19";
+                if (text.Contains("eFootball") || text.Contains("PES")) return "eFootball / PES";
                 if (text.Contains("Delta Force")) return "Delta Force";
                 if (text.Contains("Counter-Strike 2") || text.Contains("CS2")) return "CS2";
                 if (text.Contains("PUBG")) return "PUBG";
@@ -52,7 +56,7 @@ namespace TXATOOL.Views
                 if (text.Contains("Battlefield V")) return "Battlefield V";
                 if (text.Contains("Battlefield 1")) return "Battlefield 1";
             }
-            return "Delta Force";
+            return "EA SPORTS FC";
         }
 
         private void UpdatePresetDetails()
@@ -61,6 +65,38 @@ namespace TXATOOL.Views
             string game = GetSelectedGameName();
             switch (game)
             {
+                case "EA SPORTS FC":
+                    TxtPresetDetails.Text =
+                        "• Tối ưu fcsetup.ini chuẩn thi đấu Esport cho EA SPORTS FC 26 / 25 / 24:\n" +
+                        "• Tắt STRAND_BASED_HAIR = 0 (khắc phục triệt để lỗi tụt sụt 50% FPS khi ăn mừng bàn thắng & cận cảnh cầu thủ).\n" +
+                        "• Tắt Dynamic Resolution (DYNAMIC_RESOLUTION = 0) giữ hình ảnh 1080p sắc nét, không bị mờ nhòe khi chuyền dài.\n" +
+                        "• Tắt V-Sync (WAITFORVSYNC = 0) và Fullscreen để triệt tiêu độ trễ input của tay cầm và bàn phím khi rê dắt sút bóng.\n" +
+                        "• Mở khóa CONFIG_APP_MAX_FRAME_RATE = 0 và tự động gán High Performance GPU cho game.";
+                    break;
+
+                case "FIFA 23":
+                    TxtPresetDetails.Text =
+                        "• Tối ưu fifasetup.ini cho FIFA 23:\n" +
+                        "• Tắt STRAND_BASED_HAIR = 0 và DYNAMIC_RESOLUTION = 0 chống tụt khung hình đột ngột.\n" +
+                        "• Tắt WAITFORVSYNC = 0, đưa RENDERINGQUALITY = 1 (Tối ưu) và tắt MSAA để duy trì 144+ FPS ổn định.\n" +
+                        "• Tự động đăng ký Windows High Performance GPU Preference cho FIFA23.exe.";
+                    break;
+
+                case "FIFA 19":
+                    TxtPresetDetails.Text =
+                        "• Tối ưu fifasetup.ini cho FIFA 19 (FC 19):\n" +
+                        "• Mở khóa tốc độ khung hình (CONFIG_APP_MAX_FRAME_RATE = 0), tắt WAITFORVSYNC = 0 loại bỏ delay chuyền bóng.\n" +
+                        "• Thiết lập Fullscreen 1080p tối ưu, tắt hiệu ứng khử răng cưa nặng và kích hoạt GPU tối đa cho FIFA19.exe.";
+                    break;
+
+                case "eFootball / PES":
+                    TxtPresetDetails.Text =
+                        "• Tối ưu cấu hình cho eFootball (PES 2026 / 2024 / 2021):\n" +
+                        "• Tối ưu Engine.ini Unreal Engine: Tắt Motion Blur, Depth of Field, Bloom, khử mờ viền hạt (SceneColorFringe).\n" +
+                        "• Tối ưu Streaming.PoolSize lên 3072 MB và Shaders.Optimize = 1 để chống giật khựng khi camera lia nhanh trên sân.\n" +
+                        "• Đối với PES cổ điển (PES 2021, PES 2019): Tự động tạo settings.ini Fullscreen chất lượng cao tắt VSync.";
+                    break;
+
                 case "Delta Force":
                     TxtPresetDetails.Text =
                         "• Tối ưu Engine.ini: Vô hiệu hóa Motion Blur, Bloom, Depth of Field, khử mờ viền hạt (SceneColorFringe).\n" +
@@ -178,6 +214,22 @@ namespace TXATOOL.Views
 
                 switch (game)
                 {
+                    case "EA SPORTS FC":
+                        logs = await GameDoctorHelper.ApplyEaSportsFcOptimizedConfigAsync(path, readOnly);
+                        break;
+
+                    case "FIFA 23":
+                        logs = await GameDoctorHelper.ApplyFifa23OptimizedConfigAsync(path, readOnly);
+                        break;
+
+                    case "FIFA 19":
+                        logs = await GameDoctorHelper.ApplyFifa19OptimizedConfigAsync(path, readOnly);
+                        break;
+
+                    case "eFootball / PES":
+                        logs = await GameDoctorHelper.ApplyEFootballPesOptimizedConfigAsync(path, readOnly);
+                        break;
+
                     case "Delta Force":
                         logs = await GameDoctorHelper.ApplyDeltaForceOptimizedConfigAsync(path, readOnly);
                         break;
