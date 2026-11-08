@@ -118,7 +118,7 @@ namespace TXATOOL.Views
                 var assemblyVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string verStr = (assemblyVer != null && assemblyVer.Major > 0)
                     ? $"v{assemblyVer.Major}.{assemblyVer.Minor}.{assemblyVer.Build}"
-                    : "v1.2.0";
+                    : "v1.2.1";
 
                 var infoLabel = LocalizationService.Get("lblVersionInfo") ?? "THÔNG TIN PHIÊN BẢN";
                 lblCurrentVersion.Text = $"{infoLabel} {verStr}";
@@ -143,7 +143,7 @@ namespace TXATOOL.Views
             }
             catch
             {
-                lblCurrentVersion.Text = "THÔNG TIN PHIÊN BẢN v1.2.0";
+                lblCurrentVersion.Text = "THÔNG TIN PHIÊN BẢN v1.2.1";
             }
         }
 

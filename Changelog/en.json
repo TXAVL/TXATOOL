@@ -1,4 +1,16 @@
 {
+    "v1.2.1": {
+        "title": "TXATOOL - WIN - Changelog v1.2.1",
+        "summary_title": "OFFICIAL UPDATE v1.2.1 (HOTFIX & STABILITY)",
+        "content": [
+            "Completely resolved blank screen issue when opening 'Fix Game Errors & Turbo' or 'Game Configs FPS' views (fixed NullReferenceException during InitializeComponent).",
+            "Fixed duplicate desktop shortcuts created during updater/installer overwrite.",
+            "Streamlined seamless navigation directly from Dashboard to Gaming Optimization tools.",
+            "Synchronized version v1.2.1 across entire app ecosystem, Settings, and auto-update channels."
+        ],
+        "version_label": "LATEST RELEASE",
+        "version_value": "v1.2.1"
+    },
     "v1.2.0": {
         "title": "TXATOOL - WIN - Changelog v1.2.0",
         "summary_title": "OFFICIAL UPDATE v1.2.0 (HYPER GAMING & TURBO BOOST)",
@@ -11,7 +23,7 @@
             "Integrated automatic checking and installation for Visual C++ All-in-One Redistributables and DirectX Runtimes.",
             "Enhanced Fluent Design responsiveness and performance."
         ],
-        "version_label": "LATEST RELEASE",
+        "version_label": "RELEASED VERSION",
         "version_value": "v1.2.0"
     },
     "v1.1.0": {

@@ -107,8 +107,8 @@
             <!-- About TXATOOL -->
             <TextBlock x:Name="lblAboutTXATOOL" Text="About TXATOOL - WIN" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,15"/>
             <StackPanel Margin="0,0,0,30">
-                <TextBlock x:Name="lblVersion" Text="TXATOOL - WIN version: v1.2.0 (Official Release)" FontWeight="Bold" FontSize="15" Margin="0,0,0,2"/>
-                <TextBlock x:Name="lblFirstBuild" Text="Build: 1.2.0 (Build 2026.11.08)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                <TextBlock x:Name="lblVersion" Text="TXATOOL - WIN version: v1.2.1 (Official Release)" FontWeight="Bold" FontSize="15" Margin="0,0,0,2"/>
+                <TextBlock x:Name="lblFirstBuild" Text="Build: 1.2.1 (Build 2026.11.08)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,2"/>
                 <TextBlock x:Name="lblReleaseDate" Text="Date: 08/11/2026" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,15"/>
 
                 <TextBlock x:Name="lblLinks" Text="Links:" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>

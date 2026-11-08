@@ -1,15 +1,12 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "release_date": "08-11-2026",
-  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.0/TXATOOL_Setup_v1.2.0.exe",
+  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.1/TXATOOL_Setup_v1.2.1.exe",
   "content": [
-    "Activated official Game Doctor & Gaming Optimization suite inspired by HyperLis.",
-    "Added Turbo Boost & Pro Tools Dock on Dashboard: Instant RAM working sets & standby list purging, DNS/Temp flush, and quick launch for TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
-    "Activated Fix Game Errors view: Fix FPS stutters (MMCSS Priority), GPU driver crashes, and clean DirectX/NVIDIA/AMD shader caches.",
-    "Integrated live Secure Boot & TPM 2.0 diagnostics, with guided repairs for Valorant VAN 9003 and anti-cheat errors.",
-    "Activated Game Configs & Presets: Custom optimized profiles for Delta Force (Hawks Ops), CS2, PUBG, and Battlefield with 1-click auto-detect, backup, and restore.",
-    "Integrated automatic checking and installation for Visual C++ All-in-One Redistributables and DirectX Runtimes.",
-    "Enhanced Fluent Design responsiveness and performance."
+    "Completely resolved blank screen issue when opening 'Fix Game Errors & Turbo' or 'Game Configs FPS' views (fixed NullReferenceException during InitializeComponent).",
+    "Fixed duplicate desktop shortcuts created during updater/installer overwrite.",
+    "Streamlined seamless navigation directly from Dashboard to Gaming Optimization tools.",
+    "Synchronized version v1.2.1 across entire app ecosystem, Settings, and auto-update channels."
   ],
   "size": "140 MB",
   "is_critical": false

@@ -1,4 +1,16 @@
 {
+    "v1.2.1": {
+        "title": "TXATOOL - WIN - Nhật ký thay đổi v1.2.1",
+        "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.2.1 (HOTFIX & STABILITY)",
+        "content": [
+            "Khắc phục triệt để lỗi màn hình trắng khi mở mục 'Tăng tốc & Sửa lỗi Game' hoặc 'Cấu hình Game FPS' từ Sidebar và Dashboard (fix NullReferenceException during InitializeComponent).",
+            "Sửa lỗi trùng lặp shortcut kép trên Desktop sau khi cập nhật phiên bản mới.",
+            "Tối ưu hóa luồng điều hướng mượt mà và trực quan từ trang Tổng quan đến các công cụ Game Doctor.",
+            "Đồng bộ phiên bản v1.2.1 trên toàn bộ hệ thống, Cài đặt và hệ sinh thái cập nhật tự động."
+        ],
+        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_value": "v1.2.1"
+    },
     "v1.2.0": {
         "title": "TXATOOL - WIN - Nhật ký thay đổi v1.2.0",
         "summary_title": "TỔNG QUAN PHIÊN BẢN CẬP NHẬT v1.2.0 (HYPER GAMING & TURBO BOOST)",
@@ -11,7 +23,7 @@
             "Kiểm tra và hỗ trợ tự động cài đặt thư viện Visual C++ All-in-One Redistributable và DirectX Runtime.",
             "Cải thiện độ mượt mà và tối ưu hóa toàn diện giao diện Fluent Design."
         ],
-        "version_label": "PHIÊN BẢN MỚI NHẤT",
+        "version_label": "PHIÊN BẢN PHÁT HÀNH",
         "version_value": "v1.2.0"
     },
     "v1.1.0": {

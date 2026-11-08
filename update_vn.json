@@ -1,15 +1,12 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "release_date": "08-11-2026",
-  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.0/TXATOOL_Setup_v1.2.0.exe",
+  "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.1/TXATOOL_Setup_v1.2.1.exe",
   "content": [
-    "Kích hoạt bộ công cụ Game Doctor & Tối ưu hóa Game chuyên nghiệp lấy cảm hứng từ HyperLis.",
-    "Bổ sung thanh Turbo Boost & Pro Tools Dock ngay trên Dashboard: Giải phóng RAM Working Sets và Standby List tức thì, flush DNS/Temp và mở nhanh TimerResolution (0.5ms), MSI Util v3, NV Inspector, RAMMap.",
-    "Kích hoạt tính năng Sửa lỗi Game: Sửa giật lag FPS (MMCSS Priority), sửa crash GPU Driver, xóa sạch toàn bộ DirectX & NVIDIA/AMD Shader Cache.",
-    "Tích hợp tính năng chẩn đoán Secure Boot & TPM 2.0 thời gian thực, hướng dẫn sửa lỗi Anti-Cheat và VAN 9003 cho Valorant/Riot Games.",
-    "Kích hoạt bộ cấu hình game e-Sports tối ưu: Hỗ trợ Delta Force (Hawks Ops), Counter-Strike 2, PUBG và Battlefield series với tính năng tự động nhận diện, sao lưu và khôi phục 1-click.",
-    "Kiểm tra và hỗ trợ tự động cài đặt thư viện Visual C++ All-in-One Redistributable và DirectX Runtime.",
-    "Cải thiện độ mượt mà và tối ưu hóa toàn diện giao diện Fluent Design."
+    "Khắc phục triệt để lỗi màn hình trắng khi mở mục 'Tăng tốc & Sửa lỗi Game' hoặc 'Cấu hình Game FPS' từ Sidebar và Dashboard (fix NullReferenceException during InitializeComponent).",
+    "Sửa lỗi trùng lặp shortcut kép trên Desktop sau khi cập nhật phiên bản mới.",
+    "Tối ưu hóa luồng điều hướng mượt mà và trực quan từ trang Tổng quan đến các công cụ Game Doctor.",
+    "Đồng bộ phiên bản v1.2.1 trên toàn bộ hệ thống, Cài đặt và hệ sinh thái cập nhật tự động."
   ],
   "size": "140 MB",
   "is_critical": false
