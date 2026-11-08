@@ -115,20 +115,30 @@ namespace TXATOOL.Views
             }
         }
 
+        private MainWindow? GetMainWindow()
+        {
+            return (Window.GetWindow(this) as MainWindow) ?? (System.Windows.Application.Current.MainWindow as MainWindow);
+        }
+
         private async void BtnApplyTurbo_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = GetMainWindow();
             btnApplyTurbo.IsEnabled = false;
             AppendLog("=== BẮT ĐẦU KÍCH HOẠT GAME TURBO & LOW LATENCY ===");
 
             try
             {
+                mainWindow?.ShowLoading("Đang kích hoạt Game Turbo & Low Latency...", 1, 30);
                 var logs = await GameDoctorHelper.ApplyGameTurboLatencyTweaksAsync();
+                mainWindow?.UpdateLoadingProgress(1, 85, "Đang hoàn tất thiết lập hệ thống...");
                 foreach (var log in logs)
                 {
                     AppendLog(log);
                 }
 
+                mainWindow?.UpdateLoadingProgress(1, 100, "Hoàn tất!");
                 AppendLog("=== HOÀN TẤT KÍCH HOẠT GAME TURBO ===");
+                mainWindow?.HideLoading();
                 CustomMessageBoxWindow.Show(
                     "Đã kích hoạt thành công chế độ Game Turbo!\n\n• MMCSS Priority 100% Gaming\n• Network Throttling Disabled\n• TCP Gaming Low-Latency Enabled\n• Raw Mouse Input 1:1",
                     "Game Turbo");
@@ -136,27 +146,34 @@ namespace TXATOOL.Views
             catch (Exception ex)
             {
                 AppendLog($"[!] Lỗi khi kích hoạt Game Turbo: {ex.Message}");
+                mainWindow?.HideLoading();
                 CustomMessageBoxWindow.Show($"Lỗi: {ex.Message}", "Lỗi");
             }
             finally
             {
+                mainWindow?.HideLoading();
                 btnApplyTurbo.IsEnabled = true;
             }
         }
 
         private async void BtnClearShaders_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = GetMainWindow();
             btnClearShaders.IsEnabled = false;
             AppendLog("=== ĐANG XÓA TOÀN BỘ SHADER CACHE (DIRECTX / NVIDIA / AMD) ===");
 
             try
             {
+                mainWindow?.ShowLoading("Đang quét và dọn dẹp Shader Cache...", 1, 30);
                 var result = await GameDoctorHelper.ClearAllShaderCachesAsync();
+                mainWindow?.UpdateLoadingProgress(1, 90, "Đang hoàn tất giải phóng bộ nhớ...");
                 foreach (var log in result.logs)
                 {
                     AppendLog(log);
                 }
 
+                mainWindow?.UpdateLoadingProgress(1, 100, "Dọn dẹp hoàn tất!");
+                mainWindow?.HideLoading();
                 double mb = result.bytesFreed / (1024.0 * 1024.0);
                 CustomMessageBoxWindow.Show(
                     $"Đã dọn sạch {result.filesDeleted} file Shader Cache (~{mb:F1} MB).\n\nShader mới sẽ được biên dịch lại sạch sẽ khi bạn mở game, giúp triệt tiêu hiện tượng giật khựng khung hình.",
@@ -165,32 +182,40 @@ namespace TXATOOL.Views
             catch (Exception ex)
             {
                 AppendLog($"[!] Lỗi xóa Shader Cache: {ex.Message}");
+                mainWindow?.HideLoading();
             }
             finally
             {
+                mainWindow?.HideLoading();
                 btnClearShaders.IsEnabled = true;
             }
         }
 
         private async void BtnRestartGpu_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = GetMainWindow();
             btnRestartGpu.IsEnabled = false;
             AppendLog("=== ĐANG RESET DỊCH VỤ HIỂN THỊ DWM & DRIVER VGA ===");
 
             try
             {
+                mainWindow?.ShowLoading("Đang reset Driver màn hình & dịch vụ DWM...", 1, 50);
                 var logs = await GameDoctorHelper.ResetGpuDriverPipelineAsync();
                 foreach (var log in logs)
                 {
                     AppendLog(log);
                 }
+                mainWindow?.UpdateLoadingProgress(1, 100, "Đã khởi động lại dịch vụ hiển thị!");
+                mainWindow?.HideLoading();
             }
             catch (Exception ex)
             {
                 AppendLog($"[!] Lỗi: {ex.Message}");
+                mainWindow?.HideLoading();
             }
             finally
             {
+                mainWindow?.HideLoading();
                 btnRestartGpu.IsEnabled = true;
             }
         }
@@ -217,30 +242,43 @@ namespace TXATOOL.Views
 
         private async void BtnInstallRuntimes_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = GetMainWindow();
             btnInstallRuntimes.IsEnabled = false;
-            AppendLog("=== ĐANG TIẾN HÀNH CÀI ĐẶT VISUAL C++ RUNTIME & DIRECTX ===");
+            AppendLog("=== ĐANG TIẾN HÀNH CÀI ĐẶT & TỐI ƯU VISUAL C++ RUNTIME & DIRECTX ===");
 
             try
             {
-                AppendLog("Đang thực thi lệnh cài đặt Microsoft Visual C++ All-in-One qua winget...");
-                string cmd = "winget install --id Microsoft.VCRedist.2015+.x64 -e --silent --accept-source-agreements --accept-package-agreements";
-                var res = await Utilities.RunCommandAsync(cmd, true);
-                AppendLog($"Kết quả cài đặt VC++ x64: Mã thoát {res.ExitCode}");
+                mainWindow?.ShowLoading("Đang chuẩn bị kiểm tra Runtimes...", 1, 5);
 
-                string cmdX86 = "winget install --id Microsoft.VCRedist.2015+.x86 -e --silent --accept-source-agreements --accept-package-agreements";
-                var resX86 = await Utilities.RunCommandAsync(cmdX86, true);
-                AppendLog($"Kết quả cài đặt VC++ x86: Mã thoát {resX86.ExitCode}");
+                var logs = await GameDoctorHelper.InstallOrUpdateGameRuntimesAsync(
+                    (pct, msg) =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            mainWindow?.UpdateLoadingProgress(1, pct, msg);
+                        });
+                    },
+                    (logMsg) =>
+                    {
+                        AppendLog(logMsg);
+                    });
 
                 await RefreshDiagnosticsAsync();
-                CustomMessageBoxWindow.Show("Đã tiến hành cài đặt/cập nhật Visual C++ Runtimes mới nhất!", "Runtimes");
+                mainWindow?.HideLoading();
+
+                CustomMessageBoxWindow.Show(
+                    "Đã hoàn tất kiểm tra & tối ưu Visual C++ Runtimes và DirectX!\n\nHệ thống đã có đầy đủ thư viện đồ họa & runtime cần thiết cho các tựa game hiện đại.",
+                    "Runtimes & DirectX");
             }
             catch (Exception ex)
             {
                 AppendLog($"[!] Lỗi cài đặt runtimes: {ex.Message}");
+                mainWindow?.HideLoading();
                 CustomMessageBoxWindow.Show($"Lỗi: {ex.Message}", "Lỗi");
             }
             finally
             {
+                mainWindow?.HideLoading();
                 btnInstallRuntimes.IsEnabled = true;
             }
         }

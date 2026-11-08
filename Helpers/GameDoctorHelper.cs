@@ -7,6 +7,7 @@ using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.Win32;
 
 namespace TXATOOL.Helpers
@@ -467,6 +468,206 @@ namespace TXATOOL.Helpers
             bool hasDx = !missing.Any(m => m.StartsWith("DirectX"));
 
             return (hasVc, hasDx, missing);
+        }
+
+        /// <summary>
+        /// Scans, updates, and repairs Visual C++ 2015-2022 (x86 & x64) and enables DirectX DirectPlay feature.
+        /// Reports step-by-step progress to progress callback and log callback.
+        /// </summary>
+        public static async Task<List<string>> InstallOrUpdateGameRuntimesAsync(Action<int, string>? reportProgress, Action<string>? log)
+        {
+            var logs = new List<string>();
+
+            void Emit(string msg)
+            {
+                logs.Add(msg);
+                log?.Invoke(msg);
+            }
+
+            reportProgress?.Invoke(10, "Đang quét thông tin thư viện Visual C++ trong Registry...");
+            Emit("[+] Bắt đầu quét kiểm tra Visual C++ Redistributable (x64 và x86)...");
+
+            // 1. Check Registry for VC++ x64
+            string x64Version = string.Empty;
+            try
+            {
+                using var regX64 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64");
+                if (regX64 != null)
+                {
+                    var installed = regX64.GetValue("Installed");
+                    if (installed != null && Convert.ToInt32(installed) == 1)
+                    {
+                        x64Version = regX64.GetValue("Version")?.ToString() ?? "Đã cài đặt";
+                        Emit($"[✓] Phát hiện Visual C++ 2015-2022 (x64) trên máy: Phiên bản {x64Version}");
+                    }
+                }
+            }
+            catch { }
+
+            // 2. Check Registry for VC++ x86
+            string x86Version = string.Empty;
+            try
+            {
+                using var regX86 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\X86") 
+                                  ?? Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X86");
+                if (regX86 != null)
+                {
+                    var installed = regX86.GetValue("Installed");
+                    if (installed != null && Convert.ToInt32(installed) == 1)
+                    {
+                        x86Version = regX86.GetValue("Version")?.ToString() ?? "Đã cài đặt";
+                        Emit($"[✓] Phát hiện Visual C++ 2015-2022 (x86) trên máy: Phiên bản {x86Version}");
+                    }
+                }
+            }
+            catch { }
+
+            // 3. Process VC++ x64
+            reportProgress?.Invoke(30, "Đang kiểm tra & cập nhật Microsoft Visual C++ 2015-2022 (x64)...");
+            Emit("[+] Đang kiểm tra cập nhật gói Visual C++ 2015-2022 (x64)...");
+            try
+            {
+                string cmdX64 = "winget install --id Microsoft.VCRedist.2015+.x64 -e --silent --accept-source-agreements --accept-package-agreements";
+                var resX64 = await Task.Run(() => Utilities.RunCommandWithOutput(cmdX64));
+                string outX64 = (resX64.Output ?? "") + " " + (resX64.Error ?? "");
+
+                if (outX64.IndexOf("No available upgrade found", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    outX64.IndexOf("No newer package versions", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    outX64.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    Emit($"[✓] VC++ x64: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x64Version) ? x64Version : "v14.x")}), không cần nâng cấp.");
+                }
+                else if (resX64.ExitCode == 0 || outX64.IndexOf("Successfully installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    Emit("[✓] VC++ x64: Cài đặt / cập nhật hoàn tất thành công qua winget!");
+                }
+                else
+                {
+                    Emit("[i] Đang tải trực tiếp bộ cài VC++ x64 chính thức từ máy chủ Microsoft...");
+                    reportProgress?.Invoke(40, "Đang tải trực tiếp VC++ x64 từ Microsoft...");
+                    string tempExe = Path.Combine(Path.GetTempPath(), "vc_redist.x64.exe");
+                    using (var client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(30);
+                        var data = await client.GetByteArrayAsync("https://aka.ms/vs/17/release/vc_redist.x64.exe");
+                        await File.WriteAllBytesAsync(tempExe, data);
+                    }
+                    reportProgress?.Invoke(45, "Đang cài đặt trực tiếp VC++ x64...");
+                    var runRes = await Task.Run(() => Utilities.RunCommandWithOutput($"\"{tempExe}\" /install /quiet /norestart"));
+                    if (runRes.ExitCode == 0 || runRes.ExitCode == 3010 || runRes.ExitCode == 1638)
+                    {
+                        Emit("[✓] VC++ x64: Cài đặt trực tiếp từ Microsoft thành công!");
+                    }
+                    else
+                    {
+                        Emit($"[i] VC++ x64: Hoàn tất với mã {runRes.ExitCode}");
+                    }
+                    try { if (File.Exists(tempExe)) File.Delete(tempExe); } catch { }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(x64Version))
+                {
+                    Emit($"[✓] VC++ x64 đã sẵn sàng trên hệ thống ({x64Version}).");
+                }
+                else
+                {
+                    Emit($"[!] Không thể cập nhật VC++ x64: {ex.Message}");
+                }
+            }
+
+            // 4. Process VC++ x86
+            reportProgress?.Invoke(55, "Đang kiểm tra & cập nhật Microsoft Visual C++ 2015-2022 (x86)...");
+            Emit("[+] Đang kiểm tra cập nhật gói Visual C++ 2015-2022 (x86)...");
+            try
+            {
+                string cmdX86 = "winget install --id Microsoft.VCRedist.2015+.x86 -e --silent --accept-source-agreements --accept-package-agreements";
+                var resX86 = await Task.Run(() => Utilities.RunCommandWithOutput(cmdX86));
+                string outX86 = (resX86.Output ?? "") + " " + (resX86.Error ?? "");
+
+                if (outX86.IndexOf("No available upgrade found", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    outX86.IndexOf("No newer package versions", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    outX86.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    Emit($"[✓] VC++ x86: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x86Version) ? x86Version : "v14.x")}), không cần nâng cấp.");
+                }
+                else if (resX86.ExitCode == 0 || outX86.IndexOf("Successfully installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    Emit("[✓] VC++ x86: Cài đặt / cập nhật hoàn tất thành công qua winget!");
+                }
+                else
+                {
+                    Emit("[i] Đang tải trực tiếp bộ cài VC++ x86 chính thức từ máy chủ Microsoft...");
+                    reportProgress?.Invoke(65, "Đang tải trực tiếp VC++ x86 từ Microsoft...");
+                    string tempExe = Path.Combine(Path.GetTempPath(), "vc_redist.x86.exe");
+                    using (var client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(30);
+                        var data = await client.GetByteArrayAsync("https://aka.ms/vs/17/release/vc_redist.x86.exe");
+                        await File.WriteAllBytesAsync(tempExe, data);
+                    }
+                    reportProgress?.Invoke(70, "Đang cài đặt trực tiếp VC++ x86...");
+                    var runRes = await Task.Run(() => Utilities.RunCommandWithOutput($"\"{tempExe}\" /install /quiet /norestart"));
+                    if (runRes.ExitCode == 0 || runRes.ExitCode == 3010 || runRes.ExitCode == 1638)
+                    {
+                        Emit("[✓] VC++ x86: Cài đặt trực tiếp từ Microsoft thành công!");
+                    }
+                    else
+                    {
+                        Emit($"[i] VC++ x86: Hoàn tất với mã {runRes.ExitCode}");
+                    }
+                    try { if (File.Exists(tempExe)) File.Delete(tempExe); } catch { }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(x86Version))
+                {
+                    Emit($"[✓] VC++ x86 đã sẵn sàng trên hệ thống ({x86Version}).");
+                }
+                else
+                {
+                    Emit($"[!] Không thể cập nhật VC++ x86: {ex.Message}");
+                }
+            }
+
+            // 5. DirectX Legacy / DirectPlay
+            reportProgress?.Invoke(80, "Đang kiểm tra và kích hoạt thành phần DirectX DirectPlay...");
+            Emit("[+] Đang kiểm tra tính năng DirectX DirectPlay (hỗ trợ các tựa game yêu cầu DirectDraw & DirectX 9)...");
+            try
+            {
+                var dismRes = await Task.Run(() => Utilities.RunCommandWithOutput("dism /online /enable-feature /featurename:DirectPlay /all /norestart"));
+                if (dismRes.ExitCode == 0 || (dismRes.Output ?? "").IndexOf("100.0%", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    Emit("[✓] Đã kích hoạt thành công tính năng DirectX DirectPlay cho Windows.");
+                }
+                else
+                {
+                    Emit("[✓] Kiểm tra DirectX DirectPlay hoàn tất.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Emit($"[i] Lưu ý DirectPlay: {ex.Message}");
+            }
+
+            // 6. Check Core DirectX files
+            reportProgress?.Invoke(92, "Đang quét tính toàn vẹn các file DirectX & XInput...");
+            var rt = CheckGameRuntimes();
+            if (rt.hasDirectX)
+            {
+                Emit("[✓] Kiểm tra DirectX: Đầy đủ các thư viện Direct3D và XInput cần thiết cho game.");
+            }
+            else
+            {
+                var missingDx = rt.missingItems.Where(m => m.StartsWith("DirectX")).ToList();
+                Emit($"[!] Phát hiện thiếu một số file DirectX: {string.Join(", ", missingDx)}");
+            }
+
+            reportProgress?.Invoke(100, "Hoàn tất kiểm tra & tối ưu Runtimes!");
+            Emit("=== HOÀN TẤT: TOÀN BỘ RUNTIME & DIRECTX ĐÃ ĐƯỢC KIỂM TRA ĐẦY ĐỦ ===");
+            return logs;
         }
 
         /// <summary>

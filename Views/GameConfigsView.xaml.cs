@@ -136,6 +136,11 @@ namespace TXATOOL.Views
             }
         }
 
+        private MainWindow? GetMainWindow()
+        {
+            return (Window.GetWindow(this) as MainWindow) ?? (System.Windows.Application.Current.MainWindow as MainWindow);
+        }
+
         private async void BtnApplyConfig_Click(object sender, RoutedEventArgs e)
         {
             string path = GameLocationTextBox.Text.Trim();
@@ -147,12 +152,14 @@ namespace TXATOOL.Views
 
             string game = GetSelectedGameName();
             bool readOnly = ChkReadOnly.IsChecked == true;
+            var mainWindow = GetMainWindow();
 
             btnApplyConfig.IsEnabled = false;
             AppendLog($"=== BẮT ĐẦU ÁP DỤNG CẤU HÌNH TỐI ƯU CHO {game.ToUpper()} ===");
 
             try
             {
+                mainWindow?.ShowLoading($"Đang áp dụng cấu hình tối ưu cho {game}...", 1, 40);
                 List<string> logs = new List<string>();
 
                 switch (game)
@@ -176,21 +183,26 @@ namespace TXATOOL.Views
                         break;
                 }
 
+                mainWindow?.UpdateLoadingProgress(1, 90, "Đang hoàn tất lưu cấu hình...");
                 foreach (var log in logs)
                 {
                     AppendLog(log);
                 }
 
+                mainWindow?.UpdateLoadingProgress(1, 100, "Hoàn tất!");
                 AppendLog("=== ÁP DỤNG CẤU HÌNH HOÀN TẤT ===");
+                mainWindow?.HideLoading();
                 CustomMessageBoxWindow.Show($"Đã áp dụng thành công cấu hình tối ưu cho {game}!", "Thành công");
             }
             catch (Exception ex)
             {
                 AppendLog($"[!] Lỗi áp dụng cấu hình: {ex.Message}");
+                mainWindow?.HideLoading();
                 CustomMessageBoxWindow.Show($"Lỗi: {ex.Message}", "Lỗi");
             }
             finally
             {
+                mainWindow?.HideLoading();
                 btnApplyConfig.IsEnabled = true;
             }
         }
