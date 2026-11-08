@@ -1710,23 +1710,20 @@ namespace TXATOOL.Views
                             { "v1.0.0", "2026-11-05" }
                         };
 
-                        var brushMap = new SolidColorBrush[]
-                        {
-                            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981")),
-                            new SolidColorBrush((Color)System.Windows.Application.Current.FindResource("ActionColor")),
-                            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F59E0B")),
-                        };
+                        // Rút gọn chỉ hiển thị đúng phiên bản hiện tại trên thanh sidebar Dashboard (đã có nút View All để xem tất cả)
+                        var asmVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                        string currentVerStr = asmVersion != null ? $"v{asmVersion.Major}.{asmVersion.Minor}.{asmVersion.Build}" : "v1.3.0";
 
-                        int count = 0;
-                        foreach (var key in sortedKeys)
-                        {
-                            if (count >= 3) break;
-                            var data = allVersions[key];
+                        string? targetKey = sortedKeys.FirstOrDefault(k => k.Equals(currentVerStr, StringComparison.OrdinalIgnoreCase))
+                                         ?? sortedKeys.FirstOrDefault(k => k.StartsWith(currentVerStr, StringComparison.OrdinalIgnoreCase))
+                                         ?? sortedKeys.FirstOrDefault();
 
-                            string dateStr = "2026-10-20";
+                        if (!string.IsNullOrEmpty(targetKey) && allVersions.TryGetValue(targetKey, out var data))
+                        {
+                            string dateStr = "2026-11-08";
                             foreach (var kvp in dateMap)
                             {
-                                if (key.Contains(kvp.Key))
+                                if (targetKey.Contains(kvp.Key, StringComparison.OrdinalIgnoreCase))
                                 {
                                     dateStr = kvp.Value;
                                     break;
@@ -1734,21 +1731,19 @@ namespace TXATOOL.Views
                             }
 
                             var fullContent = data.content ?? new System.Collections.Generic.List<string>();
-                            var displayContent = fullContent.Take(5).ToList();
 
                             var displayItem = new ChangelogDisplayItem
                             {
                                 title = data.title,
                                 summary_title = data.summary_title,
-                                content = displayContent,
+                                content = fullContent,
                                 version_label = data.version_label,
                                 version_value = data.version_value,
                                 date = dateStr,
-                                DotBrush = brushMap[count % brushMap.Length]
+                                DotBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981"))
                             };
 
                             ChangelogItems.Add(displayItem);
-                            count++;
                         }
                     }
                 }
@@ -1976,7 +1971,8 @@ namespace TXATOOL.Views
                 if (lblApplyAll != null) lblApplyAll.Text = (!string.IsNullOrEmpty(applyAll) && applyAll != "btnApplyAll") ? applyAll : "Apply All";
 
                 var changelogTitle = LocalizationService.Get("lblChangelog");
-                if (ChangelogHeaderTitle != null) ChangelogHeaderTitle.Text = (!string.IsNullOrEmpty(changelogTitle) && changelogTitle != "lblChangelog") ? changelogTitle : "Changelog";
+                if (ChangelogHeaderTitle != null) ChangelogHeaderTitle.Text = LocalizationService.IsVietnamese ? "Nhật ký thay đổi" : ((!string.IsNullOrEmpty(changelogTitle) && changelogTitle != "lblChangelog") ? changelogTitle : "Changelog");
+                if (BtnViewAllChangelog != null) BtnViewAllChangelog.Content = LocalizationService.IsVietnamese ? "Xem tất cả" : "View All";
 
                 var donateTitle = LocalizationService.Get("lblDonateCardTitle");
                 if (lblDonateCardTitle != null) lblDonateCardTitle.Text = (!string.IsNullOrEmpty(donateTitle) && donateTitle != "lblDonateCardTitle") ? donateTitle : "Ủng hộ tác giả TXA";
