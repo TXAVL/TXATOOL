@@ -671,43 +671,153 @@ namespace TXATOOL.Helpers
         }
 
         /// <summary>
-        /// Locates default config path for a known game.
+        /// Discovers all Steam and standard game library folders across all drives on the system.
+        /// </summary>
+        public static List<string> GetAllGameSearchFolders()
+        {
+            var folders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            // 1. Steam main install path from registry
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                                ?? Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+                if (key != null)
+                {
+                    string? installPath = key.GetValue("InstallPath")?.ToString();
+                    if (!string.IsNullOrEmpty(installPath) && Directory.Exists(installPath))
+                    {
+                        folders.Add(installPath);
+                        string vdfPath = Path.Combine(installPath, "steamapps", "libraryfolders.vdf");
+                        if (File.Exists(vdfPath))
+                        {
+                            foreach (var line in File.ReadAllLines(vdfPath))
+                            {
+                                var match = System.Text.RegularExpressions.Regex.Match(line, @"""path""\s+""([^""]+)""");
+                                if (match.Success)
+                                {
+                                    string p = match.Groups[1].Value.Replace(@"\\", @"\");
+                                    if (Directory.Exists(p)) folders.Add(p);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // 2. Scan all drives for standard Steam and Epic and Games directories
+            try
+            {
+                foreach (var drive in DriveInfo.GetDrives())
+                {
+                    if (!drive.IsReady) continue;
+                    string root = drive.RootDirectory.FullName;
+
+                    string[] candidates = new[]
+                    {
+                        Path.Combine(root, "Steam"),
+                        Path.Combine(root, "SteamLibrary"),
+                        Path.Combine(root, "Games"),
+                        Path.Combine(root, "Program Files (x86)", "Steam"),
+                        Path.Combine(root, "Program Files", "Steam"),
+                        Path.Combine(root, "Program Files", "Epic Games"),
+                        Path.Combine(root, "Program Files (x86)", "Epic Games"),
+                        Path.Combine(root, "Epic Games"),
+                        Path.Combine(root, "Riot Games"),
+                        Path.Combine(root, "EA Games")
+                    };
+
+                    foreach (var c in candidates)
+                    {
+                        if (Directory.Exists(c)) folders.Add(c);
+                    }
+                }
+            }
+            catch { }
+
+            return folders.ToList();
+        }
+
+        /// <summary>
+        /// Accurately detects whether a known game is actually installed on this computer,
+        /// and returns its existing configuration directory.
+        /// Returns empty string if the game is NOT installed on this machine.
         /// </summary>
         public static string DetectGameConfigPath(string gameName)
         {
             string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var searchRoots = GetAllGameSearchFolders();
 
             switch (gameName)
             {
+                case "CS2":
+                    // Check Steam libraries for Counter-Strike Global Offensive/game/csgo/cfg
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string cs2Cfg = Path.Combine(baseDir, "steamapps", "common", "Counter-Strike Global Offensive", "game", "csgo", "cfg");
+                        if (Directory.Exists(cs2Cfg)) return cs2Cfg;
+
+                        string cs2Alt = Path.Combine(baseDir, "steamapps", "common", "Counter-Strike Global Offensive", "csgo", "cfg");
+                        if (Directory.Exists(cs2Alt)) return cs2Alt;
+                    }
+                    return string.Empty;
+
                 case "Delta Force":
-                    string dfPath = Path.Combine(localAppData, "DeltaForce", "Saved", "Config", "WindowsClient");
-                    if (Directory.Exists(dfPath)) return dfPath;
-                    return dfPath;
+                    // Delta Force stores configs in %LOCALAPPDATA%\DeltaForce\Saved\Config\WindowsClient (or WindowsNoEditor)
+                    string dfClient = Path.Combine(localAppData, "DeltaForce", "Saved", "Config", "WindowsClient");
+                    if (Directory.Exists(dfClient)) return dfClient;
+
+                    string dfNoEd = Path.Combine(localAppData, "DeltaForce", "Saved", "Config", "WindowsNoEditor");
+                    if (Directory.Exists(dfNoEd)) return dfNoEd;
+
+                    string dfSaved = Path.Combine(localAppData, "DeltaForce", "Saved", "Config");
+                    if (Directory.Exists(dfSaved)) return dfSaved;
+
+                    // Also check if Delta Force game files exist in any Steam library
+                    foreach (var baseDir in searchRoots)
+                    {
+                        string steamDf = Path.Combine(baseDir, "steamapps", "common", "Delta Force", "DeltaForce", "Saved", "Config", "WindowsClient");
+                        if (Directory.Exists(steamDf)) return steamDf;
+
+                        string steamDfAlt = Path.Combine(baseDir, "steamapps", "common", "Delta Force");
+                        if (Directory.Exists(steamDfAlt))
+                        {
+                            string cfg = Path.Combine(steamDfAlt, "Saved", "Config", "WindowsClient");
+                            if (Directory.Exists(cfg)) return cfg;
+                        }
+                    }
+                    return string.Empty;
 
                 case "PUBG":
                     string pubgPath = Path.Combine(localAppData, "TslGame", "Saved", "Config", "WindowsNoEditor");
-                    return pubgPath;
+                    if (Directory.Exists(pubgPath)) return pubgPath;
 
-                case "CS2":
-                    // Look for Steam userdata or CS2 game path
-                    string[] steamBases = new[] { @"C:\Program Files (x86)\Steam", @"D:\Steam", @"E:\Steam", @"D:\SteamLibrary", @"E:\SteamLibrary" };
-                    foreach (var s in steamBases)
+                    string pubgAlt = Path.Combine(localAppData, "TslGame", "Saved", "Config");
+                    if (Directory.Exists(pubgAlt)) return pubgAlt;
+
+                    foreach (var baseDir in searchRoots)
                     {
-                        string cs2Cfg = Path.Combine(s, "steamapps", "common", "Counter-Strike Global Offensive", "game", "csgo", "cfg");
-                        if (Directory.Exists(cs2Cfg)) return cs2Cfg;
+                        string steamPubg = Path.Combine(baseDir, "steamapps", "common", "PUBG", "TslGame", "Saved", "Config", "WindowsNoEditor");
+                        if (Directory.Exists(steamPubg)) return steamPubg;
                     }
-                    return @"C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg";
+                    return string.Empty;
 
                 case "Battlefield 2042":
-                    return Path.Combine(myDocuments, "Battlefield 2042", "settings");
+                    string bf2042 = Path.Combine(myDocuments, "Battlefield 2042", "settings");
+                    if (Directory.Exists(bf2042)) return bf2042;
+                    return string.Empty;
 
                 case "Battlefield V":
-                    return Path.Combine(myDocuments, "Battlefield V", "settings");
+                    string bfv = Path.Combine(myDocuments, "Battlefield V", "settings");
+                    if (Directory.Exists(bfv)) return bfv;
+                    return string.Empty;
 
                 case "Battlefield 1":
-                    return Path.Combine(myDocuments, "Battlefield 1", "settings");
+                    string bf1 = Path.Combine(myDocuments, "Battlefield 1", "settings");
+                    if (Directory.Exists(bf1)) return bf1;
+                    return string.Empty;
 
                 default:
                     return string.Empty;

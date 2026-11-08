@@ -98,14 +98,15 @@ namespace TXATOOL.Views
             if (GameLocationTextBox == null) return;
             string game = GetSelectedGameName();
             string detected = GameDoctorHelper.DetectGameConfigPath(game);
-            if (!string.IsNullOrEmpty(detected))
+            if (!string.IsNullOrEmpty(detected) && Directory.Exists(detected))
             {
                 GameLocationTextBox.Text = detected;
-                AppendLog($"Tự động phát hiện đường dẫn cho {game}: {detected}");
+                AppendLog($"[✓] Đã phát hiện game '{game}' được cài đặt trên máy: {detected}");
             }
             else
             {
-                AppendLog($"Chưa phát hiện đường dẫn mặc định cho {game}. Bạn có thể bấm 'Duyệt...' để chọn.");
+                GameLocationTextBox.Text = string.Empty;
+                AppendLog($"[i] Không tìm thấy game '{game}' cài đặt trên máy tính của bạn. Bạn có thể bấm 'Duyệt...' nếu game nằm ở thư mục tùy chỉnh.");
             }
         }
 
@@ -144,13 +145,26 @@ namespace TXATOOL.Views
         private async void BtnApplyConfig_Click(object sender, RoutedEventArgs e)
         {
             string path = GameLocationTextBox.Text.Trim();
+            string game = GetSelectedGameName();
+
             if (string.IsNullOrEmpty(path))
             {
-                CustomMessageBoxWindow.Show("Vui lòng nhập hoặc chọn thư mục lưu file cấu hình của game.", "Thông báo");
+                CustomMessageBoxWindow.Show(
+                    $"Không tìm thấy game '{game}' trên máy tính của bạn.\n\nVui lòng cài đặt game trước hoặc bấm nút 'Duyệt...' để chọn thư mục cấu hình nếu bạn đã cài ở vị trí khác.",
+                    "Chưa Tìm Thấy Game");
+                AppendLog($"[!] Hủy áp dụng cấu hình: Chưa phát hiện đường dẫn cài đặt của game {game}.");
                 return;
             }
 
-            string game = GetSelectedGameName();
+            if (!Directory.Exists(path))
+            {
+                CustomMessageBoxWindow.Show(
+                    $"Thư mục '{path}' không tồn tại trên hệ thống.\n\nVui lòng kiểm tra lại xem máy tính đã cài đặt game '{game}' chưa.",
+                    "Thư Mục Không Tồn Tại");
+                AppendLog($"[!] Thư mục không tồn tại: {path}");
+                return;
+            }
+
             bool readOnly = ChkReadOnly.IsChecked == true;
             var mainWindow = GetMainWindow();
 
