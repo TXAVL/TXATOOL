@@ -489,6 +489,7 @@ namespace TXATOOL.Helpers
 
             // 1. Check Registry for VC++ x64
             string x64Version = string.Empty;
+            bool x64UpToDate = false;
             try
             {
                 using var regX64 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64");
@@ -498,6 +499,12 @@ namespace TXATOOL.Helpers
                     if (installed != null && Convert.ToInt32(installed) == 1)
                     {
                         x64Version = regX64.GetValue("Version")?.ToString() ?? "Đã cài đặt";
+                        int major = Convert.ToInt32(regX64.GetValue("Major") ?? 0);
+                        int minor = Convert.ToInt32(regX64.GetValue("Minor") ?? 0);
+                        if (major >= 14 && minor >= 40)
+                        {
+                            x64UpToDate = true;
+                        }
                         Emit($"[✓] Phát hiện Visual C++ 2015-2022 (x64) trên máy: Phiên bản {x64Version}");
                     }
                 }
@@ -506,6 +513,7 @@ namespace TXATOOL.Helpers
 
             // 2. Check Registry for VC++ x86
             string x86Version = string.Empty;
+            bool x86UpToDate = false;
             try
             {
                 using var regX86 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\X86") 
@@ -516,11 +524,30 @@ namespace TXATOOL.Helpers
                     if (installed != null && Convert.ToInt32(installed) == 1)
                     {
                         x86Version = regX86.GetValue("Version")?.ToString() ?? "Đã cài đặt";
+                        int major = Convert.ToInt32(regX86.GetValue("Major") ?? 0);
+                        int minor = Convert.ToInt32(regX86.GetValue("Minor") ?? 0);
+                        if (major >= 14 && minor >= 40)
+                        {
+                            x86UpToDate = true;
+                        }
                         Emit($"[✓] Phát hiện Visual C++ 2015-2022 (x86) trên máy: Phiên bản {x86Version}");
                     }
                 }
             }
             catch { }
+
+            // 2.5 Check Package Manager Source Preference
+            bool isTxaRepo = AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled();
+            if (isTxaRepo)
+            {
+                reportProgress?.Invoke(20, "Đang kiểm tra gói Visual C++ trên kho TXA Repo...");
+                Emit("[+] Nguồn tải được chọn trong Cài đặt: Kho phần mềm TXA (txa-repo).");
+                bool hasVcOnTxa = await DownloadHelper.IsPackageInTxaRepoAsync("vcredist");
+                if (!hasVcOnTxa)
+                {
+                    Emit("[Thông báo] Gói Visual C++ 2015-2022 chưa có trên kho TXA Repo. Tự động chuyển đổi sang cài đặt qua Winget...");
+                }
+            }
 
             // 3. Process VC++ x64
             reportProgress?.Invoke(30, "Đang kiểm tra & cập nhật Microsoft Visual C++ 2015-2022 (x64)...");
@@ -533,13 +560,19 @@ namespace TXATOOL.Helpers
 
                 if (outX64.IndexOf("No available upgrade found", StringComparison.OrdinalIgnoreCase) >= 0 ||
                     outX64.IndexOf("No newer package versions", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    outX64.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                    outX64.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    resX64.ExitCode == 1638 ||
+                    (resX64.ExitCode == 1 && x64UpToDate))
                 {
-                    Emit($"[✓] VC++ x64: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x64Version) ? x64Version : "v14.x")}), không cần nâng cấp.");
+                    Emit($"[✓] VC++ x64: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x64Version) ? x64Version : "v14.51+")}), không cần nâng cấp.");
                 }
                 else if (resX64.ExitCode == 0 || outX64.IndexOf("Successfully installed", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     Emit("[✓] VC++ x64: Cài đặt / cập nhật hoàn tất thành công qua winget!");
+                }
+                else if (x64UpToDate)
+                {
+                    Emit($"[✓] VC++ x64: Đã ở phiên bản mới nhất ({x64Version}) trên hệ thống.");
                 }
                 else
                 {
@@ -588,13 +621,19 @@ namespace TXATOOL.Helpers
 
                 if (outX86.IndexOf("No available upgrade found", StringComparison.OrdinalIgnoreCase) >= 0 ||
                     outX86.IndexOf("No newer package versions", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    outX86.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0)
+                    outX86.IndexOf("already installed", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    resX86.ExitCode == 1638 ||
+                    (resX86.ExitCode == 1 && x86UpToDate))
                 {
-                    Emit($"[✓] VC++ x86: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x86Version) ? x86Version : "v14.x")}), không cần nâng cấp.");
+                    Emit($"[✓] VC++ x86: Đang ở phiên bản mới nhất ({(!string.IsNullOrEmpty(x86Version) ? x86Version : "v14.51+")}), không cần nâng cấp.");
                 }
                 else if (resX86.ExitCode == 0 || outX86.IndexOf("Successfully installed", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     Emit("[✓] VC++ x86: Cài đặt / cập nhật hoàn tất thành công qua winget!");
+                }
+                else if (x86UpToDate)
+                {
+                    Emit($"[✓] VC++ x86: Đã ở phiên bản mới nhất ({x86Version}) trên hệ thống.");
                 }
                 else
                 {

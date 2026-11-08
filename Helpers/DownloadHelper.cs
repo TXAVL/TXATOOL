@@ -21,6 +21,109 @@ namespace TXATOOL.Helpers
         private const int WingetVerifyTimeoutMs = 15 * 1000;
         private const int ChocoVerifyTimeoutMs = 10 * 1000;
 
+        private static readonly HashSet<string> _txaRepoAvailablePackages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private static bool _txaRepoIndexLoaded = false;
+        private static readonly object _txaRepoLock = new object();
+
+        private static void PopulateTxaRepoPackagesFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return;
+            try
+            {
+                using var doc = JsonDocument.Parse(json);
+                if (!doc.RootElement.TryGetProperty("packages", out var packagesElem) || packagesElem.ValueKind != JsonValueKind.Array)
+                {
+                    return;
+                }
+
+                lock (_txaRepoLock)
+                {
+                    _txaRepoAvailablePackages.Clear();
+                    foreach (var pkg in packagesElem.EnumerateArray())
+                    {
+                        if (pkg.TryGetProperty("id", out var idElem) && !string.IsNullOrWhiteSpace(idElem.GetString()))
+                        {
+                            _txaRepoAvailablePackages.Add(idElem.GetString()!);
+                        }
+                        if (pkg.TryGetProperty("alias", out var aliasElem) && !string.IsNullOrWhiteSpace(aliasElem.GetString()))
+                        {
+                            _txaRepoAvailablePackages.Add(aliasElem.GetString()!);
+                        }
+                        if (pkg.TryGetProperty("name", out var nameElem) && !string.IsNullOrWhiteSpace(nameElem.GetString()))
+                        {
+                            _txaRepoAvailablePackages.Add(nameElem.GetString()!);
+                        }
+                    }
+                    _txaRepoIndexLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error populating txa-repo packages cache: {ex.Message}");
+            }
+        }
+
+        public static void EnsureTxaRepoIndexLoaded()
+        {
+            if (_txaRepoIndexLoaded && _txaRepoAvailablePackages.Count > 0) return;
+
+            string cachePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "TXATOOL", "txa_repo_cache.json");
+
+            if (File.Exists(cachePath))
+            {
+                try
+                {
+                    string json = File.ReadAllText(cachePath);
+                    PopulateTxaRepoPackagesFromJson(json);
+                }
+                catch { }
+            }
+        }
+
+        public static async Task<bool> IsPackageInTxaRepoAsync(string packageQuery)
+        {
+            if (string.IsNullOrWhiteSpace(packageQuery)) return false;
+            EnsureTxaRepoIndexLoaded();
+            if (_txaRepoAvailablePackages.Count == 0)
+            {
+                await LoadTxaRepoAppsAsync();
+            }
+
+            lock (_txaRepoLock)
+            {
+                if (_txaRepoAvailablePackages.Contains(packageQuery)) return true;
+                return _txaRepoAvailablePackages.Any(p => p.IndexOf(packageQuery, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+        }
+
+        public static bool IsPackageInTxaRepo(AppItem app)
+        {
+            if (app == null) return false;
+            if (!string.IsNullOrEmpty(app.Id) && app.Id.StartsWith("TXAVL.", StringComparison.OrdinalIgnoreCase)) return true;
+
+            EnsureTxaRepoIndexLoaded();
+
+            lock (_txaRepoLock)
+            {
+                if (_txaRepoAvailablePackages.Count == 0) return false;
+
+                if (!string.IsNullOrEmpty(app.Id) && _txaRepoAvailablePackages.Contains(app.Id)) return true;
+                if (!string.IsNullOrEmpty(app.ChocoId) && _txaRepoAvailablePackages.Contains(app.ChocoId)) return true;
+                if (!string.IsNullOrEmpty(app.WingetId) && _txaRepoAvailablePackages.Contains(app.WingetId)) return true;
+                if (!string.IsNullOrEmpty(app.Name) && _txaRepoAvailablePackages.Contains(app.Name)) return true;
+
+                if (!string.IsNullOrEmpty(app.Name))
+                {
+                    string simple = app.Name.Split(' ')[0];
+                    if (_txaRepoAvailablePackages.Contains(simple)) return true;
+                }
+            }
+
+            return false;
+        }
+
         public static async Task<List<CategoryGroup>> LoadAppsAsync()
         {
             if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
@@ -129,6 +232,8 @@ namespace TXATOOL.Helpers
             }
 
             if (string.IsNullOrWhiteSpace(json)) return new List<CategoryGroup>();
+
+            PopulateTxaRepoPackagesFromJson(json);
 
             return await Task.Run(() =>
             {
@@ -522,8 +627,17 @@ namespace TXATOOL.Helpers
 
             foreach (var app in apps)
             {
-                var packageManager = GetPackageManager(app);
+                var (packageManager, fellBack) = ResolvePackageManager(app);
                 PackageOperationResult operationResult;
+
+                if (fellBack)
+                {
+                    bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                    string fallbackNotice = isVn
+                        ? $"[Thông báo] Ứng dụng '{app.Name}' chưa có trên kho TXA Repo. Tự động chuyển sang cài đặt qua {packageManager}."
+                        : $"[Notice] App '{app.Name}' is not available in TXA Repo. Automatically switching to {packageManager}.";
+                    Logger.LogInfo("DOWNLOAD", fallbackNotice);
+                }
 
                 if (packageManager == PackageManagerKind.Unknown)
                 {
@@ -531,14 +645,18 @@ namespace TXATOOL.Helpers
                     {
                         App = app,
                         PackageManager = packageManager,
+                        FellBackFromTxaRepo = fellBack,
                         Status = PackageOperationStatus.Failed,
-                        Message = "No supported package manager metadata found."
+                        Message = fellBack
+                            ? "Package not available in TXA Repo and no fallback manager found."
+                            : "No supported package manager metadata found."
                     };
                 }
                 else if (commandKind == CommandKind.Uninstall && packageManager == PackageManagerKind.Chocolatey)
                 {
                     Logger.LogInfo("DOWNLOAD", $"{commandKind} started for {app.Name} via {packageManager}.");
                     operationResult = await RunChocolateyUninstallAsync(app, timeoutMs);
+                    operationResult.FellBackFromTxaRepo = fellBack;
                 }
                 else
                 {
@@ -546,13 +664,22 @@ namespace TXATOOL.Helpers
                     Logger.LogInfo("DOWNLOAD", $"{commandKind} started for {app.Name} via {packageManager}.");
                     var execution = await Utilities.RunCommandMonitoredAsync(command, commandKind, timeoutMs, captureOutput: false, windowStyle: ProcessWindowStyle.Minimized);
 
+                    string opMessage = BuildOperationMessage(execution);
+                    if (fellBack)
+                    {
+                        bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                        string prefix = isVn ? "[Chuyển từ TXA Repo sang Winget] " : "[Fallback from TXA Repo to Winget] ";
+                        opMessage = prefix + opMessage;
+                    }
+
                     operationResult = new PackageOperationResult
                     {
                         App = app,
                         PackageManager = packageManager,
+                        FellBackFromTxaRepo = fellBack,
                         Execution = execution,
                         Status = MapCommandResultStatus(execution, commandKind),
-                        Message = BuildOperationMessage(execution)
+                        Message = opMessage
                     };
                 }
 
@@ -716,25 +843,50 @@ namespace TXATOOL.Helpers
             return execution.ExitCode == 0 ? "Command completed." : $"Command failed with exit code {execution.ExitCode}.";
         }
 
-        private static PackageManagerKind GetPackageManager(AppItem app)
+        public static (PackageManagerKind pm, bool fellBackFromTxaRepo) ResolvePackageManager(AppItem app)
         {
-            if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
+            bool preferTxa = AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled();
+
+            if (preferTxa)
             {
-                return PackageManagerKind.TxaRepo;
+                if (IsPackageInTxaRepo(app))
+                {
+                    return (PackageManagerKind.TxaRepo, false);
+                }
+
+                // If not available on TXA Repo, automatically fall back to Winget / Chocolatey
+                if (IsWingetApp(app))
+                {
+                    return (PackageManagerKind.Winget, true);
+                }
+
+                if (!string.IsNullOrWhiteSpace(app.ChocoId) &&
+                    !app.ChocoId.Equals("na", StringComparison.OrdinalIgnoreCase))
+                {
+                    return (PackageManagerKind.Chocolatey, true);
+                }
+
+                return (PackageManagerKind.Unknown, true);
             }
 
             if (IsWingetApp(app))
             {
-                return PackageManagerKind.Winget;
+                return (PackageManagerKind.Winget, false);
             }
 
             if (!string.IsNullOrWhiteSpace(app.ChocoId) &&
                 !app.ChocoId.Equals("na", StringComparison.OrdinalIgnoreCase))
             {
-                return PackageManagerKind.Chocolatey;
+                return (PackageManagerKind.Chocolatey, false);
             }
 
-            return PackageManagerKind.Unknown;
+            return (PackageManagerKind.Unknown, false);
+        }
+
+        private static PackageManagerKind GetPackageManager(AppItem app)
+        {
+            var (pm, _) = ResolvePackageManager(app);
+            return pm;
         }
 
         private static void ApplyInstalledState(IEnumerable<AppItem> apps, HashSet<string> installedChoco, HashSet<string> installedWinget)
@@ -858,6 +1010,12 @@ namespace TXATOOL.Helpers
 
         public static async Task UpdateAll()
         {
+            if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
+            {
+                var txaResult = await Utilities.RunCommandMonitoredAsync("txapm upgrade --all", CommandKind.Install, InstallTimeoutMs, captureOutput: false, windowStyle: ProcessWindowStyle.Minimized);
+                Logger.LogInfo("DOWNLOAD", $"UpdateAll TXA Repo (txapm) completed with exit code {txaResult.ExitCode}.");
+            }
+
             string cmdChoco = $"{GetChocoCommand()} upgrade all -y";
             string exePath = WingetPath == "winget" ? "winget" : $"\"{WingetPath}\"";
             string cmdWinget = $"{exePath} upgrade --all --silent --accept-source-agreements --accept-package-agreements";

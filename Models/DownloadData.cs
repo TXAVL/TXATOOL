@@ -106,6 +106,7 @@ namespace TXATOOL.Models
         public PackageOperationStatus Status { get; set; }
         public CommandExecutionResult? Execution { get; set; }
         public bool? DetectedInstalledState { get; set; }
+        public bool FellBackFromTxaRepo { get; set; } = false;
         public string Message { get; set; } = string.Empty;
     }
 }

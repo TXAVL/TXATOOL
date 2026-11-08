@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using TXATOOL.Helpers;
 using TXATOOL.Models;
+using TXATOOL.Views.Components;
 
 namespace TXATOOL.Views
 {
@@ -210,6 +211,22 @@ namespace TXATOOL.Views
 
             LogOperationSummary("Install", operationResults);
             _ = RefreshStatusesAfterOperationAsync(selectedApps, true, "install");
+
+            var fellBackApps = operationResults
+                .Where(r => r.FellBackFromTxaRepo)
+                .Select(r => r.App?.Name)
+                .Where(n => !string.IsNullOrEmpty(n))
+                .Distinct()
+                .ToList();
+
+            if (fellBackApps.Any())
+            {
+                bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                string msg = isVn
+                    ? $"Các ứng dụng sau chưa có trên kho TXA Repo và đã được tự động chuyển sang cài đặt qua Winget:\n\n• {string.Join("\n• ", fellBackApps)}"
+                    : $"The following applications are not yet available in TXA Repo and were automatically installed via Winget:\n\n• {string.Join("\n• ", fellBackApps)}";
+                CustomMessageBoxWindow.Show(msg, isVn ? "Thông Báo Chuyển Nguồn" : "Source Fallback Notice");
+            }
         }
 
         private async void UninstallSelected_Click(object sender, RoutedEventArgs e)
