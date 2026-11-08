@@ -129,6 +129,29 @@ namespace TXATOOL.Helpers
             }
         }
 
+        internal static void EnsureProcessPath(ProcessStartInfo psi)
+        {
+            try
+            {
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string txaBin = Path.Combine(localAppData, "TXA", "bin");
+                string txaDir = Path.Combine(localAppData, "TXA");
+                string currentPath = psi.EnvironmentVariables.ContainsKey("PATH") ? (psi.EnvironmentVariables["PATH"] ?? "") : (Environment.GetEnvironmentVariable("PATH") ?? "");
+
+                if (Directory.Exists(txaBin) && !currentPath.Contains(txaBin, StringComparison.OrdinalIgnoreCase))
+                {
+                    currentPath = txaBin + ";" + currentPath;
+                }
+                if (Directory.Exists(txaDir) && !currentPath.Contains(txaDir, StringComparison.OrdinalIgnoreCase))
+                {
+                    currentPath = txaDir + ";" + currentPath;
+                }
+
+                psi.EnvironmentVariables["PATH"] = currentPath;
+            }
+            catch { }
+        }
+
         internal static (int ExitCode, string Output, string Error) RunCommandWithOutput(string command)
         {
             if (string.IsNullOrEmpty(command)) return (-1, "", "Empty command");
@@ -143,6 +166,7 @@ namespace TXATOOL.Helpers
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden
                 };
+                EnsureProcessPath(psi);
 
                 using Process? p = Process.Start(psi);
                 if (p == null)
@@ -190,6 +214,7 @@ namespace TXATOOL.Helpers
                 {
                     UseShellExecute = false
                 };
+                EnsureProcessPath(procesStartInfo);
 
                 if (windowStyle == ProcessWindowStyle.Hidden)
                 {
@@ -283,6 +308,7 @@ namespace TXATOOL.Helpers
                     RedirectStandardOutput = captureOutput,
                     RedirectStandardError = captureOutput
                 };
+                EnsureProcessPath(process.StartInfo);
 
                 process.Start();
 

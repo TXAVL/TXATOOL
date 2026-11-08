@@ -216,7 +216,14 @@
                                             </Grid.ColumnDefinitions>
                                             
                                             <!-- Icon -->
-                                            <Image Grid.Column="0" Source="{Binding IconPath}" Width="45" Height="45" VerticalAlignment="Top" Margin="0,10,15,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                            <Grid Grid.Column="0" Width="45" Height="45" VerticalAlignment="Top" Margin="0,10,15,0">
+                                                <!-- Fallback Fluent App Box if no icon file exists -->
+                                                <Border Background="{DynamicResource SurfaceSunkenBrush}" CornerRadius="10" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+                                                    <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE71D;" FontSize="20" Foreground="{DynamicResource ActionBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <!-- App Icon Image -->
+                                                <Image Source="{Binding IconPath}" Width="45" Height="45" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                            </Grid>
 
                                             <!-- Info -->
                                             <Grid Grid.Column="1">

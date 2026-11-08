@@ -124,6 +124,16 @@ namespace TXATOOL.Helpers
             return false;
         }
 
+        public static string GetTxaRepoCommand()
+        {
+            string installedPath = Services.TxaRepoService.GetInstalledPath();
+            if (!string.IsNullOrEmpty(installedPath) && File.Exists(installedPath))
+            {
+                return $"\"{installedPath}\"";
+            }
+            return "txapm";
+        }
+
         public static async Task<List<CategoryGroup>> LoadAppsAsync()
         {
             if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
@@ -256,6 +266,35 @@ namespace TXATOOL.Helpers
                         }
                     }
 
+                    // Build reverse lookup from applications.json
+                    var appJsonMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                    if (File.Exists(JsonPath))
+                    {
+                        try
+                        {
+                            string jsonApps = File.ReadAllText(JsonPath);
+                            var rawApps = JsonSerializer.Deserialize<Dictionary<string, AppJson>>(jsonApps);
+                            if (rawApps != null)
+                            {
+                                foreach (var kvp in rawApps)
+                                {
+                                    string key = kvp.Key;
+                                    var data = kvp.Value;
+                                    if (iconFiles.TryGetValue(key, out string? realPath))
+                                    {
+                                        appJsonMap[key] = realPath;
+                                        if (!string.IsNullOrEmpty(data.winget)) appJsonMap[data.winget] = realPath;
+                                        if (!string.IsNullOrEmpty(data.choco)) appJsonMap[data.choco] = realPath;
+                                        if (!string.IsNullOrEmpty(data.content)) appJsonMap[data.content] = realPath;
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+
+                    string CleanToken(string s) => s.Replace("-", "").Replace("_", "").Replace(".", "").Replace(" ", "").ToLowerInvariant();
+
                     var apps = new List<AppItem>();
 
                     foreach (var pkg in packagesElem.EnumerateArray())
@@ -323,23 +362,62 @@ namespace TXATOOL.Helpers
                             category = isVn ? "⚡ Hệ Thống & Tiện Ích" : "⚡ System & Utilities";
                         }
 
-                        // Look for icon matching alias or id
+                        // Smart multi-strategy icon resolution
                         string? iconPath = null;
-                        if (!string.IsNullOrEmpty(alias) && iconFiles.TryGetValue(alias, out string? p1))
+
+                        // Strategy 1: Check alias
+                        if (!string.IsNullOrEmpty(alias))
                         {
-                            iconPath = p1;
+                            if (iconFiles.TryGetValue(alias, out string? p1)) iconPath = p1;
+                            else if (iconFiles.TryGetValue(CleanToken(alias), out string? p1c)) iconPath = p1c;
+                            else if (appJsonMap.TryGetValue(alias, out string? p1a)) iconPath = p1a;
                         }
-                        else if (iconFiles.TryGetValue(id, out string? p2))
+
+                        // Strategy 2: Check ID and stripped ID (e.g. TXAVL.UniKey -> UniKey)
+                        if (string.IsNullOrEmpty(iconPath) && !string.IsNullOrEmpty(id))
                         {
-                            iconPath = p2;
+                            string strippedId = id.StartsWith("TXAVL.", StringComparison.OrdinalIgnoreCase) ? id.Substring(6) : id;
+                            if (iconFiles.TryGetValue(id, out string? p2)) iconPath = p2;
+                            else if (iconFiles.TryGetValue(strippedId, out string? p2s)) iconPath = p2s;
+                            else if (iconFiles.TryGetValue(CleanToken(strippedId), out string? p2c)) iconPath = p2c;
+                            else if (appJsonMap.TryGetValue(id, out string? p2a)) iconPath = p2a;
+                            else if (appJsonMap.TryGetValue(strippedId, out string? p2as)) iconPath = p2as;
                         }
-                        else
+
+                        // Strategy 3: Check aliases array
+                        if (string.IsNullOrEmpty(iconPath) && pkg.TryGetProperty("aliases", out var aliasesElem) && aliasesElem.ValueKind == JsonValueKind.Array)
                         {
-                            string simpleName = name.Split(' ')[0].ToLowerInvariant();
-                            if (iconFiles.TryGetValue(simpleName, out string? p3))
+                            foreach (var al in aliasesElem.EnumerateArray())
                             {
-                                iconPath = p3;
+                                string? alStr = al.GetString();
+                                if (!string.IsNullOrEmpty(alStr))
+                                {
+                                    if (iconFiles.TryGetValue(alStr, out string? pAl)) { iconPath = pAl; break; }
+                                    if (iconFiles.TryGetValue(CleanToken(alStr), out string? pCleanAl)) { iconPath = pCleanAl; break; }
+                                    if (appJsonMap.TryGetValue(alStr, out string? pAppAl)) { iconPath = pAppAl; break; }
+                                }
                             }
+                        }
+
+                        // Strategy 4: Check name
+                        if (string.IsNullOrEmpty(iconPath) && !string.IsNullOrEmpty(name))
+                        {
+                            string nameClean = CleanToken(name);
+                            if (iconFiles.TryGetValue(nameClean, out string? pNameClean)) iconPath = pNameClean;
+                            else if (appJsonMap.TryGetValue(name, out string? pAppName)) iconPath = pAppName;
+                            else
+                            {
+                                string simple = name.Split(' ')[0].ToLowerInvariant();
+                                if (iconFiles.TryGetValue(simple, out string? pSimple)) iconPath = pSimple;
+                                else if (appJsonMap.TryGetValue(simple, out string? pAppSimple)) iconPath = pAppSimple;
+                            }
+                        }
+
+                        // Strategy 5: Fallback to root icon if available
+                        if (string.IsNullOrEmpty(iconPath))
+                        {
+                            string fallbackDefault = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", "icon8.png");
+                            if (File.Exists(fallbackDefault)) iconPath = fallbackDefault;
                         }
 
                         apps.Add(new AppItem
@@ -412,7 +490,7 @@ namespace TXATOOL.Helpers
             var installed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             try
             {
-                var res = await Utilities.RunCommandAsync("txapm list", true);
+                var res = await Utilities.RunCommandAsync($"{GetTxaRepoCommand()} list", true);
                 if (!string.IsNullOrWhiteSpace(res.Output))
                 {
                     var lines = res.Output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -526,12 +604,12 @@ namespace TXATOOL.Helpers
             return "choco";
         }
 
-        public static async Task<List<PackageOperationResult>> InstallPackages(List<AppItem> apps, Action<double>? progressCallback = null)
+        public static async Task<List<PackageOperationResult>> InstallPackages(List<AppItem> apps, Action<double, AppItem?>? progressCallback = null)
         {
             return await RunPackageOperationsAsync(apps, CommandKind.Install, InstallTimeoutMs, progressCallback);
         }
 
-        public static async Task<List<PackageOperationResult>> UninstallPackages(List<AppItem> apps, Action<double>? progressCallback = null)
+        public static async Task<List<PackageOperationResult>> UninstallPackages(List<AppItem> apps, Action<double, AppItem?>? progressCallback = null)
         {
             return await RunPackageOperationsAsync(apps, CommandKind.Uninstall, UninstallTimeoutMs, progressCallback);
         }
@@ -617,7 +695,7 @@ namespace TXATOOL.Helpers
             List<AppItem> apps,
             CommandKind commandKind,
             int timeoutMs,
-            Action<double>? progressCallback)
+            Action<double, AppItem?>? progressCallback)
         {
             var results = new List<PackageOperationResult>();
             if (apps == null || apps.Count == 0) return results;
@@ -627,6 +705,7 @@ namespace TXATOOL.Helpers
 
             foreach (var app in apps)
             {
+                progressCallback?.Invoke((double)processed / total * 100, app);
                 var (packageManager, fellBack) = ResolvePackageManager(app);
                 PackageOperationResult operationResult;
 
@@ -662,7 +741,7 @@ namespace TXATOOL.Helpers
                 {
                     string command = BuildPackageCommand(app, packageManager, commandKind);
                     Logger.LogInfo("DOWNLOAD", $"{commandKind} started for {app.Name} via {packageManager}.");
-                    var execution = await Utilities.RunCommandMonitoredAsync(command, commandKind, timeoutMs, captureOutput: false, windowStyle: ProcessWindowStyle.Minimized);
+                    var execution = await Utilities.RunCommandMonitoredAsync(command, commandKind, timeoutMs, captureOutput: true, windowStyle: ProcessWindowStyle.Minimized);
 
                     string opMessage = BuildOperationMessage(execution);
                     if (fellBack)
@@ -685,7 +764,7 @@ namespace TXATOOL.Helpers
 
                 results.Add(operationResult);
                 processed++;
-                progressCallback?.Invoke((double)processed / total * 100);
+                progressCallback?.Invoke((double)processed / total * 100, app);
                 Logger.LogInfo("DOWNLOAD", $"{commandKind} finished for {app.Name}. Status={operationResult.Status}.");
             }
 
@@ -763,13 +842,14 @@ namespace TXATOOL.Helpers
             if (packageManager == PackageManagerKind.TxaRepo)
             {
                 string target = !string.IsNullOrWhiteSpace(app.Id) ? app.Id : app.WingetId ?? app.ChocoId ?? "";
+                string txaCmd = GetTxaRepoCommand();
                 if (commandKind == CommandKind.Install)
                 {
-                    return $"txapm install {target}";
+                    return $"{txaCmd} install {target}";
                 }
                 else
                 {
-                    return $"txapm uninstall {target} -y";
+                    return $"{txaCmd} uninstall {target} -y";
                 }
             }
 
@@ -1012,7 +1092,7 @@ namespace TXATOOL.Helpers
         {
             if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
             {
-                var txaResult = await Utilities.RunCommandMonitoredAsync("txapm upgrade --all", CommandKind.Install, InstallTimeoutMs, captureOutput: false, windowStyle: ProcessWindowStyle.Minimized);
+                var txaResult = await Utilities.RunCommandMonitoredAsync($"{GetTxaRepoCommand()} upgrade --all", CommandKind.Install, InstallTimeoutMs, captureOutput: true, windowStyle: ProcessWindowStyle.Minimized);
                 Logger.LogInfo("DOWNLOAD", $"UpdateAll TXA Repo (txapm) completed with exit code {txaResult.ExitCode}.");
             }
 

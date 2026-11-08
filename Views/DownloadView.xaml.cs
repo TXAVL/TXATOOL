@@ -195,9 +195,14 @@ namespace TXATOOL.Views
 
             try
             {
-                operationResults = await DownloadHelper.InstallPackages(selectedApps, p =>
+                operationResults = await DownloadHelper.InstallPackages(selectedApps, (p, currentApp) =>
                 {
-                    Dispatcher.Invoke(() => SetLoading(true, Helpers.LocalizationService.Get("msgInstallingApps"), (int)p));
+                    Dispatcher.Invoke(() =>
+                    {
+                        string baseMsg = Helpers.LocalizationService.Get("msgInstallingApps") ?? "Installing applications...";
+                        string displayMsg = currentApp != null ? $"{baseMsg} ({currentApp.Name})" : baseMsg;
+                        SetLoading(true, displayMsg, (int)p);
+                    });
                 });
             }
             catch (System.Exception ex)
@@ -211,6 +216,20 @@ namespace TXATOOL.Views
 
             LogOperationSummary("Install", operationResults);
             _ = RefreshStatusesAfterOperationAsync(selectedApps, true, "install");
+
+            var failedApps = operationResults
+                .Where(r => r.Status == PackageOperationStatus.Failed || r.Status == PackageOperationStatus.TimedOut)
+                .ToList();
+
+            if (failedApps.Any())
+            {
+                bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                string errorList = string.Join("\n• ", failedApps.Select(f => $"{f.App?.Name}: {f.Message}"));
+                string msg = isVn
+                    ? $"Cài đặt không thành công cho các ứng dụng sau:\n\n• {errorList}"
+                    : $"Installation failed for the following applications:\n\n• {errorList}";
+                CustomMessageBoxWindow.Show(msg, isVn ? "Lỗi Cài Đặt" : "Installation Error");
+            }
 
             var fellBackApps = operationResults
                 .Where(r => r.FellBackFromTxaRepo)
@@ -239,9 +258,14 @@ namespace TXATOOL.Views
 
             try
             {
-                operationResults = await DownloadHelper.UninstallPackages(selectedApps, p =>
+                operationResults = await DownloadHelper.UninstallPackages(selectedApps, (p, currentApp) =>
                 {
-                    Dispatcher.Invoke(() => SetLoading(true, Helpers.LocalizationService.Get("msgUninstallingApps"), (int)p));
+                    Dispatcher.Invoke(() =>
+                    {
+                        string baseMsg = Helpers.LocalizationService.Get("msgUninstallingApps") ?? "Uninstalling applications...";
+                        string displayMsg = currentApp != null ? $"{baseMsg} ({currentApp.Name})" : baseMsg;
+                        SetLoading(true, displayMsg, (int)p);
+                    });
                 });
             }
             catch (System.Exception ex)
