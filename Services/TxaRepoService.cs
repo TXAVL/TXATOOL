@@ -17,10 +17,12 @@ namespace TXATOOL.Services
         {
             try
             {
-                // Default install location is %LOCALAPPDATA%\TXA\txapm.exe or scripts
+                // Default install location is %LOCALAPPDATA%\TXA\txapm.exe or %LOCALAPPDATA%\TXA\bin\txapm.exe
                 string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 string txaExe = Path.Combine(localAppData, "TXA", "txapm.exe");
                 if (File.Exists(txaExe)) return txaExe;
+                string txaBinExe = Path.Combine(localAppData, "TXA", "bin", "txapm.exe");
+                if (File.Exists(txaBinExe)) return txaBinExe;
 
                 // Also check if available in PATH
                 var result = Utilities.RunCommandWithOutput("where.exe txapm");

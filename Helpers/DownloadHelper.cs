@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Net.Http;
 using TXATOOL.Models;
 
 namespace TXATOOL.Helpers
@@ -22,6 +23,15 @@ namespace TXATOOL.Helpers
 
         public static async Task<List<CategoryGroup>> LoadAppsAsync()
         {
+            if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
+            {
+                var txaApps = await LoadTxaRepoAppsAsync();
+                if (txaApps != null && txaApps.Count > 0)
+                {
+                    return txaApps;
+                }
+            }
+
             return await Task.Run(() =>
             {
                 if (!File.Exists(JsonPath)) return new List<CategoryGroup>();
@@ -88,10 +98,196 @@ namespace TXATOOL.Helpers
             });
         }
 
+        public static async Task<List<CategoryGroup>> LoadTxaRepoAppsAsync()
+        {
+            string cachePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "TXATOOL", "txa_repo_cache.json");
+
+            string json = string.Empty;
+
+            try
+            {
+                using var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(10);
+                json = await client.GetStringAsync("https://txavl.github.io/txa-repo/api/txa/v1/index.json");
+                try
+                {
+                    var dir = Path.GetDirectoryName(cachePath);
+                    if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+                    File.WriteAllText(cachePath, json);
+                }
+                catch { }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to fetch online txa-repo index: {ex.Message}");
+                if (File.Exists(cachePath))
+                {
+                    try { json = File.ReadAllText(cachePath); } catch { }
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(json)) return new List<CategoryGroup>();
+
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    using var doc = JsonDocument.Parse(json);
+                    if (!doc.RootElement.TryGetProperty("packages", out var packagesElem) || packagesElem.ValueKind != JsonValueKind.Array)
+                    {
+                        return new List<CategoryGroup>();
+                    }
+
+                    bool isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+
+                    var iconFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                    if (Directory.Exists(ImagesPath))
+                    {
+                        foreach (var file in Directory.GetFiles(ImagesPath))
+                        {
+                            iconFiles[Path.GetFileNameWithoutExtension(file)] = file;
+                        }
+                    }
+
+                    var apps = new List<AppItem>();
+
+                    foreach (var pkg in packagesElem.EnumerateArray())
+                    {
+                        string id = pkg.TryGetProperty("id", out var idElem) ? idElem.GetString() ?? "" : "";
+                        if (string.IsNullOrEmpty(id)) continue;
+
+                        string name = pkg.TryGetProperty("name", out var nameElem) ? nameElem.GetString() ?? id : id;
+                        string alias = pkg.TryGetProperty("alias", out var aliasElem) ? aliasElem.GetString() ?? "" : "";
+                        string summary = pkg.TryGetProperty("summary", out var sumElem) ? sumElem.GetString() ?? "" : "";
+
+                        if (pkg.TryGetProperty("summaries", out var sumsElem) && sumsElem.ValueKind == JsonValueKind.Object)
+                        {
+                            if (isVn && sumsElem.TryGetProperty("vi-VN", out var viSum) && !string.IsNullOrEmpty(viSum.GetString()))
+                            {
+                                summary = viSum.GetString()!;
+                            }
+                            else if (!isVn && sumsElem.TryGetProperty("en-US", out var enSum) && !string.IsNullOrEmpty(enSum.GetString()))
+                            {
+                                summary = enSum.GetString()!;
+                            }
+                        }
+
+                        var tags = new List<string>();
+                        if (pkg.TryGetProperty("tags", out var tagsElem) && tagsElem.ValueKind == JsonValueKind.Array)
+                        {
+                            foreach (var t in tagsElem.EnumerateArray())
+                            {
+                                string? ts = t.GetString();
+                                if (!string.IsNullOrEmpty(ts)) tags.Add(ts.ToLowerInvariant());
+                            }
+                        }
+
+                        // Categorize accurately based on tags and ID
+                        string category;
+                        string idLower = id.ToLowerInvariant();
+
+                        if (tags.Any(t => t.Contains("game") || t.Contains("gaming") || t.Contains("gta") || t.Contains("steam") || t.Contains("launcher"))
+                            || idLower.Contains("warframe") || idLower.Contains("steam") || idLower.Contains("epicgames") || idLower.Contains("rockstar") || idLower.Contains("ubisoft") || idLower.Contains("gameloop") || idLower.Contains("unity"))
+                        {
+                            category = isVn ? "🎮 Trò Chơi & Game Launchers" : "🎮 Games & Launchers";
+                        }
+                        else if (tags.Any(t => t.Contains("agent") || t.Contains("ai") || t.Contains("code") || t.Contains("develop") || t.Contains("programming") || t.Contains("editor") || t.Contains("ide") || t.Contains("llm") || t.Contains("git"))
+                            || idLower.Contains("antigravity") || idLower.Contains("python") || idLower.Contains("nodejs") || idLower.Contains("git") || idLower.Contains("rust") || idLower.Contains("golang") || idLower.Contains("visualstudio") || idLower.Contains("vscode") || idLower.Contains("jetbrains") || idLower.Contains("neovim"))
+                        {
+                            category = isVn ? "🤖 AI & Công Cụ Lập Trình" : "🤖 AI & Developer Tools";
+                        }
+                        else if (tags.Any(t => t.Contains("browser") || t.Contains("chat") || t.Contains("messaging") || t.Contains("remote") || t.Contains("rdp") || t.Contains("network"))
+                            || idLower.Contains("chrome") || idLower.Contains("firefox") || idLower.Contains("edge") || idLower.Contains("brave") || idLower.Contains("zalo") || idLower.Contains("telegram") || idLower.Contains("discord") || idLower.Contains("anydesk") || idLower.Contains("teamviewer") || idLower.Contains("zoom") || idLower.Contains("wireshark"))
+                        {
+                            category = isVn ? "🌐 Trình Duyệt & Giao Tiếp" : "🌐 Browsers & Communication";
+                        }
+                        else if (tags.Any(t => t.Contains("media") || t.Contains("video") || t.Contains("audio") || t.Contains("player") || t.Contains("graphics") || t.Contains("photo") || t.Contains("3d") || t.Contains("draw") || t.Contains("vfx"))
+                            || idLower.Contains("vlc") || idLower.Contains("blender") || idLower.Contains("audacity") || idLower.Contains("gimp") || idLower.Contains("inkscape") || idLower.Contains("photoshop") || idLower.Contains("capcut") || idLower.Contains("obs") || idLower.Contains("spotify") || idLower.Contains("handbrake") || idLower.Contains("ffmpeg"))
+                        {
+                            category = isVn ? "🎨 Đồ Họa & Đa Phương Tiện" : "🎨 Media & Graphics";
+                        }
+                        else if (tags.Any(t => t.Contains("office") || t.Contains("document") || t.Contains("notes") || t.Contains("markdown") || t.Contains("pdf") || t.Contains("reader") || t.Contains("typing") || t.Contains("password") || t.Contains("security"))
+                            || idLower.Contains("office") || idLower.Contains("notion") || idLower.Contains("obsidian") || idLower.Contains("unikey") || idLower.Contains("bitwarden") || idLower.Contains("keepass") || idLower.Contains("foxit") || idLower.Contains("acrobat") || idLower.Contains("sumatrapdf") || idLower.Contains("winrar") || idLower.Contains("sevenzip"))
+                        {
+                            category = isVn ? "📄 Văn Phòng & Năng Suất" : "📄 Office & Productivity";
+                        }
+                        else
+                        {
+                            category = isVn ? "⚡ Hệ Thống & Tiện Ích" : "⚡ System & Utilities";
+                        }
+
+                        // Look for icon matching alias or id
+                        string? iconPath = null;
+                        if (!string.IsNullOrEmpty(alias) && iconFiles.TryGetValue(alias, out string? p1))
+                        {
+                            iconPath = p1;
+                        }
+                        else if (iconFiles.TryGetValue(id, out string? p2))
+                        {
+                            iconPath = p2;
+                        }
+                        else
+                        {
+                            string simpleName = name.Split(' ')[0].ToLowerInvariant();
+                            if (iconFiles.TryGetValue(simpleName, out string? p3))
+                            {
+                                iconPath = p3;
+                            }
+                        }
+
+                        apps.Add(new AppItem
+                        {
+                            Id = id,
+                            Name = name,
+                            Description = summary,
+                            Category = category,
+                            Link = "https://txavl.github.io/txa-repo/",
+                            WingetId = id,
+                            ChocoId = !string.IsNullOrEmpty(alias) ? alias : id,
+                            IconPath = iconPath,
+                            IsSelected = false,
+                            IsInstalled = false
+                        });
+                    }
+
+                    return apps
+                        .GroupBy(a => a.Category)
+                        .Select(g => new CategoryGroup
+                        {
+                            CategoryName = g.Key,
+                            Apps = g.OrderBy(a => a.Name).ToList()
+                        })
+                        .OrderBy(g => g.CategoryName)
+                        .ToList();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error parsing txa-repo json: {ex.Message}");
+                    return new List<CategoryGroup>();
+                }
+            });
+        }
+
         public static async Task UpdateInstalledStatusAsync(List<CategoryGroup> categories)
         {
             if (categories == null || categories.Count == 0)
             {
+                return;
+            }
+
+            if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
+            {
+                var txaInstalled = await GetInstalledTxaRepoPackages();
+                foreach (var app in categories.SelectMany(group => group.Apps ?? Enumerable.Empty<AppItem>()))
+                {
+                    bool isInstalled = (!string.IsNullOrEmpty(app.Id) && txaInstalled.Contains(app.Id))
+                                       || (!string.IsNullOrEmpty(app.WingetId) && txaInstalled.Contains(app.WingetId))
+                                       || (!string.IsNullOrEmpty(app.ChocoId) && txaInstalled.Contains(app.ChocoId));
+                    app.IsInstalled = isInstalled;
+                    app.StatusText = isInstalled ? "Installed" : "";
+                }
                 return;
             }
 
@@ -104,6 +300,33 @@ namespace TXATOOL.Helpers
                 categories.SelectMany(group => group.Apps ?? Enumerable.Empty<AppItem>()),
                 chocoTask.Result,
                 wingetTask.Result);
+        }
+
+        public static async Task<HashSet<string>> GetInstalledTxaRepoPackages()
+        {
+            var installed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var res = await Utilities.RunCommandAsync("txapm list", true);
+                if (!string.IsNullOrWhiteSpace(res.Output))
+                {
+                    var lines = res.Output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var line in lines)
+                    {
+                        var trimmed = line.Trim();
+                        if (trimmed.StartsWith("Id", StringComparison.OrdinalIgnoreCase) || trimmed.StartsWith("-"))
+                            continue;
+
+                        var parts = trimmed.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (parts.Length > 0)
+                        {
+                            installed.Add(parts[0].Trim());
+                        }
+                    }
+                }
+            }
+            catch { }
+            return installed;
         }
 
         public static async Task<HashSet<string>> GetInstalledChocoPackages(int timeoutMs = RefreshTimeoutMs, CommandKind commandKind = CommandKind.Refresh)
@@ -410,6 +633,19 @@ namespace TXATOOL.Helpers
 
         private static string BuildPackageCommand(AppItem app, PackageManagerKind packageManager, CommandKind commandKind)
         {
+            if (packageManager == PackageManagerKind.TxaRepo)
+            {
+                string target = !string.IsNullOrWhiteSpace(app.Id) ? app.Id : app.WingetId ?? app.ChocoId ?? "";
+                if (commandKind == CommandKind.Install)
+                {
+                    return $"txapm install {target}";
+                }
+                else
+                {
+                    return $"txapm uninstall {target} -y";
+                }
+            }
+
             if (packageManager == PackageManagerKind.Winget)
             {
                 string wingetId = SanitizePackageId(app.WingetId);
@@ -482,6 +718,11 @@ namespace TXATOOL.Helpers
 
         private static PackageManagerKind GetPackageManager(AppItem app)
         {
+            if (AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled())
+            {
+                return PackageManagerKind.TxaRepo;
+            }
+
             if (IsWingetApp(app))
             {
                 return PackageManagerKind.Winget;
@@ -645,39 +886,54 @@ namespace TXATOOL.Helpers
         }
 
         public static string WingetPath { get; private set; } = "winget";
+        private static bool _isWingetResolved = false;
 
         public static async Task<bool> DetermineWingetPathAsync()
         {
+            if (_isWingetResolved) return true;
+
             try
             {
                 var result = await Utilities.RunCommandAsync("winget -v", true);
                 string output = result.Output?.Trim() ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(output) && !output.ToLower().Contains("not recognized") && !output.ToLower().Contains("is not recognized"))
                 {
-                    var match = System.Text.RegularExpressions.Regex.Match(output, @"(\d+)\.(\d+)");
-                    if (match.Success)
+                    WingetPath = "winget";
+                    _isWingetResolved = true;
+                    return true;
+                }
+            }
+            catch { }
+
+            // Check %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe
+            try
+            {
+                string userAppsWinget = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "WindowsApps", "winget.exe");
+                if (File.Exists(userAppsWinget))
+                {
+                    var result = await Utilities.RunCommandAsync($"\"{userAppsWinget}\" -v", true);
+                    string output = result.Output?.Trim() ?? string.Empty;
+                    if (!string.IsNullOrWhiteSpace(output) && (output.StartsWith("v", StringComparison.OrdinalIgnoreCase) || output.Contains(".")))
                     {
-                        int major = int.Parse(match.Groups[1].Value);
-                        int minor = int.Parse(match.Groups[2].Value);
-                        if (major > 1 || (major == 1 && minor >= 6))
-                        {
-                            WingetPath = "winget";
-                            return true;
-                        }
+                        WingetPath = userAppsWinget;
+                        _isWingetResolved = true;
+                        return true;
                     }
                 }
             }
             catch { }
 
+            // Check bundled portable winget-cli
             string portablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "winget-cli", "winget.exe");
             if (File.Exists(portablePath))
             {
                 WingetPath = portablePath;
-                return false;
+                _isWingetResolved = true;
+                return true;
             }
 
             WingetPath = "winget";
-            return true;
+            return false;
         }
 
         public static async Task InstallWinget()

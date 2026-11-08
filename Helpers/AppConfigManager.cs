@@ -18,6 +18,9 @@ namespace TXATOOL.Helpers
 
         [JsonPropertyName("remind_date")]
         public DateTime? RemindDate { get; set; }
+
+        [JsonPropertyName("download_source")]
+        public string DownloadSource { get; set; } = "default";
     }
 
     public static class AppConfigManager

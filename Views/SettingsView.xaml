@@ -62,6 +62,29 @@
                 </Grid>
             </Border>
 
+            <!-- Download Repository Source Selection -->
+            <Border Background="{DynamicResource PanelHoverBrush}" CornerRadius="12" Padding="20" Margin="0,0,0,30">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="32" Foreground="{DynamicResource ActionBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="lblDownloadSourceTitle" Text="Download Repository Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="lblDownloadSourceSubtitle" Text="Choose default (Winget/Choco) or TXA Store (txa-repo)" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+
+                    <ComboBox x:Name="DownloadSourceComboBox" Grid.Column="2" SelectedIndex="0" Style="{StaticResource WinUIComboBoxStyle}" VerticalAlignment="Center" SelectionChanged="DownloadSourceComboBox_SelectionChanged">
+                        <ComboBoxItem x:Name="sourceItemDefault" Content="Mặc định (Winget/Choco)" Tag="default"/>
+                        <ComboBoxItem x:Name="sourceItemTxaRepo" Content="Kho TXA (txa-repo)" Tag="txa-repo"/>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
             <!-- Check Update -->
             <Border Background="{DynamicResource PanelHoverBrush}" CornerRadius="12" Padding="20" Margin="0,0,0,30">
                 <Grid>

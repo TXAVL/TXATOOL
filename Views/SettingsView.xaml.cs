@@ -38,6 +38,18 @@ namespace TXATOOL.Views
                     break;
                 }
             }
+            if (DownloadSourceComboBox != null)
+            {
+                bool isTxaInstalled = Services.TxaRepoService.IsInstalled();
+                if (AppConfigManager.Config.DownloadSource == "txa-repo" && isTxaInstalled)
+                {
+                    DownloadSourceComboBox.SelectedIndex = 1;
+                }
+                else
+                {
+                    DownloadSourceComboBox.SelectedIndex = 0;
+                }
+            }
             _isInitializing = false;
 
             ApplyTranslations();
@@ -65,6 +77,42 @@ namespace TXATOOL.Views
             }
         }
 
+        private void DownloadSourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isInitializing) return;
+
+            if (DownloadSourceComboBox.SelectedItem is ComboBoxItem selected && selected.Tag is string tag)
+            {
+                if (tag == "txa-repo")
+                {
+                    if (!Services.TxaRepoService.IsInstalled())
+                    {
+                        var isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+                        TXATOOL.Views.Components.CustomMessageBoxWindow.Show(
+                            isVn 
+                                ? "Kho TXA (txa-repo) chưa được cài đặt trên máy tính của bạn.\n\nVui lòng cài đặt TXA Package Manager (txapm) qua mục 'Mở rộng tính năng' trước khi chọn nguồn này."
+                                : "TXA Store (txa-repo) is not installed on this system.\n\nPlease install TXA Package Manager (txapm) via 'Extend Features' before selecting this source.",
+                            isVn ? "Thông báo" : "Notice"
+                        );
+                        _isInitializing = true;
+                        DownloadSourceComboBox.SelectedIndex = 0;
+                        _isInitializing = false;
+                        AppConfigManager.Config.DownloadSource = "default";
+                        AppConfigManager.SaveConfig();
+                        return;
+                    }
+
+                    AppConfigManager.Config.DownloadSource = "txa-repo";
+                    AppConfigManager.SaveConfig();
+                }
+                else
+                {
+                    AppConfigManager.Config.DownloadSource = "default";
+                    AppConfigManager.SaveConfig();
+                }
+            }
+        }
+
         private void ApplyTranslations()
         {
             lblChooseTheme.Text = LocalizationService.Get("lblChooseTheme") ?? "Appearance";
@@ -76,6 +124,16 @@ namespace TXATOOL.Views
             LocalizationService.TranslateUI(this);
             
             // Explicitly set dynamic/code-behind text if needed
+            var isVn = (LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+            if (lblDownloadSourceTitle != null)
+                lblDownloadSourceTitle.Text = LocalizationService.Get("lblDownloadSourceTitle") ?? (isVn ? "Nguồn kho tải xuống" : "Download Repository Source");
+            if (lblDownloadSourceSubtitle != null)
+                lblDownloadSourceSubtitle.Text = LocalizationService.Get("lblDownloadSourceSubtitle") ?? (isVn ? "Chọn kho mặc định (Winget / Choco) hoặc Kho phần mềm TXA (txa-repo)" : "Choose default (Winget / Choco) or TXA Software Store (txa-repo)");
+            if (sourceItemDefault != null)
+                sourceItemDefault.Content = LocalizationService.Get("sourceItemDefault") ?? (isVn ? "Mặc định (Winget & Choco)" : "Default (Winget & Choco)");
+            if (sourceItemTxaRepo != null)
+                sourceItemTxaRepo.Content = LocalizationService.Get("sourceItemTxaRepo") ?? (isVn ? "Kho phần mềm TXA (txa-repo)" : "TXA Software Store (txa-repo)");
+
             lblCheckUpdateTitle.Text = LocalizationService.Get("lblCheckUpdateTitle") ?? "Check for updates";
             btnCheckUpdate.Content = LocalizationService.Get("btnCheckUpdateText") ?? "Check Update";
             if (lblBtnDonateVietQR != null) lblBtnDonateVietQR.Text = LocalizationService.Get("lblBtnDonateVietQR") ?? "Ủng hộ tác giả (VietQR)";

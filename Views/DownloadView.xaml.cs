@@ -57,69 +57,105 @@ namespace TXATOOL.Views
             }
         }
 
+        private static bool _hasCheckedDependencies = false;
+
         private async void DownloadView_Loaded(object sender, RoutedEventArgs e)
         {
              ApplyTranslations();
              await LoadData();
         }
 
+        private void UpdateRepoBadgeUI()
+        {
+            try
+            {
+                bool isTxa = AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled();
+                bool isVn = (Helpers.LocalizationService.CurrentLanguage ?? "en").ToLower().Contains("vn");
+
+                if (txtRepoBadge != null)
+                {
+                    txtRepoBadge.Text = isTxa
+                        ? (isVn ? "Nguồn: Kho phần mềm TXA (txa-repo)" : "Source: TXA Store (txa-repo)")
+                        : (isVn ? "Nguồn: Mặc định (Winget / Choco)" : "Source: Default (Winget / Choco)");
+                }
+                if (txtRepoBadgeIcon != null)
+                {
+                    txtRepoBadgeIcon.Text = isTxa ? "⚡" : "📦";
+                }
+            }
+            catch { }
+        }
+
         private async Task LoadData()
         {
             try
             {
-                if (!await DownloadHelper.IsChocoInstalled())
+                UpdateRepoBadgeUI();
+
+                bool isTxaRepo = AppConfigManager.Config.DownloadSource == "txa-repo" && Services.TxaRepoService.IsInstalled();
+
+                if (!isTxaRepo && !_hasCheckedDependencies)
                 {
-                    var infoWindow = new ModernConfirmationWindow(
-                        Helpers.LocalizationService.Get("msgChocoInstalling"),
-                        Helpers.LocalizationService.Get("msgSettingUp"),
-                        "OK",
-                        null);
+                    _hasCheckedDependencies = true;
 
-                    if (Window.GetWindow(this) != null) infoWindow.Owner = Window.GetWindow(this);
-
-                    infoWindow.Show();
-
-                    try
+                    if (!await DownloadHelper.IsChocoInstalled())
                     {
-                        await DownloadHelper.InstallChoco();
-                    }
-                    finally
-                    {
-                        infoWindow.Close();
-                    }
-                }
+                        var infoWindow = new ModernConfirmationWindow(
+                            Helpers.LocalizationService.Get("msgChocoInstalling"),
+                            Helpers.LocalizationService.Get("msgSettingUp"),
+                            "OK",
+                            null);
 
-                bool isSystemWinget = await DownloadHelper.DetermineWingetPathAsync();
-                if (!isSystemWinget)
-                {
-                    var notifyWindow = new ModernConfirmationWindow(
-                        Helpers.LocalizationService.Get("msgWingetInstallingBackground"),
-                        Helpers.LocalizationService.Get("msgSettingUp"),
-                        "OK",
-                        null);
+                        if (Window.GetWindow(this) != null) infoWindow.Owner = Window.GetWindow(this);
 
-                    if (Window.GetWindow(this) != null) notifyWindow.Owner = Window.GetWindow(this);
-                    notifyWindow.Show();
+                        infoWindow.Show();
 
-                    _ = Task.Run(async () =>
-                    {
                         try
                         {
-                            await DownloadHelper.InstallWinget();
-                            Logger.LogInfo("DOWNLOAD", "Background Winget installation completed.");
-                        }
-                        catch (System.Exception ex)
-                        {
-                            Logger.LogCrash(ex, "BackgroundInstallWinget");
+                            await DownloadHelper.InstallChoco();
                         }
                         finally
                         {
-                            Dispatcher.Invoke(() =>
-                            {
-                                try { notifyWindow.Close(); } catch { }
-                            });
+                            infoWindow.Close();
                         }
-                    });
+                    }
+
+                    bool isSystemWinget = await DownloadHelper.DetermineWingetPathAsync();
+                    if (!isSystemWinget)
+                    {
+                        var notifyWindow = new ModernConfirmationWindow(
+                            Helpers.LocalizationService.Get("msgWingetInstallingBackground"),
+                            Helpers.LocalizationService.Get("msgSettingUp"),
+                            "OK",
+                            null);
+
+                        if (Window.GetWindow(this) != null) notifyWindow.Owner = Window.GetWindow(this);
+                        notifyWindow.Show();
+
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                await DownloadHelper.InstallWinget();
+                                Logger.LogInfo("DOWNLOAD", "Background Winget installation completed.");
+                            }
+                            catch (System.Exception ex)
+                            {
+                                Logger.LogCrash(ex, "BackgroundInstallWinget");
+                            }
+                            finally
+                            {
+                                Dispatcher.Invoke(() =>
+                                {
+                                    try { notifyWindow.Close(); } catch { }
+                                });
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    await DownloadHelper.DetermineWingetPathAsync();
                 }
 
                 Categories = await DownloadHelper.LoadAppsAsync();
@@ -128,6 +164,7 @@ namespace TXATOOL.Views
 
                 await DownloadHelper.UpdateInstalledStatusAsync(_allCategories ?? Categories);
                 UpdateAppStatusTexts();
+                UpdateRepoBadgeUI();
             }
             catch (System.Exception ex)
             {

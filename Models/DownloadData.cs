@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -68,7 +68,8 @@ namespace TXATOOL.Models
     {
         Unknown,
         Chocolatey,
-        Winget
+        Winget,
+        TxaRepo
     }
 
     public enum CommandKind
