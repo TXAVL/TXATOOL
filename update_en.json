@@ -3,10 +3,11 @@
   "release_date": "08-11-2026",
   "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.1/TXATOOL_Setup_v1.2.1.exe",
   "content": [
-    "Completely resolved blank screen issue when opening 'Fix Game Errors & Turbo' or 'Game Configs FPS' views (fixed NullReferenceException during InitializeComponent).",
-    "Fixed duplicate desktop shortcuts created during updater/installer overwrite.",
-    "Streamlined seamless navigation directly from Dashboard to Gaming Optimization tools.",
-    "Synchronized version v1.2.1 across entire app ecosystem, Settings, and auto-update channels."
+    "Fixed repeated silent Winget background installation alert popup loop when entering the Download tab.",
+    "Added download repository source selector in Settings: Default (Winget & Choco) or TXA Store (txa-repo).",
+    "Loaded full application & game catalog directly from TXA repository (txavl.github.io/txa-repo) managed via txapm.",
+    "Resolved blank screen issue when opening 'Fix Game Errors & Turbo' or 'Game Configs FPS' views.",
+    "Fixed duplicate desktop shortcuts created during updater/installer overwrite."
   ],
   "size": "140 MB",
   "is_critical": false

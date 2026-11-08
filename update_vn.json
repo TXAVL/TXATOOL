@@ -3,10 +3,11 @@
   "release_date": "08-11-2026",
   "download_url_setup": "https://github.com/TXAVL/TXATOOL/releases/download/v1.2.1/TXATOOL_Setup_v1.2.1.exe",
   "content": [
-    "Khắc phục triệt để lỗi màn hình trắng khi mở mục 'Tăng tốc & Sửa lỗi Game' hoặc 'Cấu hình Game FPS' từ Sidebar và Dashboard (fix NullReferenceException during InitializeComponent).",
-    "Sửa lỗi trùng lặp shortcut kép trên Desktop sau khi cập nhật phiên bản mới.",
-    "Tối ưu hóa luồng điều hướng mượt mà và trực quan từ trang Tổng quan đến các công cụ Game Doctor.",
-    "Đồng bộ phiên bản v1.2.1 trên toàn bộ hệ thống, Cài đặt và hệ sinh thái cập nhật tự động."
+    "Sửa triệt để lỗi hiện thông báo đang cài Winget lặp lại liên tục khi vào tab Tải xuống.",
+    "Bổ sung menu tùy chọn nguồn kho tải xuống trong Cài đặt: Kho mặc định (Winget/Choco) hoặc Kho phần mềm TXA (txa-repo).",
+    "Tích hợp danh sách phần mềm & game từ kho txa-repo (txavl.github.io/txa-repo) quản lý trực tiếp qua txapm.",
+    "Khắc phục lỗi màn hình trắng khi mở mục 'Tăng tốc & Sửa lỗi Game' hoặc 'Cấu hình Game FPS'.",
+    "Sửa lỗi trùng lặp shortcut kép trên Desktop sau khi cập nhật phiên bản mới."
   ],
   "size": "140 MB",
   "is_critical": false
