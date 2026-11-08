@@ -318,10 +318,9 @@ namespace TXATOOL.Views
                 EnrichAppMetadata(app);
             }
 
-            _masterApps = new List<UWPAppItem>(_debloatApps);
+            _masterApps = new List<UWPAppItem>();
+            _allApps = new List<UWPAppItem>();
             RefreshDisplayApps();
-
-            SelectedApp = _masterApps.FirstOrDefault(a => a.Name.Contains("3D Viewer")) ?? _masterApps.FirstOrDefault();
 
             LocalizationService.LanguageChanged += ApplyTranslations;
             Loaded += (s, e) => ApplyTranslations();
@@ -432,16 +431,68 @@ namespace TXATOOL.Views
             return false;
         }
 
+        private string FormatFriendlyAppName(string packageId)
+        {
+            if (string.IsNullOrWhiteSpace(packageId)) return "Unknown App";
+
+            string clean = packageId;
+            if (clean.StartsWith("MicrosoftWindows.Client.", StringComparison.OrdinalIgnoreCase))
+                clean = clean.Substring("MicrosoftWindows.Client.".Length);
+            else if (clean.StartsWith("MicrosoftWindows.", StringComparison.OrdinalIgnoreCase))
+                clean = clean.Substring("MicrosoftWindows.".Length);
+            else if (clean.StartsWith("MicrosoftCorporationII.", StringComparison.OrdinalIgnoreCase))
+                clean = clean.Substring("MicrosoftCorporationII.".Length);
+            else if (clean.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase))
+                clean = clean.Substring("Microsoft.".Length);
+
+            if (clean.Equals("ZuneMusic", StringComparison.OrdinalIgnoreCase)) return "Media Player (Groove Music)";
+            if (clean.Equals("ZuneVideo", StringComparison.OrdinalIgnoreCase)) return "Movies & TV";
+            if (clean.Equals("WindowsSoundRecorder", StringComparison.OrdinalIgnoreCase)) return "Sound Recorder";
+            if (clean.Equals("WindowsCamera", StringComparison.OrdinalIgnoreCase)) return "Camera";
+            if (clean.Equals("WindowsCalculator", StringComparison.OrdinalIgnoreCase)) return "Calculator";
+            if (clean.Equals("WindowsNotepad", StringComparison.OrdinalIgnoreCase)) return "Notepad";
+            if (clean.Equals("WindowsStore", StringComparison.OrdinalIgnoreCase)) return "Microsoft Store";
+            if (clean.Equals("ScreenSketch", StringComparison.OrdinalIgnoreCase)) return "Snipping Tool (Screen Sketch)";
+            if (clean.Equals("Windows.Photos", StringComparison.OrdinalIgnoreCase) || clean.Equals("WindowsPhotos", StringComparison.OrdinalIgnoreCase)) return "Photos";
+            if (clean.Equals("DesktopAppInstaller", StringComparison.OrdinalIgnoreCase)) return "App Installer (Winget)";
+            if (clean.Equals("SecHealthUI", StringComparison.OrdinalIgnoreCase)) return "Windows Security";
+            if (clean.Equals("Paint", StringComparison.OrdinalIgnoreCase) || clean.Equals("MSPaint", StringComparison.OrdinalIgnoreCase)) return "Paint";
+            if (clean.Equals("QuickAssist", StringComparison.OrdinalIgnoreCase)) return "Quick Assist";
+            if (clean.Equals("YourPhone", StringComparison.OrdinalIgnoreCase)) return "Phone Link";
+
+            if (clean.Contains("."))
+            {
+                var parts = clean.Split('.');
+                clean = parts[parts.Length - 1];
+            }
+
+            if (!clean.Contains(" "))
+            {
+                var sb = new System.Text.StringBuilder();
+                for (int i = 0; i < clean.Length; i++)
+                {
+                    if (i > 0 && char.IsUpper(clean[i]) && !char.IsUpper(clean[i - 1]))
+                    {
+                        sb.Append(' ');
+                    }
+                    sb.Append(clean[i]);
+                }
+                clean = sb.ToString();
+            }
+
+            return clean;
+        }
+
         private async Task LoadAppsAsync()
         {
             try
             {
                 var apps = await UWPHelper.GetInstalledAppsAsync();
 
-                _allApps = apps.Select(a =>
+                var scannedList = apps.Select(a =>
                 {
-                    // 1. Kiểm tra xem app có sẵn icon trong danh mục mẫu (_masterApps) hay không
-                    var matchedMaster = _masterApps.FirstOrDefault(m =>
+                    // 1. Kiểm tra xem app có khớp với danh mục mẫu (_debloatApps) hay không
+                    var matchedCatalog = _debloatApps.FirstOrDefault(m =>
                         (!string.IsNullOrEmpty(m.PackageId) && (
                             a.Name.Equals(m.PackageId, StringComparison.OrdinalIgnoreCase) ||
                             a.PackageFullName.IndexOf(m.PackageId, StringComparison.OrdinalIgnoreCase) >= 0 ||
@@ -449,34 +500,47 @@ namespace TXATOOL.Views
                             (m.PackageId.Contains("Teams", StringComparison.OrdinalIgnoreCase) && a.Name.Contains("Teams", StringComparison.OrdinalIgnoreCase))
                         )));
 
-                    string resolvedImage = string.Empty;
-                    if (matchedMaster != null && !string.IsNullOrEmpty(matchedMaster.ImagePath) && !matchedMaster.ImagePath.EndsWith("default.png", StringComparison.OrdinalIgnoreCase))
+                    string displayName;
+                    string imagePath = string.Empty;
+                    RemovalType removalType = a.PackageFullName.Contains("~~~~") ? RemovalType.Capability : RemovalType.Package;
+
+                    if (matchedCatalog != null)
                     {
-                        resolvedImage = matchedMaster.ImagePath;
-                    }
-                    else if (!string.IsNullOrEmpty(a.LogoPath) && File.Exists(a.LogoPath))
-                    {
-                        resolvedImage = a.LogoPath;
+                        displayName = matchedCatalog.Name;
+                        if (!string.IsNullOrEmpty(matchedCatalog.ImagePath) && !matchedCatalog.ImagePath.EndsWith("default.png", StringComparison.OrdinalIgnoreCase))
+                        {
+                            imagePath = matchedCatalog.ImagePath;
+                        }
+                        removalType = matchedCatalog.Type;
                     }
                     else
                     {
-                        // Fallback icon cũ: để chuỗi rỗng để kích hoạt trigger hiển thị icon MDL2 (\uE71D) trên nền #EFF6FF
-                        resolvedImage = string.Empty;
+                        displayName = FormatFriendlyAppName(a.Name);
                     }
+
+                    if (string.IsNullOrEmpty(imagePath))
+                    {
+                        if (!string.IsNullOrEmpty(a.LogoPath) && File.Exists(a.LogoPath))
+                        {
+                            imagePath = a.LogoPath;
+                        }
+                    }
+
+                    bool isCritical = a.NonRemovable || IsAppCritical(a.PackageFullName);
 
                     var item = new UWPAppItem
                     {
-                        Name = a.Name,
+                        Name = displayName,
                         Size = a.Size,
                         EstimatedSizeInMB = ParseSizeToMB(a.Size),
                         Publisher = string.IsNullOrWhiteSpace(a.Publisher) ? "Microsoft Corporation" : a.Publisher,
                         PackageFullName = a.PackageFullName,
                         IsChecked = false,
-                        IsCritical = IsAppCritical(a.PackageFullName),
-                        IsEnabled = _isExpertMode ? true : !IsAppCritical(a.PackageFullName),
+                        IsCritical = isCritical,
+                        IsEnabled = _isExpertMode ? true : !isCritical,
                         PackageId = a.Name,
-                        ImagePath = resolvedImage,
-                        Type = RemovalType.Package
+                        ImagePath = imagePath,
+                        Type = removalType
                     };
 
                     var tokens = a.PackageFullName.Split('_');
@@ -488,40 +552,26 @@ namespace TXATOOL.Views
 
                 Dispatcher.Invoke(() =>
                 {
-                    foreach (var scanned in _allApps)
+                    _allApps = scannedList;
+                    _masterApps = _allApps;
+
+                    if (rbRecommended != null && rbRecommended.IsChecked == true)
                     {
-                        var existing = _masterApps.FirstOrDefault(m =>
-                            scanned.PackageFullName.IndexOf(m.PackageId, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            m.PackageId.IndexOf(scanned.Name, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            (m.PackageId.Contains("Teams", StringComparison.OrdinalIgnoreCase) && scanned.Name.Contains("Teams", StringComparison.OrdinalIgnoreCase)));
-
-                        if (existing != null)
-                        {
-                            if (!string.IsNullOrWhiteSpace(scanned.Size) && scanned.Size != "Unknown")
-                            {
-                                existing.Size = scanned.Size;
-                                existing.EstimatedSizeInMB = scanned.EstimatedSizeInMB;
-                            }
-                            if (!string.IsNullOrWhiteSpace(scanned.Version) && scanned.Version != "1.0.0.0")
-                            {
-                                existing.Version = scanned.Version;
-                            }
-                            if (!string.IsNullOrWhiteSpace(scanned.Publisher))
-                            {
-                                existing.Publisher = scanned.Publisher;
-                            }
-                            existing.PackageFullName = scanned.PackageFullName;
-
-                            // Bổ sung Logo động nếu master app chưa có icon
-                            if (!string.IsNullOrEmpty(scanned.ImagePath) && string.IsNullOrEmpty(existing.ImagePath))
-                            {
-                                existing.ImagePath = scanned.ImagePath;
-                            }
-                        }
+                        ApplyPreset(RecommendedList);
                     }
-
-                    RefreshDisplayApps();
-                    UpdateAppCountsUI();
+                    else if (rbSafe != null && rbSafe.IsChecked == true)
+                    {
+                        ApplyPreset(SafeList);
+                    }
+                    else if (rbAggressive != null && rbAggressive.IsChecked == true)
+                    {
+                        ApplyPreset(AggressiveList);
+                    }
+                    else
+                    {
+                        RefreshDisplayApps();
+                        UpdateAppCountsUI();
+                    }
                 });
             }
             catch { }
@@ -530,7 +580,7 @@ namespace TXATOOL.Views
         private void RefreshDisplayApps()
         {
             var search = txtSearchApps?.Text?.Trim().ToLower() ?? "";
-            IEnumerable<UWPAppItem> query = (_isExpertMode && _allApps.Count > 0) ? _allApps : _masterApps;
+            IEnumerable<UWPAppItem> query = (_isExpertMode) ? _allApps : _allApps.Where(a => !a.IsCritical);
 
             if (_activeTab == "Presets")
             {
@@ -562,7 +612,7 @@ namespace TXATOOL.Views
                     a.PackageFullName.ToLower().Contains(search));
             }
 
-            DisplayApps = new ObservableCollection<UWPAppItem>(query.ToList());
+            DisplayApps = new ObservableCollection<UWPAppItem>(query.OrderBy(a => a.IsCritical).ThenBy(a => a.Name).ToList());
 
             if (SelectedApp == null || !DisplayApps.Contains(SelectedApp))
             {
@@ -575,10 +625,11 @@ namespace TXATOOL.Views
         private bool MatchesPreset(UWPAppItem app, List<string> presetList)
         {
             if (presetList == null || presetList.Count == 0) return false;
-            if (presetList.Contains("ALL_DEBLOAT")) return true;
+            if (presetList.Contains("ALL_DEBLOAT")) return !app.IsCritical;
             return presetList.Any(p =>
                 app.PackageId.IndexOf(p, StringComparison.OrdinalIgnoreCase) >= 0 ||
                 app.Name.IndexOf(p, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                app.PackageFullName.IndexOf(p, StringComparison.OrdinalIgnoreCase) >= 0 ||
                 (p.Equals("MSTeams", StringComparison.OrdinalIgnoreCase) && app.PackageId.IndexOf("MicrosoftTeams", StringComparison.OrdinalIgnoreCase) >= 0) ||
                 (p.IndexOf("QuickAssist", StringComparison.OrdinalIgnoreCase) >= 0 && app.PackageId.IndexOf("QuickAssist", StringComparison.OrdinalIgnoreCase) >= 0));
         }
@@ -589,25 +640,15 @@ namespace TXATOOL.Views
             _isApplyingPreset = true;
             _currentPresetList = new List<string>(presetList);
 
-            foreach (var app in _masterApps)
+            foreach (var app in _allApps)
             {
                 bool shouldCheck = MatchesPreset(app, _currentPresetList);
                 app.IsChecked = shouldCheck && app.IsEnabled;
             }
 
-            foreach (var app in _allApps)
-            {
-                bool shouldCheck = _currentPresetList.Any(p => app.PackageFullName.IndexOf(p, StringComparison.OrdinalIgnoreCase) >= 0);
-                app.IsChecked = shouldCheck && app.IsEnabled;
-            }
-
-            UpdateAppCountsUI();
             _isApplyingPreset = false;
-
-            if (_activeTab == "Presets" || _activeTab == "CustomList")
-            {
-                RefreshDisplayApps();
-            }
+            UpdateAppCountsUI();
+            RefreshDisplayApps();
         }
 
         private void Preset_Checked(object sender, RoutedEventArgs e)
@@ -637,9 +678,8 @@ namespace TXATOOL.Views
             if (lblPresetAggressiveApps != null)
                 lblPresetAggressiveApps.Text = $"{GetMatchedCount(AggressiveList)} apps";
 
-            int selectedCount = _masterApps.Count(a => a.IsChecked) + _allApps.Count(a => a.IsChecked);
-            double totalSizeMB = _masterApps.Where(a => a.IsChecked).Sum(a => a.EstimatedSizeInMB) +
-                                 _allApps.Where(a => a.IsChecked).Sum(a => a.EstimatedSizeInMB);
+            int selectedCount = _allApps.Count(a => a.IsChecked);
+            double totalSizeMB = _allApps.Where(a => a.IsChecked).Sum(a => a.EstimatedSizeInMB);
 
             if (totalSizeMB >= 1024)
             {
@@ -658,11 +698,12 @@ namespace TXATOOL.Views
 
         private int GetMatchedCount(List<string> preset)
         {
+            if (preset == null || preset.Count == 0) return 0;
             if (preset.Contains("ALL_DEBLOAT"))
             {
-                return _masterApps.Count;
+                return _allApps.Count(a => !a.IsCritical);
             }
-            return _masterApps.Count(app => MatchesPreset(app, preset));
+            return _allApps.Count(app => MatchesPreset(app, preset));
         }
 
         private bool _isUpdatingSelectAll = false;
@@ -800,14 +841,6 @@ namespace TXATOOL.Views
                     if (!_isExpertMode) app.IsChecked = false;
                 }
             }
-            foreach (var app in _masterApps)
-            {
-                if (app.IsCritical)
-                {
-                    app.IsEnabled = _isExpertMode;
-                    if (!_isExpertMode) app.IsChecked = false;
-                }
-            }
 
             RefreshDisplayApps();
             UpdateAppCountsUI();
@@ -855,7 +888,6 @@ namespace TXATOOL.Views
         private void DeselectAll_Click(object sender, RoutedEventArgs e)
         {
             _isApplyingPreset = true;
-            foreach (var app in _masterApps) app.IsChecked = false;
             foreach (var app in _allApps) app.IsChecked = false;
             _isApplyingPreset = false;
 
@@ -869,8 +901,7 @@ namespace TXATOOL.Views
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-            var selectedIds = _masterApps.Where(a => a.IsChecked).Select(a => a.PackageId).ToList();
-            selectedIds.AddRange(_allApps.Where(a => a.IsChecked).Select(a => a.PackageId));
+            var selectedIds = _allApps.Where(a => a.IsChecked).Select(a => a.PackageId).Distinct().ToList();
 
             if (selectedIds.Count == 0)
             {
@@ -912,7 +943,6 @@ namespace TXATOOL.Views
 
                     if (selectedIds != null)
                     {
-                        foreach (var app in _masterApps) app.IsChecked = selectedIds.Contains(app.PackageId);
                         foreach (var app in _allApps) app.IsChecked = selectedIds.Contains(app.PackageId);
 
                         UpdateAppCountsUI();
@@ -934,10 +964,7 @@ namespace TXATOOL.Views
 
         private async void StartDebloat_Click(object sender, RoutedEventArgs e)
         {
-            var selectedApps = new List<UWPAppItem>();
-            selectedApps.AddRange(_masterApps.Where(a => a.IsChecked));
-            selectedApps.AddRange(_allApps.Where(a => a.IsChecked));
-            selectedApps = selectedApps.GroupBy(a => a.PackageId).Select(g => g.First()).ToList();
+            var selectedApps = _allApps.Where(a => a.IsChecked).GroupBy(a => a.PackageId).Select(g => g.First()).ToList();
 
             if (selectedApps.Count == 0)
             {
@@ -1204,7 +1231,6 @@ foreach ($selector in $featSelectors) {{
         {
             TerminalPopup.Visibility = Visibility.Collapsed;
 
-            foreach (var app in _masterApps) app.IsChecked = false;
             foreach (var app in _allApps) app.IsChecked = false;
 
             UpdateAppCountsUI();

@@ -326,7 +326,10 @@ namespace TXATOOL.Views
 
             try
             {
-                mainWindow?.ShowLoading($"Đang áp dụng cấu hình tối ưu cho {game}...", 1, 40);
+                mainWindow?.ShowLoading($"Đang chuẩn bị áp dụng cấu hình tối ưu cho {game}...", 1, 25);
+                await System.Threading.Tasks.Task.Delay(350);
+
+                mainWindow?.UpdateLoadingProgress(1, 60, $"Đang tinh chỉnh tham số FPS Boost ({game})...");
                 List<string> logs = new List<string>();
 
                 switch (game)
@@ -366,17 +369,21 @@ namespace TXATOOL.Views
                         break;
                 }
 
-                mainWindow?.UpdateLoadingProgress(1, 90, "Đang hoàn tất lưu cấu hình...");
+                mainWindow?.UpdateLoadingProgress(1, 90, "Đang hoàn tất lưu và khóa thuộc tính file cấu hình...");
+                await System.Threading.Tasks.Task.Delay(350);
+
                 foreach (var log in logs)
                 {
                     AppendLog(log);
                 }
 
-                mainWindow?.UpdateLoadingProgress(1, 100, "Hoàn tất!");
+                mainWindow?.UpdateLoadingProgress(1, 100, "Hoàn tất tối ưu cấu hình!");
                 AppendLog("=== ÁP DỤNG CẤU HÌNH HOÀN TẤT ===");
+                await System.Threading.Tasks.Task.Delay(400);
+
                 mainWindow?.HideLoading();
                 RefreshGameStatus();
-                CustomMessageBoxWindow.Show($"Đã áp dụng thành công cấu hình tối ưu cho {game}!", "Thành công");
+                CustomMessageBoxWindow.Show($"Đã áp dụng thành công cấu hình tối ưu cho {game}!\n\nĐã cấu hình các tham số thi đấu tốt nhất cho hệ thống.", "Áp Dụng Thành Công");
             }
             catch (Exception ex)
             {
